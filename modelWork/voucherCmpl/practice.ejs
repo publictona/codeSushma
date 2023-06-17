@@ -1,0 +1,144 @@
+<body>
+    <table>
+
+        <tr>
+            <div class="col-md-12 text-right"><i class="fa fa-print btn btn-primary"  style="margin-bottom:5px; "></i></div>
+            <td colspan="6">
+                <h3>Complimentary Items Voucher</h3>
+            </td>
+        </tr>
+
+        <!-- add -->
+
+        <tr>
+
+            <td colspan="4"> <br> Barcode CI-334653 <br> <br> </td>
+
+        </tr>
+
+        <tr>
+            <td colspan="1">Voucher No.</td>
+            <td colspan="2">
+                <%= ob.F_TRANNO %>
+            </td>
+            <td colspan="3">Date:<%=ob.F_TRANDT %>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td colspan="1">Tour_Code</td>
+            <td colspan="1">
+                <%= ob.F_TCD %>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="1">B Branch Incharge </td>
+            <td colspan="2">9167835005</td>
+            <td colspan="2">on/After Tour-98210 07573</td>
+        </tr>
+        <tr>
+            <td colspan="1">Name Of Guest</td>
+            <td colspan="1">
+                <%=ob.F_SNAME%>
+                    <%=ob.F_FNAME%>
+            </td>
+            
+        </tr>
+        <tr>
+            <td colspan="1">Tour name</td>
+            <td colspan="1">KERALA KANYAKUMARI ECONOMY</td>
+        </tr>
+        <tr>
+            <td colspan="1">Issued By</td>
+            <td colspan="1">104-SHAILESH/CH</td>
+        </tr>
+
+        <tr>
+            <td colspan="1">For Pax</td>
+            <td colspan="1">Adult Male:<%=ob.F_ADMALE%>  Adult Female:<%=ob.F_ADFEMALE%>
+            </td>
+           
+        </tr>
+
+
+        <tr>
+            <td colspan="6">
+                --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            </td>
+        </tr>
+        <!-- table -->
+        <tr>
+            <td colspan="1">Sr.</td>
+            <td colspan="2">Items</td>
+            <td colspan="2">Qty</td>
+            <td colspan="2">Remarks</td>
+        </tr>
+        <% for(let i=0; i < ob.vouItems.length; i++) { %>
+            <tr>
+                <td colspan="1">
+                    <%= i+1 %>.
+                </td>
+                <td colspan="2">
+                    <%= ob.vouItems[i].ITM_NO %>
+                </td>
+                <td colspan="2">
+                    <%= ob.vouItems[i].F_QTY %>
+                </td>
+                <td colspan="2"> 
+                    <%= ob.vouItems[i].GIVEAT %>
+                </td>
+            </tr>
+            <% } %>
+
+
+                <tr>
+                    <td colspan="4">
+                        --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        Received the above mentioned Complimentary items form Kesari Tours Pvt. Ltd.
+                       <br>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Guest Sign :
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Complementary items to be received on Airport
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Note:All joining leaving guest to carry their dry snacks hamper
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        from respective office before the tour due to baggage limit, tour
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        maneger will not be able to carry snacks hamper from India.
+                    </td>
+                </tr>
+
+            </table>
+        </body>
+
+
+
+

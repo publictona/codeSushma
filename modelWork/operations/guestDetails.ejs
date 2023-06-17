@@ -1,0 +1,205 @@
+<% include ../partials/head %>
+<% include ../partials/header %>
+<link rel="stylesheet" href="/css/animateStyle.css">
+<style>
+.searchBoxCashierPool .form-control,.searchBoxCashierPool .select2-selection{
+    height: 35px !important;
+    border: 1px solid lightgrey;
+    border-radius: 14px !important;
+    background-color: white;
+}
+.searchBoxCashierPool .select2-container--default .select2-selection--single{
+    background:none;
+}
+.searchBoxCashierPool .select2{
+    background:none;
+}
+.alert {
+        width: auto;
+        padding: 20px;
+        font-size: 15px;
+        top: 63px !important;
+        right: 20px !important;
+        z-index: 999999 !important;
+}
+.error1{
+  border:1px solid red;
+}
+</style>
+
+<div class="row gutter--3px">
+  <div class="box box-primary">
+    <div class="box-body">
+      <div class="col-md-12">
+        <div class="row gutter--3px">
+          <div class="col-md-12">
+            <h3>Guest Tour Details</h3>
+            <form id="callPoolFilter" class="searchBoxCallPool clearfix">
+              <div class="row gutter--3px">
+                <div class="form-group col-md-3">
+                  <label>Tourcode</label>
+                  <input type="text" class="form-control tourCode" name="" placeholder="TOURCODE NUMBER">
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Tour Series</label>
+                  <input type="text" class="form-control tourCode" name="" placeholder="TOURCODE SERIES">
+                </div>
+                
+                <div class="col-md-3">
+                  <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top: 20px;">Filter</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-12">
+            <table id="callPoolTables" class="table table-bordered table-responsive table-striped display nowrap order-column" style="width:50%">
+
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var userPerm=<%-JSON.stringify(userPerm)%>;
+  var rsid="<%=rsid%>";
+  var dataObj={};
+
+var DrawTableInquiry;
+function  clearTourDt(){
+  $('.daterange').val('');
+ }
+  $(document).ready(function () {
+    
+    var dataColumns = [{
+        data: "_id",
+        sTitle: "ID#",
+        visible: false
+      },
+   
+      {
+        data: "F_FORM",
+        sTitle: "Form#",
+        visible: true,
+        className: "fs15--design column-50",
+        },
+
+      {
+        data: "F_TCD",
+        sTitle: "Tour Code#",
+        visible: true,
+        className: "fs15--design column-50",
+        },
+
+      {
+        data: "guestno",
+        sTitle: "Guestno",
+        visible: true,
+        className: "fs15--design column-50",
+      },
+
+      {
+        data: "address",
+        sTitle: "Address#",
+        visible: true,
+        className: "fs15--design column-150",
+      },
+
+      {
+        data: "age",
+        sTitle: "Age#",
+        visible: true,
+        className: "fs15--design column-50",
+
+      },
+      {
+        data: "gender",
+        sTitle: "Gender#",
+        visible: true,
+        className: "fs15--design column-50",
+      },
+
+      {
+        data: "guestName",
+        sTitle: "GuestName#",
+        visible: true,
+        className: "fs15--design column-50",
+      },
+
+      {
+        data: "nominee",
+        sTitle: "Nominee#",
+        visible: true,
+        className: "fs15--design column-50",
+      },
+
+      {
+        data: "nomineeNo",
+        sTitle: "Nominee No#",
+        visible: true,
+        className: "fs15--design column-50",
+      },
+
+      {
+        data: "nomineeRel",
+        sTitle: "NomineeRel#",
+        visible: true,
+        className: "fs15--design column-50",
+      },
+
+      {
+        data: "weight",
+        sTitle: "Weight#",
+        visible: true,
+        className: "fs15--design column-50",
+      },
+
+ ];
+
+    DrawTableInquiry = DrawCustomDataTable("callPoolTables",300, "/route/operations/gridGuestTourDetail",
+    dataColumns, [
+        [0, "desc"]
+      ], "callPoolFilter", null,true,true,undefined,undefined,undefined,"tableButtons");
+
+    
+    $("#callPoolFilter").validate({
+      errorPlacement: function (error, element) {},
+      submitHandler: function (form) {
+       
+        var $form = $(form);
+        var url = $form.attr('action');
+        var formData = $form.serializeObject();
+        DrawTableInquiry.ajax.reload();
+      }
+    });
+
+    $('.daterange').daterangepicker({
+      locale: {
+        format: 'DD/MM/YYYY'
+      },
+      ranges: {
+        'Today': [moment(), moment()],
+        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf(
+          'month')]
+      }
+    });
+    clearTourDt();
+  });
+
+  $("form#psaBookingFilter").submit(function (e) {
+      e.preventDefault();
+    });
+
+ 
+
+
+ 
+</script>
+<% include ../partials/footer %>

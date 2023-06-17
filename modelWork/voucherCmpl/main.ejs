@@ -1,0 +1,71 @@
+
+<li class="text-info fs15--design p-10 text-uppercase" onclick="getComplimentaryVouClick()"><i class="fa fa-list-alt"></i> 
+    Print Complimentary Voucher
+</li>
+
+
+
+<div id="voucherModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header modal-otp-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+
+                </button>
+                <h4>Print Complementary Voucher</h4>
+
+            </div>
+            <div class="modal-body modal-body-otp" id="cmplVoucherBody">
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+function getComplimentaryVouClick(e) {
+    $('.divLoader').show();
+    var obj = { tourCode: globalVarObj.tourCode, tourForm: globalVarObj.tourForm };
+    $.ajax({
+        url: '/route/tourComplementary/getComplementaryVou',
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(obj),
+        dataType: "json",
+
+        success: function (result) {
+            console.log(result);
+            //bind the html in respective tag and show modal.
+            $('#cmplVoucherBody').html(result.data);
+            $('#voucherModal').modal('show');
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            var result = jQuery.parseJSON(jqXHR.responseText);
+        }
+    });
+}
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

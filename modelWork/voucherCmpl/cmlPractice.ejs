@@ -1,0 +1,162 @@
+<style>
+    @media print {
+        .page-break {
+            display: block;
+            page-break-before: always;
+        }
+
+        tfoot img {
+            position: fixed;
+            bottom: 0;
+        }
+    }
+</style>
+
+<div class="row">
+
+<!-- for print voucher button  -->
+    <div class="col-md-12 text-right"><i class="fa fa-print btn btn-primary" onclick="printVoucher()"
+            style="margin-bottom:5px; "></i></div>
+    <div class="col-md-12 table-responsive" id="tourCmplVoucher" style="font-family: monospace;">
+
+        <table style="width:100%;">
+            <tr>
+                <td>
+                    <h2>Complimentary Items Voucher</h2>
+                </td>
+                <!-- for kesari logo -->
+                <td><img src="https://image.kesari.in/upload/assets/kesari-tours.png" style="float:right;width:50px;">
+                </td>
+            </tr>
+        </table>
+        <table style="width:100%; font-size:9px;">
+            <tr>
+                <!-- for branch address -->
+                <td style="vertical-align:bottom;">KESARI TOURS PVT. LTD.<%=branchData.BKA_PRTADD%>,kesari.in (CIN No :
+                        U63040MH1995PTC084356)</td>
+
+            </tr>
+        </table>
+        <hr>
+
+        <table style="width:100%; font-size:10px;margin-top:10px; ">
+
+            <tr>
+
+                <td style="width:20%">Voucher No.</td>
+                <td>: <%= ob.F_TRANNO %>
+                </td>
+                <td>Date:<%=ob.F_TRANDT %>/<%=ob.F_TRANTM %> <span>hrs.</span></td>
+                <td></td>
+            </tr>
+
+
+            <tr>
+                <td style="width:20%">Tour_Code</td>
+                <td colspan="1">: <%= ob.F_TCD %>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <!-- for branch address/incharge details -->
+                <td style="width:20%">B Branch Incharge </td>
+                <td> : <%= branchData.BKA_MOBILE %>
+                </td>
+                <td>on/After Tour-98210 07573</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td style="width:20%">Name Of Guest</td>
+                <td>: <%=ob.F_SNAME%>
+                        <%=ob.F_FNAME%>
+                </td>
+                <!-- for barcode -->
+                <td colspan="2" rowspan="4" style="padding: 10px 0px;"><img src="<%=imgSrc%>" alt=""
+                        style="height:45px;width:150px;" /></td>
+
+            </tr>
+            <tr>
+                <td style="width:20%">Tour Name</td>
+                <td> : <%=ob.TOURNAME%>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:20%">Issued By</td>
+                <td>: <%=ob.F_TRANNM%>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width:20%">For Pax</td>
+                <td>: Adult Male:<%=ob.F_ADMALE%> Adult Female:<%=ob.F_ADFEMALE%>
+                </td>
+
+
+            </tr>
+
+            <!-- table -->
+            <table border="1" cellpadding="0" cellspacing="0"
+                style="width:100%;font-size:10px;border-spacing: 0.5rem;border-collapse: collapse;">
+                <tbody>
+                    <!--voucher table heading data -->
+                    <tr style="background-color:#BBB;height: 25px;vertical-align: MIDDLE;">
+
+                        <td style="width:5%;padding-left: 10px;">Sr.</td>
+                        <td style="width:45%;padding-left: 10px;">Items</td>
+                        <td style="width:5%;padding-left: 10px;">Qty</td>
+                        <td style="width:45%;padding-left: 10px;">Remarks</td>
+                    </tr>
+
+                    <!-- items loop vouItems is our item array-->
+                    <% for(let i=0; i < ob.vouItems.length; i++) { %>
+                        <tr>
+                            <td style="padding-left: 10px;">
+                                <%= i+1 %>.
+                            </td>
+                            <td style="padding-left: 10px;">
+                                <%= ob.vouItems[i].ITM_NO %>
+                            </td>
+                            <td style="padding-left: 10px;">
+                                <%= ob.vouItems[i].F_QTY %>
+                            </td>
+                            <td style="padding-left: 10px;">
+                                <%= ob.vouItems[i].GIVEAT %>
+                            </td>
+                        </tr>
+                        <% } %>
+                </tbody>
+            </table>
+
+            <hr style="border-top:1px dashed !important;">
+            <p style="font-size:10px;"><b> Received the above mentioned Complimentary items form Kesari Tours Pvt.
+                    Ltd.</b></p>
+
+
+            <p style="font-size:10px;"><b> Guest Sign :</b></p>
+            <hr style="border-top:1px dashed !important;">
+
+            <p style="font-size:10px;"><b> Complementary items to be received on Airport</b></p>
+            <table style="width:100%;">
+                <tr style="display: block; page-break-before: always;">
+                    <p style="font-size:10px;"><b>Note :</b> All joining leaving guest to carry their dry snacks hamper
+                        <br> from respective office before the tour due to baggage limit, tour
+                        <br> maneger will not be able to carry snacks hamper from India.
+
+            </table>
+    </div>
+</div>
+
+<script>
+    //for print voucher
+    function printVoucher() {
+        var divToPrint = document.getElementById("tourCmplVoucher");
+        divToPrint.style.border = "1px";
+        newWin = window.open("");
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    };
+
+</script>

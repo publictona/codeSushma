@@ -1,0 +1,430 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <style>
+            .contentRow {
+                white-space: break-spaces !important;
+            }
+
+            .tourcode,
+            .formno {
+                text-transform: uppercase;
+                font-size: 16px;
+                font-weight: 500;
+            }
+
+            .tourname {
+                font-size: 12px;
+            }
+
+            .tour-detials {
+                font-size: 15px;
+                white-space: nowrap;
+            }
+
+            .background-box {
+                background: #dadada;
+                padding: 1px 5px;
+                border-radius: 4px;
+            }
+
+            .col-150 {
+                min-width: 150px;
+                max-width: 150px;
+                width: 150px;
+            }
+
+            .col-50 {
+                min-width: 50px;
+                max-width: 50px;
+                width: 50px;
+            }
+
+            .alert {
+                width: auto;
+                padding: 20px;
+                font-size: 15px;
+                top: 63px !important;
+                right: 20px !important;
+                z-index: 999999 !important;
+            }
+
+            .ibTable tr td {
+                padding: 3px;
+            }
+
+            .calIpBox {
+                border-bottom: 1px solid #fff;
+            }
+
+            .page-title {
+                margin-top: 4.5rem;
+                border-bottom: 1px solid #e8e8e8;
+                padding-bottom: 1rem;
+                font-size: 1.5rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            label.error {
+                position: relative !important;
+                left: 0px !important;
+                top: 4px !important;
+                font-size: 11px !important;
+                display: block !important;
+            }
+
+            .modal-header {
+                /* background-color: #311d40; */
+                background-color: #750101;
+                color: #FFE5C1;
+                font-size: medium;
+            }
+
+            .fs15--design:not(th) {
+                font-size: 15px;
+                font-weight: 550;
+
+            }
+        </style>
+
+        <div class="content__inner DIV_BOX">
+            <div class="page-header">
+            
+                <div class="page-title">
+                    <!-- <h2 class="page-title"> Room Details :-</h2> -->
+                    <h3>Room Details</h3>
+                    <span class="btn btn-primary" onclick="addNewUser()"><i class="fa fa-plus"></i> Add New Room</span>
+                </div>
+                <div class="box-body">
+                    <!-- <div class="row gutter--3px">
+                    <div class="col-md-12">
+                        <span class="btn btn-primary" onclick="addNewUser()"><i class="fa fa-plus"></i> Add New
+                            Room</span>
+                    </div> -->
+                    <div class="col-md-12 r-col">
+                        <table id="uspList" class="table table-bordered table-striped display nowrap order-column"
+                            style="width:100%;">
+                            <tbody class="appar">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="newUserBox" tabindex="-1" role="dialog" aria-labelledby="newUserBox"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header"> Room Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="regForm">
+                            <div class="row gutter--3px">
+                                <div class="col-md-12">
+                                    <div class="row gutter--3px">
+
+                                        <div class="col-md-6">
+                                            <input type="hidden" class="form-control id" name="id" value="0">
+
+                                            <label class="fs15--design">
+                                                Room No <span class="text-red">*</span>
+                                            </label>
+                                            <input type="number" class="form-control room_number" name="room_number">
+                                        </div>
+
+                                        <div class="col-md-6">
+
+                                            <label class="fs15--design" >
+                                                Hotel <span class="text-red ">*</span>
+                                            </label>
+                                            <select class="form-control hotelId" name="hotelId">
+                                                <option value=""></option>
+
+                                                
+
+                                            </select>
+
+                                        </div>
+                                          <div class="col-md-6">
+                                            <label class="fs15--design">
+                                                Room Type <span class="text-red">*</span>
+                                            </label>
+                                            <select class="form-control" name="room_type">
+                                                <option value=""></option>
+                                                <option value="Single">Single</option>
+                                                <option value="Twin">Twin</option>
+                                                <option value="Triple">Triple</option>
+                                            </select>
+
+                                        </div>
+
+
+
+                                        <div class="col-md-6">
+                                            <label class="fs15--design">
+                                                Beds <span class="text-red">*</span>
+                                            </label>
+                                            <input type="number" class="form-control beds" name="beds">
+                                        </div>
+
+                                        <!-- <div class="col-md-6">
+                                            <label class="fs15--design">
+                                                Reservations
+                                            </label>
+                                            <input type="text" class="form-control reservations" name="reservations">
+                                        </div> -->
+
+                                        <div class="col-md-6">
+                                            <label class="fs15--design">
+                                                Room Available <span class="text-red">*</span>
+                                            </label>
+                                            <select class="form-control" name="availability">
+                                                <option value=""></option>
+                                                <option value="Yes">Yes</option>
+                                                <option value="No">No</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="col-md-12 mt-10">
+                                    <button type="submit" class="btn btn-primary btn-block">Add New Room</button>
+                                </div>
+                            </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        </div>
+        <script>
+
+
+            var DrawTableInquiry;
+
+
+            $(document).ready(function () {
+
+
+                var dataColumns = [{
+                    data: "_id",
+                    sTitle: "roomId",
+                    visible: false
+                },
+                {
+                    data: "hotelId",
+                    sTitle: "Hotel",
+                    visible: false,
+                    className: "fs15--design",
+                },
+                {
+                    data: "room_number",
+                    sTitle: "Room Number",
+                    visible: true,
+                    className: "fs15--design",
+                },
+                {
+                    data: "room_type",
+                    sTitle: "Room Type",
+                    visible: true,
+                    className: "fs15--design",
+                },
+                {
+                    data: "beds",
+                    sTitle: "Beds",
+                    visible: true,
+                    className: "fs15--design  contentRow",
+                },
+
+                {
+                    data: "availability",
+                    sTitle: "Availability",
+                    visible: true,
+                    className: "fs15--design",
+                },
+
+                {
+                    data: "register",
+                    sTitle: "Action",
+                    visible: true,
+
+                    render: function (data, type, row) {
+                        //console.log(row);
+                        var html =
+                            ' <span class="btn btn-primary btn-block " data-id="' + row
+                                ._id +
+                            '" onclick="getUser(this) "><i class="fa fa-pencil"></i>  Edit</span>';
+
+                        return html;
+                    }
+                }
+
+                ];
+
+
+                // hotelId
+                var url = "/route/hotelMaster/";
+                $.get(url, {}, function (data) {
+                    var objOpt = '<option value=""></option>';
+                    if (data.message == "success") {
+                        if (data.result && data.result.length) {
+                            for (var index = 0; index < data.result.length; index++) {
+                                const element = data.result[index];
+                                objOpt += '<option value="' + data.result[index].hotelId + '">' + data.result[index].hotelName + '</option>';
+                            }
+                        }
+                    } else {
+
+                    }
+                    $(".hotelId").html(objOpt);
+                });
+
+
+                DrawTableInquiry = DrawCustomDataTable("uspList", 500,
+                    "/route/roomMasterNew/dataGridView", dataColumns, [
+                    [0, "asc"]
+                ], "frm_grid_search", null, true, true);
+
+                $("#frm_grid_search").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        DrawTableInquiry.ajax.reload();
+                    }
+                });
+                $('.textUpper').on('keyup', function (e) {
+                    $(this).val($(this).val().toUpperCase());
+                });
+
+
+
+
+                $("form#regForm").submit(function (e) {
+                    $('#newUserBox').modal('hide');
+                    e.preventDefault();
+                });
+
+                $("#regForm").validate({
+
+                    rules: {
+                        room_number: "required",
+                        room_type: "required",
+                        beds: "required",
+                        hotelId: "required",
+                        availability: "required",
+                        hotelId: "required"
+                        // reservation: "required",
+                    },
+                    messages: {
+                        room_number: "Room Number is required",
+                        hotelId: "Please select Hotel",
+                        room_type: "Please Select Room Type",
+                        beds: "Please Enter bed Number",
+                        hotelId: "Please Select Hotel name ",
+                        availability: "Please select availability",
+                        // reservation: "Please select reservation",
+
+                    },
+                    errorPlacement: function (error, element) {
+                        offset = element.offset();
+                        error.insertAfter(element)
+                        error.addClass('message');
+                        error.css('display', 'block!important');
+                    },
+                    submitHandler: function (form) {
+                        var $form = $(form);
+                        var formData = $form.serializeObject();
+                        var method = "post";
+                        var url = "/route/roomMasterNew/create";
+                        //console.log(formData.id);
+                        if (formData.id != 0) {
+                            url =
+                                '/route/roomMasterNew/updatebookingdata/' +
+                                formData.id;
+                            method = "put";
+                        }
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(formData),
+                            //data: formData,
+                            dataType: "json",
+                            success: function (result) {
+                                console.log("hggggggggggggggi");
+
+                                if (result.status) {
+                                    notification({
+                                        type: "success",
+                                        message: result
+                                            .msg
+                                    });
+                                    DrawTableInquiry.ajax
+                                        .reload();
+
+                                }
+
+
+                            }
+                        });
+
+                    }
+                });
+            });
+
+            function addNewUser() {
+                $('#newUserBox').modal('show');
+            }
+
+            function populate(frm, data) {
+                $.each(data, function (key, value) {
+                    $('[name=' + key + ']', frm).val(value);
+                });
+                $('.sector').select2();
+            }
+
+            function getUser(id) {
+                //console.log(id.getAttribute('data-id'));
+                var id = id.getAttribute('data-id');
+
+                $.ajax({
+                    url: "/route/roomMasterNew/bookingdata",
+                    type: "get",
+                    data: {
+                        id: id
+                    },
+                    success: function (result) {
+                        console.log("hi");
+                        console.log(result);
+                        console.log(result.data.firstName);
+                        var iddata = {
+                            id: result.data._id
+                        }
+                        populate('#regForm', result.data);
+                        populate('#regForm', iddata);
+                        $('#newUserBox').modal('show');
+
+                    }
+                })
+            }
+
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+
+
+        </script>
+        <% include ../partials/footer %>
