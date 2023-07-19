@@ -1,0 +1,116 @@
+<% include ../partials/head %>
+<% include ../partials/header%>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+    .refresh-table {
+        position: absolute
+    }
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    td, th {
+      border: 1px solid #DDDDDD;
+      text-align: left;
+      padding: 8px;
+    }
+    tr:nth-child(even) {
+      background-color: #DDDDDD;
+    }
+</style>
+<div class="content__inner" style="margin-top: 5%;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body card-body--without-title">
+                    <button class="btn btn-primary refresh-table"><i class="fa fa-fw fa-refresh"></i></button>&nbsp;&nbsp;
+                    <button class="btn btn-primary addHotel" style="display: block;float: right;">Add New</button>
+                    <table id="therapistTable" class="table table-bordered table-striped display nowrap order-column">
+                        <tbody class="">
+                        </tbody>
+                    </table>
+                      <div class="container" style="margin-top:45px;">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="table-responsive">
+                              <table>
+                                <thead>
+                                  <tr id="head"></tr>
+                                </thead>
+                                <tbody id="body">
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$.ajax({
+url:'/route/booking/bookingdata',
+type:'get',
+success:function(result){
+   // console.log(result);
+// var htr=`<td></td>`;
+// for(let x in result.data.data){
+// console.log(result.data.data);
+//   htr+=`<td>${result.data.data[x].day}</td>`;
+// }
+// $('#head').append(htr);
+// var btr=``;
+// for(var j=0;j<result.data.data1.length;j++){
+//   btr+=`<tr><td>${result.data.data1[j].room_Number}</td>`;
+//       for(var z=1;z<=result.data.data.length;z++){
+//          btr+=`<td></td>`;
+//       }
+//   btr+=`</tr>`;
+// }
+// $('#body').append(btr);
+var htr=``;
+  htr+=`<th>Room NO/Days</th>`;
+for(let x in result.data.data){
+//console.log(result.data.data);
+    htr+=`<th>${result.data.data[x].day}</th>`;
+}
+$('#head').append(htr);
+// var btr=``;
+//  for(let y in result.data.data1){
+//      btr+=`<tr><td style="width:5%;">${result.data.data1[y]._id}</td>`;
+//     for(let z in result.data.data){
+//       btr+=`<td width="40%">`;
+// console.log("secoooooooooo",result.data.data1[y].data);
+//       if(result.data.data1[y].data.includes(z)){
+//       btr+=`Booked`;
+// }
+// btr+=`</td>`;
+//     }
+//     btr+=`</tr>`;
+//   }
+// $('#body').append(btr);
+var btr=``;
+ for(let y in result.data.cData){
+     btr+=`<tr><td style="width:5%;">${y}</td>`;
+    for(let z in result.data.data){
+//console.log("secoooooooooo",result.data.cData[y]);
+     // if(result.data.cData[y] == z)
+      btr+=`<td width="40%">`;
+      console.log(result.data.cData[y]);
+      var dateArr = result.data.cData[y];
+      if(dateArr.includes(z)){
+      btr+=`Booked`;
+}
+btr+=`</td>`;
+    }
+    btr+=`</tr>`;
+  }
+$('#body').append(btr);
+}
+});
+</script>
+<% include ../partials/footer %>

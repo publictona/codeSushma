@@ -1,0 +1,209 @@
+<% include ../partials/head %>
+<% include ../partials/header %>
+<link rel="stylesheet" href="/css/animateStyle.css">
+<style>
+.searchBoxCashierPool .form-control,.searchBoxCashierPool .select2-selection{
+    height: 35px !important;
+    border: 1px solid lightgrey;
+    border-radius: 14px !important;
+    background-color: white;
+}
+.searchBoxCashierPool .select2-container--default .select2-selection--single{
+    background:none;
+}
+.searchBoxCashierPool .select2{
+    background:none;
+}
+.alert {
+        width: auto;
+        padding: 20px;
+        font-size: 15px;
+        top: 63px !important;
+        right: 20px !important;
+        z-index: 999999 !important;
+}
+.error1{
+  border:1px solid red;
+}
+</style>
+
+<div class="row gutter--3px">
+  <div class="box box-primary">
+    <div class="box-body">
+      <div class="col-md-12">
+        <div class="row gutter--3px">
+          <div class="col-md-12">
+
+            <form id="callPoolFilter" class="searchBoxCallPool clearfix">
+              <div class="row gutter--3px">
+                <div class="form-group col-md-3">
+                  <input type="text" class="form-control tourCode" name="tourCode" placeholder="TOURCODE NUMBER">
+                </div>
+                <div class="col-md-1">
+                  <button type="submit" class="btn btn-primary btn-lg btn-block">Filter</button>
+                </div>
+              </div>
+            </form>
+
+          </div>
+          <div class="col-md-12">
+            <table id="callPoolTable" class="table table-bordered table-responsive table-striped display nowrap order-column" style="width:100%">
+
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+	
+</div>
+<script>
+  
+  var dataObj={};
+  var DrawTableInquiry;
+  function lockUnlock(e){
+    var obj={
+      tourcode:e.getAttribute('data-tcd'),
+      type:e.getAttribute('data-type'),
+      TR_FILEREM:e.parentNode.parentNode.querySelector('.remark').value
+    };
+    if(obj.TR_FILEREM){
+      $.ajax({
+          url: "/route/operations/lockUnlockFile",
+          type: 'post',
+          data: JSON.stringify(obj),
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          success: function (result) {
+            if(result.status){
+              notification({type:"success",message:"Successfully updated details"});
+            }else{
+              notification({type:"danger",message:result.message});
+            }    
+            DrawTableInquiry.ajax.reload();      
+          }
+      });
+    }else{
+      notification({type:"danger",message:"something error"});
+    }
+  }
+
+
+  $(document).ready(function () {
+    
+    var dataColumns = [{
+        data: "_id",
+        visible: false
+      },
+      {
+        data: "TM_TCD",
+        sTitle: "Tourcode",
+        visible: true,
+        className: "fs15--design column-50",
+        render: function (data, type, row) {
+          var data="";
+          return row.TM_TCD;
+        }
+      },
+      {
+        data: "TR_FILEBY",
+        sTitle: "Tour File By",
+        visible: true,
+        className: "fs15--design column-50",
+      }  ,
+      {
+        data: "TR_FILEDT",
+        sTitle: "TR Lock On",
+        visible: true,
+        className: "fs15--design column-50",
+        render: function (data, type, row) {
+          
+          return (row.TR_FILEDT)?dateFormat(row.TR_FILEDT):"";
+        }
+      } ,
+     
+
+      {
+        data: "TM_REMRK1",
+        sTitle: " Operation Remark",
+        visible: true,
+        className: "fs15--design",
+        render: function (data, type, row) {
+          var html='';
+          if(row.TM_REMRK1){
+            html='<input style="width:100% !important;" type="text" class="form-control remark" value="'+row.TM_REMRK1+'">';
+          }else{
+            html='<input style="width:100% !important;" type="text" class="form-control remark" value="">';
+          }
+          return html;
+        }
+      },
+
+      {
+        data: "TM_REMRK2",
+        sTitle: " Product Remark",
+        visible: true,
+        className: "fs15--design",
+        render: function (data, type, row) {
+          var html='';
+          if(row.TM_REMRK2){
+            html='<input style="width:100% !important;" type="text" class="form-control remark" value="'+row.TM_REMRK2+'">';
+          }else{
+            html='<input style="width:100% !important;" type="text" class="form-control remark" value="">';
+          }
+          return html;
+        }
+      },
+      
+      
+                   
+    ];
+
+    DrawTableInquiry = DrawCustomDataTable("callPoolTable",600, "/route/globalRemark/gridData",
+      dataColumns, [
+        [0, "desc"]
+      ], "callPoolFilter", null,true,true,undefined,undefined,undefined,"tableButtons");
+
+    
+    $("#callPoolFilter").validate({
+      errorPlacement: function (error, element) {},
+      submitHandler: function (form) {
+       
+        var $form = $(form);
+        var url = $form.attr('action');
+        var formData = $form.serializeObject();
+        DrawTableInquiry.ajax.reload();
+      }
+    });
+
+    $('#fromDateRange').daterangepicker({
+      locale: {
+        format: 'DD/MM/YYYY'
+      },
+      ranges: {
+        'Today': [moment(), moment()],
+        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf(
+          'month')]
+      }
+    });
+
+  });
+
+  $("form#psaBookingFilter").submit(function (e) {
+      e.preventDefault();
+    });
+
+ 
+
+
+ 
+</script>
+<% include ../partials/footer %>

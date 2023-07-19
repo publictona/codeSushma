@@ -1,0 +1,365 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+        <style type="text/css">
+            .contentRow {
+                white-space: break-spaces !important;
+            }
+
+            .tourcode,
+            .formno {
+                text-transform: uppercase;
+                font-size: 16px;
+                font-weight: 800;
+            }
+
+            .tourname {
+                font-size: 12px;
+            }
+
+            .tour-detials {
+                font-size: 15px;
+                white-space: nowrap;
+            }
+
+            .background-box {
+                background: #dadada;
+                padding: 1px 5px;
+                border-radius: 4px;
+            }
+
+            .col-150 {
+                min-width: 150px;
+                max-width: 150px;
+                width: 150px;
+            }
+
+            .col-50 {
+                min-width: 50px;
+                max-width: 50px;
+                width: 50px;
+            }
+
+            .alert {
+                width: auto;
+                padding: 20px;
+                font-size: 15px;
+                top: 63px !important;
+                right: 20px !important;
+                z-index: 999999 !important;
+            }
+
+            .ibTable tr td {
+                padding: 3px;
+            }
+
+            .calIpBox {
+                border-bottom: 1px solid #fff;
+            }
+
+            label.error {
+                display: block !important;
+            }
+        </style>
+
+        <div id="mySidenav" class="hamburger-menu">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <div class="hamburger-content">
+                <form id="frm-grid-search" name="frm-grid-search">
+                    <div class="box bgff">
+                        <label for="mice_branch">TOURCODE</label>
+                        <select class="form-control select2" name="TOURCODE" id="TOURCODE"></select>
+                    </div>
+                    <div class="box bgff">
+                        <label for="TOURNAME">TOURNAME</label>
+                        <select class="form-control select2 " name="TOURNAME" id="TOURNAME"></select>
+                    </div>
+                    <div class="bgff">
+                        <button type="submit" class="btn btn-primary btn-guest height-30 btn-block" onclick="closeNav()"
+                            style="">SEARCH</button>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="box-header with-border with-hamburger">
+                <a href="javascript:void(0);" class="box-header-hamburger-menu" onclick="openNav()">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </a>
+                <h4 class="box-title"> Registration Amount</h4>
+            </div>
+            <div class="box-body">
+                <div class="row gutter--3px">
+                    <div class="col-md-7 r-col">
+                        <table id="tour_slide_table"
+                            class="table table-bordered table-striped display nowrap order-column" style="width:100%;">
+                            <tbody class="appar">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="tourSeriesVisaDetailsModel" tabindex="-1" role="dialog"
+            aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content gutter--3px third-sec">
+                    <form id="erp_form_vd" action="/route/TOURNAME/registrationAmountUpdate/" autocomplete="off">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true">&times;</span>
+                                <span class="sr-only">X</span>
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">
+                                Update Registration Amount
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group col-sm-6">
+                                <label class="control-label" for="TOURCODE_VD">TOURCODE</label>
+                                <div class="">
+                                    <input type="text" class="form-control" name="TOURCODE" id="TOURCODE_VD"
+                                        placeholder="TOURCODE" readonly="" />
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label class="control-label" for="TOURNAME_VD">TOURNAME</label>
+                                <div class="">
+                                    <input type="text" class="form-control" name="TOURNAME" id="TOURNAME_VD"
+                                        placeholder="TOURNAME" readonly="" />
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-6">
+                                <label class="control-label" for="F_ADVTOPAY">Registration Amount</label>
+                                <div class="">
+                                    <input type="number" class="form-control" name="F_ADVTOPAY" id="F_ADVTOPAY_VD"
+                                        placeholder="REGISTRATION  AMOUNT" />
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <div>
+                                <input type="hidden" class="form-control" name="AccessToken"
+                                    value="<%= AccessToken %>" />
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary btn-guest button-submit-form btn-block"
+                               
+                                 data-click="reset()" id="submit">UPDATE</button>
+                            </div>
+
+                            <!-- <div class="alert alert-success hide-alert-box text-center visa__alert"
+                                id="custom_success_vd">
+                                <button type="button" class="close visa__close" data-dismiss="alert">x</button>
+                                <strong>Success! </strong>
+                                Record Update successfully.
+                            </div> -->
+                            <div class="alert alert-success hide-alert-box text-center visa__alert" id="danger-alert-vd">
+                                <button type="button" class="close visa__close" data-dismiss="alert">x</button>
+                                <strong>Success! </strong>
+                                Record Update successfully.
+                                <span class="custom_error"></span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+        <script type="text/javascript">
+
+            function PresentationDate(data) {
+                if (data) {
+                    var year = data.substr(0, 4);
+                    var month = data.substr(5, 2);
+                    var mydate = data.substr(8, 2);
+                    var newDate = mydate + "/" + month + "/" + year;
+                    return newDate;
+                }
+            }
+
+            function getTourcode() {
+                $.ajax({
+                    url: "/route/TOURNAME/getTourSeries",
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (result) {
+                        result = JSON.parse(JSON.stringify(result));
+                        var options = '<option value="ALL">- SELECT -</option>';
+                        var tourmaneOptions = '<option value="ALL">- SELECT -</option>';
+                        for (var i = 0; i < result.length; i++) {
+                            options += '<option value=' + result[i].TOURCODE + ' data-TOURCODE="' + result[i].TOURCODE + '">' + result[i].TOURCODE + '</option>';
+                            tourmaneOptions += '<option value="' + result[i].TOURNAME + '" data-TOURCODE="' + result[i].TOURCODE + '">' + result[i].TOURNAME + '</option>';
+                        }
+                        $("#TOURCODE").html(options);
+                        $("#TOURCODE").select2();
+                        $("#TOURNAME").html(tourmaneOptions);
+                        $("#TOURNAME").select2();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("Error in loading branch data.Please refresh page");
+                    }
+                });
+            }
+
+
+
+
+            $(document).ready(function () {
+                getTourcode();
+                var editGridData = "";
+
+                $(document).on('click', '.editGridData', function () {
+                    $(".overlay").show();
+                    var id = $(this).attr("data-id");
+                    var url = "/route/TOURNAME/" + id;
+                    editGridData = id;
+                    $.get(url, {}, function (data) {
+                        populate_data = data;
+                        console.log(data);
+                        var formAction = "/route/TOURNAME/registrationAmountUpdate/";
+                        formAction = formAction + id;
+                        $("#erp_form_vd").attr("action", formAction);
+                        $.when($('#erp_form_vd').populate(data)).done(function (x) {
+                            $(".overlay").hide();
+                            $('#tourSeriesVisaDetailsModel').modal('show');
+                        });
+                    });
+                });
+
+                var dataColumns = [{
+                    data: "_id",
+                    sTitle: "Id",
+                    visible: false
+                }, {
+                    data: "TOURCODE",
+                    sTitle: "SERIES.",
+                    className: "column-10",
+                    visible: true,
+
+                }, {
+                    data: "TOURNAME",
+                    sTitle: "TOURNAME",
+                    className: "column-50",
+                    visible: true,
+                },
+
+                {
+                    data: "F_ADVTOPAY",
+                    sTitle: "REGISTRATION AMOUNT..",
+                    className: "column-20",
+                    visible: true,
+                    render: function (data, type, row) {
+                        return '<a href="#" class="editGridData" data-id="' + row._id + '">' + row.F_ADVTOPAY + '</a>';
+                    }
+                },
+
+                    // {
+                    //     data: "register",
+                    //     sTitle: "Action",
+                    //     visible: true,
+                    //     className: "column-50",
+                    //     render: function (data, type, row) {
+                    //         //console.log(row);
+                    //         var html =
+                    //             ' <span class="btn btn-primary btn-block" data-id="' + row
+                    //                 ._id +
+                    //             '" onclick="getUser(this) "><i class="fa fa-pencil"></i> Edit</span>';
+                    //         return html;
+                    //     }
+                    // }
+
+
+
+                ];
+
+
+                var DrawTableInquiry = DrawCustomDataTable("tour_slide_table", 350, "/route/TOURNAME/gridData", dataColumns, [
+                    [0, "desc"]
+                ], "frm-grid-search", null, true, true);
+
+                $("#frm-grid-search").validate({
+                    errorPlacement: function (error, element) {
+                    }, submitHandler: function (form) {
+                        DrawTableInquiry.ajax.reload();
+                    }
+                });
+
+
+
+
+                $("#erp_form_vd").validate({
+                    rules: {},
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        $(".overlay").show();
+                        var $form = $(form);
+                        var url = $form.attr('action');
+                        // url += SubmitUrlId;
+                        var formData = $form.serializeObject();
+                        $.ajax({
+                            url: url,
+                            type: "PUT",
+                            data: JSON.stringify(formData),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (result) {
+                                document.getElementById("erp_form_vd").reset();
+                                if (result.message) {
+                                    $(".overlay").hide();
+                                    // if (action_type == "PUT") {
+                                    $("#custom_success_vd").alert();
+                                    $("#custom_success_vd").fadeTo(2000, 500).slideUp(500, function () { });
+                                    $(".form_add_entry").trigger("click");
+
+                                    document.getElementById("erp_form_vd").reset();
+                                    $('#tourSeriesVisaDetailsModel').modal('hide');
+
+                                    DrawTableInquiry.ajax.reload();
+                                }
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                $(".overlay").hide();
+                                if (jqXHR.status == 200 || jqXHR.status == 302) {
+                                    window.location.href = '/login';
+                                }
+                                var result = jQuery.parseJSON(jqXHR.responseText);
+                                if (jqXHR.status == 500) {
+
+                                    $(".custom_error").html(result.message);
+
+                                    $("#danger-alert-vd").alert();
+
+                                    $("#danger-alert-vd").fadeTo(2000, 500).slideUp(500, function () { $('#tourSeriesVisaDetailsModel').modal('hide'); });
+                                } else {
+                                    $(".custom_error").html(errorThrown);
+                                    $("#danger-alert-vd").alert();
+
+                                    $("#danger-alert-vd").fadeTo(2000, 500).slideUp(500, function () { $('#tourSeriesVisaDetailsModel').modal('hide'); });
+                                }
+                            }
+                        });
+                    }
+
+
+                });
+
+            });
+
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+        </script>
+        <% include ../partials/footer %>

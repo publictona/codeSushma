@@ -1,0 +1,244 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+        <link rel="stylesheet" href="/css/animateStyle.css">
+        <style>
+            .searchBoxCashierPool .form-control,
+            .searchBoxCashierPool .select2-selection {
+                height: 35px !important;
+                border: 1px solid lightgrey;
+                border-radius: 14px !important;
+                background-color: white;
+            }
+
+            .searchBoxCashierPool .select2-container--default .select2-selection--single {
+                background: none;
+            }
+
+            .searchBoxCashierPool .select2 {
+                background: none;
+            }
+
+            .alert {
+                width: auto;
+                padding: 20px;
+                font-size: 15px;
+                top: 63px !important;
+                right: 20px !important;
+                z-index: 999999 !important;
+            }
+
+            .error1 {
+                border: 1px solid red;
+            }
+        </style>
+
+        <div class="row gutter--3px">
+            <div class="box box-primary">
+                <div class="box-body">
+                    <div class="col-md-12">
+                        <div class="row gutter--3px">
+                            <div class="col-md-12">
+
+                                <form id="callPoolFilter" class="searchBoxCallPool clearfix">
+                                    <div class="row gutter--3px">
+                                        <div class="form-group col-md-3">
+                                            <input type="text" class="form-control tourCode" name="tourCode"
+                                                placeholder="TOURCODE NUMBER">
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <input type="text" class="form-control tourCode" name="tourCode"
+                                                placeholder="TOUR SERIES">
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <input type="date" class="form-control fromDateRange" name="fromDateRange"
+                                                placeholder="DATE">
+                                        </div>
+                                        <div class="col-md-1">
+                                            <button type="submit"
+                                                class="btn btn-primary btn-lg btn-block">Filter</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                            <div class="col-md-12">
+                                <table id="callPoolTable"
+                                    class="table table-bordered table-responsive table-striped display nowrap order-column"
+                                    style="width:100%">
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        </div>
+        <script>
+
+            var dataObj = {};
+            var DrawTableInquiry;
+
+
+
+            function saveRemark(e) {
+                var obj = {
+                    tourcode: e.getAttribute('data-tcd'),
+                    type: e.getAttribute('data-type'),
+                    remark: e.value
+                };
+                console.log(obj)
+                if (obj.remark) {
+                    $.ajax({
+                        url: "/route/globalRemark/saveGlobalRemarkData",
+                        type: 'post',
+                        data: JSON.stringify(obj),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.status) {
+                                notification({ type: "success", message: "Successfully updated remark" });
+                            } else {
+                                notification({ type: "danger", message: result.message });
+                            }
+                            DrawTableInquiry.ajax.reload();
+                        }
+                    });
+                }
+            }
+
+
+            $(document).ready(function () {
+
+                var dataColumns = [
+
+                    {
+                        data: "_id",
+                        visible: false
+                    },
+                    {
+                        data: "TM_TCD",
+                        sTitle: "Tourcode",
+                        visible: true,
+                        className: "fs15--design column-50",
+                        render: function (data, type, row) {
+                            var data = "";
+                            return row.TM_TCD;
+                        }
+                    },
+                    {
+                        data: "PROREMBY",
+                        sTitle: "Prod. Remrk By",
+                        visible: true,
+                        className: "fs15--design",
+                    },
+                    {
+                        data: "PROREMON",
+                        sTitle: "Prod. Remrk on",
+                        visible: true,
+                        className: "fs15--design",
+                        render: function (data, type, row) {
+
+                            return (row.PROREMON) ? dateFormat(row.PROREMON) : "";
+                        }
+                    },
+                    {
+                        data: "TM_REMRK1",
+                        sTitle: " Product Remark",
+                        visible: true,
+                        className: "fs15--design",
+                        render: function (data, type, row) {
+                            var html = '';
+                            if("<%=department%>".indexOf('PRODUCT')>-1){
+                                if (row.TM_REMRK1) {
+                                    html = '<input data-tcd="'+row.TM_TCD+'" data-type="Product" style="width:100% !important;" type="text" class="form-control" value="' + row.TM_REMRK1 + '" onblur="saveRemark(this)">';
+                                } else {
+                                    html = '<input data-tcd="'+row.TM_TCD+'" data-type="Product" style="width:100% !important;" type="text" class="form-control" value="" onblur="saveRemark(this)">';
+                                }
+                            }else{
+                                html = row.TM_REMRK1;
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        data: "OPSREMBY",
+                        sTitle: "Ops. Remrk By",
+                        visible: true,
+                        className: "fs15--design",
+                    },
+                    {
+                        data: "OPSREMON",
+                        sTitle: "Ops. Remrk on",
+                        visible: true,
+                        className: "fs15--design",
+                        render: function (data, type, row) {
+
+                            return (row.OPSREMON) ? dateFormat(row.OPSREMON) : "";
+                        }
+                    },
+                    {
+                        data: "TM_REMRK2",
+                        sTitle: "Operation Remark",
+                        visible: true,
+                        className: "fs15--design",
+                        render: function (data, type, row) {
+                            var html = '';
+                            if("<%=department%>".indexOf('KESARI IT')>-1){
+                                if (row.TM_REMRK2) {
+                                    html = '<input data-tcd="'+row.TM_TCD+'" data-type="Operation" style="width:100% !important;" type="text" class="form-control" value="' + row.TM_REMRK2 + '" onblur="saveRemark(this)">';
+                                } else {
+                                    html = '<input data-tcd="'+row.TM_TCD+'" data-type="Operation" style="width:100% !important;" type="text" class="form-control" value="" onblur="saveRemark(this)">';
+                                }
+                            }else{
+                                html =row.TM_REMRK2;
+                            }
+                            return html;
+                        }
+                    }
+                ];
+
+                DrawTableInquiry = DrawCustomDataTable("callPoolTable", 600, "/route/globalRemark/gridData",
+                    dataColumns, [
+                    [0, "desc"]
+                ], "callPoolFilter", null, true, true, undefined, undefined, undefined, "tableButtons");
+
+
+                $("#callPoolFilter").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+
+                        var $form = $(form);
+                        var url = $form.attr('action');
+                        var formData = $form.serializeObject();
+                        DrawTableInquiry.ajax.reload();
+                    }
+                });
+
+                $('#fromDateRange').daterangepicker({
+                    locale: {
+                        format: 'DD/MM/YYYY'
+                    },
+                    ranges: {
+                        'Today': [moment(), moment()],
+                        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                        'This Month': [moment().startOf('month'), moment().endOf('month')],
+                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf(
+                            'month')]
+                    }
+                });
+
+            });
+
+            $("form#psaBookingFilter").submit(function (e) {
+                e.preventDefault();
+            });
+
+        </script>
+        <% include ../partials/footer %>

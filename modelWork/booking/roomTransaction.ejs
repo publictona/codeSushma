@@ -1,0 +1,696 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+
+        <style>
+            .refresh-table {
+                position: absolute
+            }
+
+
+            .bgff {
+                margin-left: 30px;
+                margin-right: 30px;
+                margin-bottom: 15px;
+
+            }
+
+            .form-control {
+                padding: 12px 19px;
+                box-sizing: border-box;
+                border: 1px solid rgb(211, 221, 225);
+                border-radius: 4px;
+                background-color: rgb(255, 255, 255);
+                color: rgb(69, 85, 96);
+                font-family: inherit;
+                font-size: 12px;
+                font-weight: 500;
+                transition: background-color 300ms ease-in-out 0s, color 300ms ease-in-out 0s;
+            }
+
+            .form-control:focus {
+                box-shadow: rgb(175 224 235) 0px 0px 3px 0px;
+                border-color: rgb(188 238 249);
+                outline: none;
+                transition: box-shadow 300ms ease-in-out 0s, border-color 300ms ease-in-out 0s;
+            }
+
+            .select2-container--open .select2-dropdown--above {
+                z-index: 99999 !important;
+            }
+
+            .select2-container {
+                display: inline;
+                z-index: 9999;
+            }
+
+            .hamburger-menu {
+                height: 100%;
+                max-height: 92%;
+                width: 0;
+                position: fixed;
+                z-index: 1;
+                top: 55px;
+                left: 0px;
+                background-color: #fff;
+                overflow-x: hidden;
+                transition: .5s;
+                padding-top: 50px;
+                box-shadow: 0 1px 6px 0 rgb(32 33 36 / 28%);
+            }
+
+            .hamburger-menu .closebtn {
+                position: absolute;
+                top: 0;
+                right: 10px;
+                margin-left: 50px;
+                padding: 8px 8px 8px 32px;
+                text-decoration: none;
+                font-size: 25px;
+                color: #818181;
+                display: block;
+                transition: .3s;
+            }
+
+
+
+            label.error {
+                position: relative !important;
+                left: 0px !important;
+                top: 4px !important;
+                font-size: 11px !important;
+                display: block !important;
+            }
+
+            .fs15--design:not(th) {
+                font-size: 13px;
+                font-weight: 450;
+
+            }
+        </style>
+
+        <div class="content__inner" style="margin-top: 5%;">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="card">
+
+                        <div class="card-body card-body--without-title">
+                            <div id="mySidenav" class="hamburger-menu">
+                                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                                <div class="hamburger-content">
+                                    <form id="frm_grid_search" name="frm_grid_search">
+                                        <div class="bgff">
+                                            <label>Hotel Name</label>
+                                            <input type="hidden" class="form-control master_type" name="master_type"
+                                                value="room_Transaction" />
+
+                                            <input type="text" class="form-control hotels" id="filterInput" />
+                                        </div>
+
+                                        <!-- <div class="col-md-4">
+                                            <label for="">Select Bed Option</label>
+                                            <div class="form-group">
+                                                <select class="form-control available_Room" id="available_Room"
+                                                    name="booked_Room[]">
+                                                    <option value="">Select</option>
+
+                                                </select>
+
+                                            </div>
+                                        </div> -->
+
+
+                                        <div class="bgff">
+                                            <span class="btn btn-primary btn-guest height-30 width-50 btn-block"
+                                                onclick="getUser(this)">SEARCH</span>
+
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="box-header with-border with-hamburger">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <a href="javascript:void(0);" class="box-header-hamburger-menu"
+                                            onclick="openNav()">
+                                            <i class="fa fa-bars fa-2x" aria-hidden="true"></i>
+                                        </a>
+
+                                    </div>
+                                    <div class="col-md-5">
+                                        <h3 class="box-title">Room Transaction</h3>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <span class="btn btn-primary" style="float: right;" onclick="addNewUser()"><i
+                                                class="fa fa-plus"></i> Add New Room</span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 r-col">
+                                <table id="uspList"
+                                    class="table table-bordered table-striped display nowrap order-column"
+                                    style="width:100%;">
+                                    <tbody class="appar">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="hotelMasterModel" tabindex="-1" role="dialog" aria-labelledby="hotelMasterModel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header"> Room Transaction</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="hotelMasterForm">
+                            <div class="row gutter--3px">
+                                <div class="col-md-12">
+                                    <div class="row gutter--3px">
+
+                                        <div class="col-md-4">
+
+                                            <input type="hidden" class="form-control id" name="id" value="0">
+                                            <input type="hidden" name="master_type" value="room_Transaction">
+                                            <input type="hidden" class="form-control master_id" name="master_id"
+                                                value="0" />
+                                            <label for=""> Guest Name</label><span class="text-red">*</span>
+
+                                            <input type="text" class="form-control userName" name="userName">
+                                        </div>
+
+
+
+
+
+                                        <div class="col-md-4">
+                                            <label class="fs15--design">
+                                                No Of Person<span class="text-red">*</span>
+                                            </label>
+                                            <input type="number" id="no_Of_Person" class="form-control no_Of_Person"
+                                                name="no_Of_Person">
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label for="" class="fs15--design">
+                                                Select Bed Option<span class="text-red">*</span>
+                                            </label>
+                                            <select class="form-control bed_Option" id="bed_Option" name="bed_Option[]">
+                                                <option value="">Select</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label for="Hotel" class="fs15--design">
+                                                Select Hotel<span class="text-red">*</span>
+                                            </label>
+                                            <select name="hotel" id="hotel" class="form-control hotel">
+                                                <option value="">Select</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label for="">To Date</label>
+                                            <input type="date" class="form-control booking_FromDate"
+                                                id="booking_FromDate" name="booking_FromDate">
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label for="">To Date</label>
+                                            <input type="date" class="form-control booking_ToDate" id="booking_ToDate"
+                                                name="booking_ToDate">
+                                        </div>
+
+
+                                        <div class="col-md-4">
+                                            <label for="">Select Bed Option</label>
+                                            <div class="form-group">
+                                                <select class="form-control available_Room" id="available_Room"
+                                                    name="booked_Room[]">
+                                                    <option value="">Select</option>
+
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                        <!-- error msg -->
+                                        <div class="alert alert-success alert-dismissible fade show alert-hidden"
+                                            id="success-alert-add">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                            <strong>Success! </strong> Record added successfully.
+                                        </div>
+                                        <div class="alert alert-info alert-dismissible fade show alert-hidden"
+                                            id="success-alert-update">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            <strong>Success! </strong> Record Update successfully.
+                                        </div>
+                                        <div class="alert alert-danger alert-dismissible fade show d-none"
+                                            id="success-alert-error">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                            <strong>Error! </strong> <span class="custom_error"></span>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-12 mt-10">
+                                <div>
+                                    <button type="submit" class="btn btn-primary btn-block">Save Room</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var DrawTableInquiry;
+            $(document).ready(function () {
+                var dataColumns = [{
+                    data: "_id",
+                    sTitle: "room_TransactionId",
+                    visible: false
+                },
+
+                // {
+                //     data: "master_id",
+                //     visible: true,
+                //     sTitle: "Hotel Id#",
+
+                // }, 
+
+                {
+                    data: "hotel",
+                    visible: true,
+                    sTitle: "Hotel Name#",
+
+                },
+
+                {
+                    data: "userName",
+                    sTitle: "Name#",
+                    visible: true,
+
+                },
+
+                {
+                    data: "room_Type",
+                    sTitle: "Room Type#",
+                    visible: true,
+
+                },
+
+                {
+                    data: "no_Of_Person",
+                    sTitle: "No Of Person#",
+                    visible: true
+                },
+
+                {
+                    data: "booked_Room",
+                    sTitle: "Booked Room",
+                    visible: true
+                },
+
+                {
+                    data: "booking_FromDate",
+                    sTitle: "CheckIn Date#",
+                    visible: true,
+                    render: function (data, type, row) {
+                        var html = "";
+                        return dateFormat(row.booking_FromDate);
+                    }
+                },
+                {
+                    data: "booking_ToDate",
+                    sTitle: "Checkout Date#",
+                    visible: true,
+                    render: function (data, type, row) {
+                        var html = "";
+                        return dateFormat(row.booking_ToDate);
+                    }
+
+                },
+
+                {
+                    data: "room_Transaction",
+                    sTitle: "Action",
+                    visible: true,
+
+                    render: function (data, type, row) {
+
+                        var html =
+                            ' <span class="btn btn-primary btn-block " data-id="' + row
+                                ._id +
+                            '" onclick="getUser(this) "><i class="fa fa-pencil"></i>  Edit</span>';
+
+                        return html;
+                    }
+                }
+
+                ];
+
+                DrawTableInquiry = DrawCustomDataTable("uspList", 500,
+                    "/route/roomTransaction/dataGridView", dataColumns, [
+                    [0, "asc"]
+                ], "frm_grid_search", null, true, true);
+                // $('.refresh-table').on('click', function () {
+                //     DrawTableInquiry.ajax.reload();
+                // })
+                // ----------
+
+                $("#frm-grid-search").validate({
+                    errorPlacement: function (error, element) {
+                    }, submitHandler: function (form) {
+                        DrawTableInquiry.ajax.reload();
+                    }
+                });
+
+                $("#erp_form .form-control").change(function () {
+                    $(this).closest('form').data('changed', true);
+                    $('.btn-submit').removeAttr('disabled');
+                });
+
+                $(document).on('click', '.addHotel', function () {
+                    document.getElementById("hotelMasterForm").reset();
+                    $("#hotelMasterModel").modal('show');
+                });
+
+
+
+                $('.textUpper').on('keyup', function (e) {
+                    $(this).val($(this).val().toUpperCase());
+                });
+
+                $("form#hotelMasterForm").submit(function (e) {
+                    $('#hotelMasterModel').modal('hide');
+                    e.preventDefault();
+                });
+
+
+                $("#hotelMasterForm").validate({
+                    rules: {
+
+                        booking_FromDate: "required",
+                        no_Of_Person: "required",
+                        booking_ToDate: "required",
+                        available_Room: "required",
+                        hotel: "required",
+                        //bed_Option: "required",
+
+                    },
+                    messages: {
+                        booking_FromDate: "Please Select booking From Date",
+                        booking_ToDate: "Please select booking To Date",
+                        available_Room: "Please Select Available Room",
+                        no_Of_Person: "Please Enter Total Person",
+                        hotel: "Please Select Hotel",
+                        bed_Option: "Please Select bed ",
+                    },
+
+                    errorPlacement: function (error, element) {
+                        offset = element.offset();
+                        error.insertAfter(element)
+                        error.addClass('message');
+                        error.css('display', 'block!important');
+                    },
+
+                    submitHandler: function (form) {
+                        $(".overlay").show();
+                        var $form = $(form);
+                        //console.log(form);
+
+                        var url = "/route/roomTransaction/create";
+
+                        var formData = $form.serializeObject();
+                        console.log(formData);
+                        //return false;
+                        action_type = "POST";
+
+
+                        if (formData.id != 0) {
+                            url =
+                                '/route/roomTransaction/updateRoom/' +
+                                formData.id;
+                            action_type = "PUT";
+                        }
+                        //return false;
+                        $.ajax({
+                            url: url,
+                            type: action_type,
+                            data: JSON.stringify(formData),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (result) {
+                                // success: function (result) {
+                                if (result.message == "Save Successfully") {
+                                    $("#success-alert-add").alert();
+                                    $("#success-alert-add").fadeTo(2000, 500).slideUp(500, function () {
+                                    });
+                                } else {
+                                    $("#success-alert-update").alert();
+                                    $("#success-alert-update").fadeTo(2000, 500).slideUp(500, function () {
+                                    });
+                                }
+                                $(".overlay").hide();
+                                 window.sort_by = "_id";
+                                 window.page = 0;
+                                $('#hotelMasterModel').modal('hide');
+                                DrawTableInquiry.ajax.reload();
+                                 $("#grid_search_by").val("");
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                $("#success-alert-error").alert();
+                                $("#success-alert-error").fadeTo(2000, 500).slideUp(500, function () {
+                                });
+                            }
+
+                        });
+                    }
+                });
+            });
+
+            function filterData() {
+                var obj = {
+                    "hotel": $('.hotels').val(),
+
+                };
+                console.log("ggggggggggg", obj)
+                DrawTableInquiry.ajax.reload();
+
+                getUser(obj);
+
+            }
+
+            function addNewUser() {
+                $("#hotelMasterForm").get(0);
+                // $('#hotelMasterModel').modal('show');
+                $('#hotelMasterModel').modal('show');
+            }
+
+            $("form").submit(function (e) {
+                e.preventDefault();
+            });
+
+            $('.btn-submit').attr('disabled', 'disabled');
+            var SubmitUrlId;
+            var populate_data = {};
+            var action_type = "POST";
+            var NewObject;
+            var flag = false;
+
+
+            function populate(frm, data) {
+                $.each(data, function (key, value) {
+                    $('[name=' + key + ']', frm).val(value);
+                });
+                $('.sector').select2();
+            }
+
+            function getUser(id) {
+                //console.log(id.getAttribute('data-id'));
+
+                var id = id.getAttribute('data-id');
+                $("#erp_formSubmit").html("Update");
+                var obj = {};
+
+                if (id && Object.keys(id).length > 0) {
+                    obj = id;
+                    console.log("hjjjjjjjfhhf", obj)
+                }
+                $.ajax({
+                    url: "/route/roomTransaction/roomData",
+                    type: "get",
+                    //data: JSON.stringify(obj),
+                    data: {
+                        id: id,
+                        obj: obj,
+
+                    },
+                    success: function (result) {
+                        console.log("hi");
+                        console.log(result);
+                        console.log(result.data.firstName);
+                        var iddata = {
+                            id: result.data._id
+                        }
+                        populate('#hotelMasterForm', result.data);
+                        populate('#hotelMasterForm', iddata);
+                        $('#hotelMasterModel').modal('show');
+
+                    }
+                })
+            }
+
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+
+            function addPerson() {
+                var number = 3;
+                var text = ``;
+                for (var i = 1; i <= number; i++) {
+
+                    text += `<input type="text" class="form-control userName" name="userName" />`;
+                }
+                $('#id').append(text);
+
+            }
+
+            $('#booking_ToDate').change(function () {
+                var fromDate = $("#booking_FromDate").val();
+                var toDate = $("#booking_ToDate").val();
+                //var hotel = $("#hotel").val();
+                var hotel = 'Taj Hotel';
+                var data = { 'fromDate': fromDate, 'toDate': toDate, 'hotel': hotel }
+
+                $.ajax({
+                    url: '/route/booking/availableRoom',
+                    type: 'post',
+                    data: data,
+                    success: function (result) {
+
+                        //console.log("available_Roomavailable_Room", result)
+
+                        $('#available_Room').attr('multiple', 'multiple');
+                        var option = ``;
+                        result.data.forEach(ele => {
+                            console.log("hiiiiiiiiiiiiiiiii", ele);
+                            option += `<option value="${ele.room_Number}">${ele.room_Number}</option>`;
+
+                        })
+                        $("#available_Room").append(option);
+                        $("#available_Room").select2();
+                    }
+                })
+            })
+
+            //$('.addHotel').click(function(){
+            var data = { 'master_type': 'Amenities' };
+            $.ajax({
+                url: '/route/itemReq/BC_MASTER',
+                type: 'post',
+                data: data,
+                success: function (result) {
+                    console.log(result);
+
+                    var option = ``;
+                    result.data.forEach(ele => {
+                        console.log(ele);
+                        option += `<option value="${ele.name}">${ele.name}</option>`;
+                    })
+                    $("#hotelAmenities").append(option);
+                    $("#hotelAmenities").select2();
+                }
+            })
+
+            var data = { 'master_type': 'Hotel' };
+            $.ajax({
+                url: '/route/itemReq/BC_MASTER',
+                type: 'post',
+                data: data,
+                success: function (data) {
+                    console.log(data);
+                    var option = ``;
+                    data.data.forEach(ele => {
+                        console.log(ele);
+                        option += `<option value="${ele.hotelName}">${ele.hotelName}</option>`;
+                    })
+                    $("#hotel").append(option);
+                    //$("#hotel").select2();
+                }
+            })
+
+            $('#no_Of_Person').keyup(function () {
+                var id = $(this).val();
+                //alert("hiiiiiiii", id);
+                $('#bed_Option').attr('multiple', 'multiple');
+                var data = [1, 2, 3];
+                var option = ``;
+                data.forEach(ele => {
+                    console.log(ele);
+                    option += `<option value="${ele}">${ele}</option>`;
+                })
+                $("#bed_Option").append(option);
+                $("#bed_Option").select2();
+
+            })
+
+            // <input type="text" id="filterInput" placeholder="Enter filter keyword...">
+            // <button id="filterButton">Filter</button>
+
+            // <ul id="dataList">
+            //   <li>Apple</li>
+            //   <li>Orange</li>
+            //   <li>Banana</li>
+            //   <li>Cherry</li>
+            //   <li>Strawberry</li>
+            // </ul>
+
+
+            document.getElementById("filterButton").addEventListener("click", function () {
+                var filterKeyword = document.getElementById("filterInput").value.toLowerCase();
+                var dataList = document.getElementById("dataList").getElementsByTagName("li");
+
+                for (var i = 0; i < dataList.length; i++) {
+                    var currentItem = dataList[i];
+
+                    if (currentItem.textContent.toLowerCase().includes(filterKeyword)) {
+                        currentItem.style.display = "block";
+                    } else {
+                        currentItem.style.display = "none";
+                    }
+                }
+            });
+
+
+
+
+
+        </script>
+        <% include ../partials/footer %>

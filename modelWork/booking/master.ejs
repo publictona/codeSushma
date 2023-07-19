@@ -1,0 +1,615 @@
+<% include ../partials/head %>
+    <% include ../partials/header%>
+        <style>
+            .refresh-table {
+                position: absolute
+            }
+
+            .bgff {
+                margin-left: 30px;
+                margin-right: 30px;
+                margin-bottom: 15px;
+            }
+
+            .form-control {
+                padding: 12px 19px;
+                box-sizing: border-box;
+                border: 1px solid rgb(211, 221, 225);
+                border-radius: 4px;
+                background-color: rgb(255, 255, 255);
+                color: rgb(69, 85, 96);
+                font-family: inherit;
+                font-size: 12px;
+                font-weight: 500;
+                transition: background-color 300ms ease-in-out 0s, color 300ms ease-in-out 0s;
+            }
+
+            .form-control:focus {
+                box-shadow: rgb(175 224 235) 0px 0px 3px 0px;
+                border-color: rgb(188 238 249);
+                outline: none;
+                transition: box-shadow 300ms ease-in-out 0s, border-color 300ms ease-in-out 0s;
+            }
+
+            .select2-container--open .select2-dropdown--above {
+                z-index: 99999 !important;
+            }
+
+            .select2-container {
+                display: inline;
+                z-index: 9999;
+            }
+
+            .hamburger-menu {
+                height: 100%;
+                max-height: 92%;
+                width: 0;
+                position: fixed;
+                z-index: 1;
+                top: 55px;
+                left: 0px;
+                background-color: #fff;
+                overflow-x: hidden;
+                transition: .5s;
+                padding-top: 50px;
+                box-shadow: 0 1px 6px 0 rgb(32 33 36 / 28%);
+            }
+
+            .hamburger-menu .closebtn {
+                position: absolute;
+                top: 0;
+                right: 10px;
+                margin-left: 50px;
+                padding: 8px 8px 8px 32px;
+                text-decoration: none;
+                font-size: 25px;
+                color: #818181;
+                display: block;
+                transition: .3s;
+            }
+        </style>
+
+        <div class="content__inner" style="margin-top: 5%;">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="card">
+
+                        <div class="card-body card-body--without-title">
+                            <div id="mySidenav" class="hamburger-menu">
+                                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                                <div class="hamburger-content">
+                                    <form id="searchInput" name="searchInput">
+                                        <div class="bgff">
+                                          <label> Name</label>
+                                          <input type="hidden" class="form-control master_type" name="master_type" value="Booking" />
+                                          <input type="text" class="form-control userName" name="userName" autocomplete="off" />
+                                        </div>
+                                        <div class="bgff">
+                                          <button type="submit" class="btn btn-primary btn-guest height-30 btn-block" onclick="filterSearch(event)">SEARCH</button>
+                                        </div>
+                                      </form>
+                                      
+                                </div>
+
+
+
+                            </div>
+                            <div class="box-header with-border with-hamburger">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <a href="javascript:void(0);" class="box-header-hamburger-menu"
+                                            onclick="openNav()">
+                                            <i class="fa fa-bars fa-2x" aria-hidden="true"></i>
+                                        </a>
+
+                                    </div>
+                                    <div class="col-md-5">
+                                        <h3 class="box-title">All Bookings</h3>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <span class="btn btn-primary" style="float: right;" onclick="addNewUser()"><i
+                                                class="fa fa-plus"></i> Booking</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 r-col">
+                                <table id="therapistTable"
+                                    class="table table-bordered table-striped display nowrap order-column"
+                                    style="width:100%;">
+                                    <tbody class="appar">
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="hotelMasterModel" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title">Hotel </h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>×</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <form id="hotelMasterForm" autocomplete="off">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h3>Booking Details</h3>
+                                    <div class="row">
+
+
+                                        <div class="col-md-4">
+                                            <label for="">Enter Name</label>
+                                            <div class="form-group">
+                                                <input type="hidden" class="form-control master_type" name="master_type"
+                                                    value="Booking" />
+                                                <input type="hidden" class="form-control master_id" name="master_id"
+                                                    value="0" />
+                                                <input type="text" class="form-control userName" name="userName" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="">No Of Person</label><span class="text-red">*</span>
+                                            <div class="form-group">
+                                                <input type="Number" id="no_Of_Person" class="form-control no_Of_Person"
+                                                    name="no_Of_Person" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="">Select Bed Option</label><span class="text-red">*</span>
+                                            <div class="form-group">
+                                                <select class="form-control bed_Option" id="bed_Option"
+                                                    name="bed_Option[]">
+                                                    <option value="">Select</option>
+
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="Hotel">Select Hotel</label>
+                                            <div class="form-group">
+                                                <select name="hotel" id="hotel" class="form-control hotel">
+                                                    <option value="">Select</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label for="">From Date</label>
+                                            <div class="form-group">
+                                                <input type="date" class="form-control FromDate" name="booking_FromDate"
+                                                    id="booking_FromDate">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="">To Date</label>
+                                            <div class="form-group">
+                                                <input type="date" class="form-control booking_ToDate"
+                                                    name="booking_ToDate" id="booking_ToDate">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="">Select Available Room</label>
+                                            <div class="form-group">
+                                                <select class="form-control available_Room" id="available_Room"
+                                                    name="booked_Room[]">
+                                                    <option value="">Select</option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <input type="submit" class="btn btn-primary btn-block button-submit-PHOTO"
+                                                value="SAVE">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="modal-footer">
+                                <div class="row">
+                                    <!-- <div class="col-md-12">
+ <input type="submit" class="btn btn-primary btn-block button-submit-PHOTO" value="SAVE">
+ </div> -->
+                                    <div class="clearfix"></div>
+                                    <div class="col-md-6">
+                                        <div class="alert alert-success alert-dismissible fade show alert-hidden"
+                                            id="success-alert-add">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                            <strong>Success! </strong> Record added successfully.
+                                        </div>
+
+                                        <div class="alert alert-info alert-dismissible fade show alert-hidden"
+                                            id="success-alert-update">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            <strong>Success! </strong> Record Update successfully.
+                                        </div>
+
+                                        <div class="alert alert-danger alert-dismissible fade show d-none"
+                                            id="success-alert-error">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                            <strong>Error! </strong> <span class="custom_error"></span>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javaScript">
+ function openNav() {
+ document.getElementById("mySidenav").style.width = "250px";
+ }
+
+ function closeNav() {
+ document.getElementById("mySidenav").style.width = "0";
+ }
+ $(document).ready(function() {
+ 
+ //$('.addHotel').click(function(){
+ var data = {'master_type':'Amenities'};
+ $.ajax({
+ url:'/route/itemReq/BC_MASTER',
+ type:'post',
+ data: data,
+ success:function(result){
+ console.log(result);
+ 
+ var option=``;
+ result.data.forEach(ele => {
+ console.log(ele);
+ option+=`<option value="${ele.name}">${ele.name}</option>`;
+ })
+ $("#hotelAmenities").append(option);
+ $("#hotelAmenities").select2();
+ }
+ })
+
+var data={'master_type':'Hotel'};
+$.ajax({
+ url:'/route/itemReq/BC_MASTER',
+ type:'post',
+ data:data,
+ success:function(data){
+ console.log(data);
+ var option=``;
+ data.data.forEach(ele => {
+ console.log(ele);
+ option+=`<option value="${ele.hotelName}">${ele.hotelName}</option>`;
+ })
+ $("#hotel").append(option);
+ //$("#hotel").select2();
+ }
+})
+
+$('#no_Of_Person').keyup(function(){
+ var id = $(this).val();
+ alert("hiiiiiiii",id);
+ $('#bed_Option').attr('multiple', 'multiple');
+ var data = [1,2,3];
+ var option=``;
+ data.forEach(ele => {
+ console.log(ele);
+ option+=`<option value="${ele}">${ele}</option>`;
+ })
+ $("#bed_Option").append(option);
+ $("#bed_Option").select2();
+
+ })
+
+ $('#booking_ToDate').change(function(){
+ var fromDate = $("#booking_FromDate").val();
+ var toDate = $("#booking_ToDate").val();
+ //var hotel = $("#hotel").val();
+ var hotel = 'Taj Hotel';
+ var data= {'fromDate':fromDate,'toDate':toDate,'hotel':hotel}
+
+ $.ajax({
+ url:'/route/booking/availableRoom',
+ type:'post',
+ data:data,
+ success:function(result){
+ 
+ $('#available_Room').attr('multiple', 'multiple');
+ var option=``;
+ result.data.forEach(ele => {
+ console.log("hiiiiiiiiiiiiiiiii",ele);
+ option+=`<option value="${ele.room_Number}">${ele.room_Number}</option>`;
+ 
+ })
+ $("#available_Room").append(option);
+ $("#available_Room").select2();
+ }
+})
+})
+
+ //})
+ // $('form#hotelMasterForm').submit( function(e){
+ // $('#hotelMasterModel').modal('hide');
+ // e.preventDefault();
+ // })
+ $("form").submit(function(e){
+ e.preventDefault();
+ });
+ 
+ $('.btn-submit').attr('disabled', 'disabled');
+ var SubmitUrlId;
+ var populate_data = {};
+ var action_type = "POST";
+ var NewObject;
+ var flag = false;
+
+ $("#erp_form .form-control").change(function() {
+ $(this).closest('form').data('changed', true);
+ $('.btn-submit').removeAttr('disabled');
+ });
+
+ $(document).on('click', '.addHotel', function() {
+ document.getElementById("hotelMasterForm").reset();
+ $("#hotelMasterModel").modal('show');
+ });
+
+ $(document).on('click', '.grid-edit-row', function() {
+ $(".overlay").show();
+ $(".form_add_entry").show();
+ $(".form-title").html("Edit hotelMaster master");
+ var id = $(this).attr("data-id");
+ var url = "/route/hotelMaster/" + id;
+ $.get(url, {}, function(data) {
+ populate_data = data;
+ JSON.stringify(populate_data);
+ $.when($('#hotelMasterForm').populate(data)).done(function(x) {
+ SubmitUrlId = "/" + populate_data._id;
+ action_type = "PUT";
+ NewObject = data;
+ flag = true;
+ $(".overlay").hide();
+ $(".form_add_entry").show();
+ $("#hotelMasterModel").modal('show');
+ });
+ });
+ });
+
+$("#hotelMasterForm").validate({
+ rules: {
+ hotelCategory:"required",
+ hotelName:"required",
+ hotelAddress:"required",
+ },
+ message:{
+ hotelCategory: "Hotel Category is required",
+ hotelName: "Hotel Name is required",
+ },
+ errorPlacement: function(error, element) {
+ offset = element.offset();
+ error.insertAfter(element)
+ error.addClass('message');
+ element.css('border', '1px solid red');
+ },
+ submitHandler: function(form) {
+ $(".overlay").show();
+ var $form = $(form);
+ //console.log(form);
+ 
+ var url = "/route/itemReq/saveBcRequest";
+ 
+ var formData = $form.serializeObject();
+ console.log(formData);
+ //return false;
+ action_type = "POST";
+ if(formData.id != 0){
+ //url="/route/itemReq/"
+ }
+ //return false;
+ $.ajax({
+ url: url,
+ type: action_type,
+ data: JSON.stringify(formData),
+ contentType: "application/json; charset=utf-8",
+ dataType: "json",
+ success: function(result) {
+ $(".overlay").hide();
+ 
+ window.sort_by = "_id";
+ window.page = 0;
+ $('#hotelMasterModel').modal('hide');
+ DrawTableInquiry.ajax.reload();
+ // $("#grid_search_by").val("");
+ }
+ 
+ });
+ }
+});
+
+var dataColumns = [{
+ data: "_id",
+ visible: false
+},{
+ data: "master_id",
+ visible: true,
+ sTitle: "Hotel Id#",
+ 
+},{
+ data: "userName",
+ sTitle: "Name#",
+ visible: true,
+ 
+},{
+ data:"no_Of_Person",
+ sTitle:"No Of Person#",
+ visible:true
+},{
+ data:"booked_Room",
+ sTitle:"Booked Room",
+ visible:true
+},{
+ data:"booking_FromDate",
+ sTitle:"CheckIn Date#",
+ visible:true,
+ render: function (data, type, row) {
+                        var html = "";
+return dateFormat(row.booking_FromDate);
+                        }
+ },
+{
+ data:"booking_ToDate",
+ sTitle:"Checkout Date#",
+ visible:true,
+ render: function (data, type, row) {
+var html = "";
+return dateFormat(row.booking_ToDate);
+                        }
+ 
+},
+
+// {
+//  data:"available_Room",
+//  sTitle:"Available Room",
+//  visible:true,
+// },
+ 
+{
+ data: "update",
+ sTitle: "Action#",
+ visible: true,
+ render: function (data, type, row) {
+ //console.log(row);
+ var html = ' <span class="btn btn-primary" data-id="' + row._id + '" onclick="getHotel(this) "><i class="fa fa-pencil"></i> Edit</span>';
+ return html;
+ }
+ }
+
+];
+
+var DrawTableInquiry = DrawCustomDataTable("therapistTable", 350, "/route/itemReq/BC_GridData", dataColumns, [
+ [0, "desc"]
+ ], "searchInput",null,true,true);
+console.log(DrawTableInquiry);
+$('.refresh-table').on('click',function(){
+ DrawTableInquiry.ajax.reload();
+})
+
+
+});
+function populate(frm, data) {
+ $.each(data, function (key, value) {
+ $('[name=' + key + ']', frm).val(value);
+ });
+
+}
+
+function getHotel(id){
+ var id = id.getAttribute('data-id');
+
+ $.ajax({
+ url: "/route/itemReq/BC_MASTER",
+ type: "post",
+ data: { id: id },
+ success: function (result) {
+ console.log("hi");
+ console.log(result.data[0]);
+ var iddata = {
+ id: result.data[0]._id
+ }
+ $.when($('#hotelMasterForm').populate(result.data[0])).done(function( x ) {});
+ $("#hotelAmenities").select2();
+ // populate('#hotelMasterForm', result.data[0]);
+ populate('#hotelMasterForm', iddata);
+ $('#hotelMasterModel').modal('show');
+
+ }
+ })
+}
+
+function addPerson(){
+
+var number = 3;
+var text=``;
+for(var i = 1; i<=number; i++){
+
+text+=`<input type="text" class="form-control userName" name="userName" />`;
+}
+
+$('#id').append(text);
+
+}
+
+function addNewUser(){
+ $("#hotelMasterForm").get(0);
+ $('#hotelMasterModel').modal('show');
+}
+
+function filterSearch(event) {
+  // Get the search query from the input field
+  //var searchQuery = document.getElementById('searchInput').value;
+  event.preventDefault(); // Prevent form submission
+
+  // Get the search query from the input field
+  var searchQuery = document.forms["searchInput"]["userName"].value.toLowerCase();
+
+  
+  // Get all the elements to be filtered
+  //var elements = document.getElementsByClassName('userName');
+  
+  // Loop through each element and show/hide based on the search query
+//   for (var i = 0; i < elements.length; i++) {
+//     var element = elements[i];
+//     var text = element.textContent.toLowerCase();
+    
+//     // If the search query is found in the element's text, show it; otherwise, hide it
+//     if (text.includes(searchQuery)) {
+//       element.style.display = 'block';
+//     } else {
+//       element.style.display = 'none';
+//     }
+//   }
+
+  console.log("Search query:", searchQuery);
+}
+
+
+// <input type="text" id="searchInput" placeholder="Search...">
+// <button onclick="filterSearch()">Search</button>
+
+// <div class="searchable">Element 1</div>
+// <div class="searchable">Element 2</div>
+// <div class="searchable">Element 3</div>
+
+
+
+
+
+
+</script>
+
+        <% include ../partials/footer %>
