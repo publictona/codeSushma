@@ -1,0 +1,712 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+
+        <style>
+            .pd-0 {
+                padding: 0px;
+            }
+
+            .ui-widget-content {
+                background-color: white !important;
+                max-height: 200px !important;
+                overflow-y: auto !important;
+                list-style: none !important;
+                max-width: 200px !important;
+                padding-left: 0px !important;
+            }
+
+            .ui-widget-content {
+                max-height: 300px;
+                overflow: auto;
+            }
+
+            .modal-header h5,
+            .modal-header {
+                color: #b7bbba;
+            }
+
+            .pd-3 {
+                padding-left: 10px;
+            }
+
+            .ui-autocomplete {
+                z-index: 2147483647;
+            }
+
+            .contentRow {
+                white-space: break-spaces !important;
+            }
+
+            .tourcode,
+            .formno {
+                text-transform: uppercase;
+                font-size: 16px;
+                font-weight: 800;
+            }
+
+            .tourname {
+                font-size: 12px;
+            }
+
+            .tour-detials {
+                font-size: 15px;
+                white-space: nowrap;
+            }
+
+            .background-box {
+                background: #dadada;
+                padding: 1px 5px;
+                border-radius: 4px;
+            }
+
+            .col-150 {
+                min-width: 150px;
+                max-width: 150px;
+                width: 150px;
+            }
+
+            .col-50 {
+                min-width: 50px;
+                max-width: 50px;
+                width: 50px;
+            }
+
+            .alert {
+                width: auto;
+                padding: 20px;
+                font-size: 15px;
+                top: 63px !important;
+                right: 20px !important;
+                z-index: 999999 !important;
+            }
+
+            .ibTable tr td {
+                padding: 3px;
+            }
+
+            .calIpBox {
+                border-bottom: 1px solid #fff;
+            }
+
+            label.error {
+                display: block !important;
+            }
+
+            /* ------tab s------ */
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                background-color: #eaeeed;
+                font-family: 'sans-serif', sans-serif;
+            }
+
+            .tab-container {
+                margin: 5% 10%;
+                background-color: #b7bbba;
+                padding: 3%;
+                border-radius: 4px;
+            }
+
+            .tab-menu {}
+
+            .tab-menu ul {
+                margin: 0;
+                padding: 0;
+            }
+
+            .tab-menu ul li {
+                list-style-type: none;
+                display: inline-block;
+            }
+
+            .tab-menu ul li a {
+                text-decoration: none;
+                color: #333;
+                background-color: #e0e6e4;
+                padding: 7px 25px;
+                border-radius: 4px;
+                margin-left: 10px;
+            }
+
+            .tab-menu ul li a.active-a {
+                background-color: #777;
+                color: #ffffff;
+                font-weight: bold;
+            }
+
+            .tab {
+                display: none;
+            }
+
+            .tab h2 {
+                color: rgba(0, 0, 0, .7);
+            }
+
+            .tab p {
+                color: rgba(0, 0, 0, 0.6);
+                text-align: justify;
+            }
+
+            .tab-active {
+                display: block;
+            }
+
+            .tab .badge {
+                margin-right: 5px;
+            }
+
+            #uspList_wrapper table,
+            #uspList_wrapper .dataTables_scrollHeadInner {
+                width: 100% !important;
+            }
+
+            .spa-loc .checkbox>input[type=checkbox] {
+                left: 10px !important;
+                top: 10px !important;
+                opacity: 1 !important;
+            }
+
+            .btn-group,
+            .btn-group-vertical {
+                display: block;
+            }
+
+            .custom-table {
+                margin-left: 12px;
+            }
+
+            .main-title {
+                color: #fff;
+            }
+
+            /* -----e----- */
+        </style>
+
+        <div class="box-body">
+            <div class="row gutter--3px">
+                <div class="col-md-12">
+                    <span class="btn btn-primary " onclick="addNewUser2(this)"><i class="fa fa-plus"></i> Add Stock
+                        Request </span>
+                </div>
+                <br>
+                <br>
+
+                <div class="col-md-12 r-col">
+                    <table id="uspList2" class="table table-bordered table-striped display nowrap order-column"
+                        style="width:100%;">
+                        <tbody class="appar">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Table end -->
+
+        <!-- MODAL START -->
+        <div class="modal fade" id="newUserBox2" tabindex="-1" role="dialog" aria-labelledby="newUserBox2"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-custom" role="document">
+            
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="main-title">Stock Request Details</h5>
+                        <button type="submit" class="close custom-close" data-dismiss="modal" onclick="closeNav(this)">
+                            <span>×</span>
+                        </button>
+
+                    </div>
+                    <div class="modal-body">
+                        <form id="regForm2">
+                            <div class="row gutter--3px">
+                                <div class="col-lg-12">
+                                    <div class="row gutter--3px pd-3">
+                                        <div class="form-group row col-sm-12 mb-0">
+                                            <input type="hidden" class="form-control idBranch" name="id" value="0">
+                                        </div>
+
+                                        <h4><strong> Stock Item Details</strong></h4>
+
+                                        <!-- item  list start -->
+                                        <div class="form-group row col-sm-12">
+                                            <div class="form-group row col-sm-12 ">
+                                                <table class="table table-bordered">
+                                                    <thead class="form-group  table-success">
+                                                        <tr data-cnt="0">
+                                                            <th style="width: 30px;" scope="col">No</th>
+                                                            <th style="width: 400px;" scope="col">Stock Request Code
+                                                            </th>
+                                                            <th style="width: 100px;" scope="col" class="text-end">
+                                                                Quantity</th>
+                                                            <th style="width: 100px;" scope="col" class="text-end"> Unit
+                                                            </th>
+
+                                                            <th style="width: 50px;" scope="col">
+                                                                <button type="button" class="btn btn-sm btn-success"
+                                                                    onclick="BtnAdd1()">Add </button>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <!-- onchange="setsupplierDetails(this)" -->
+
+                                                    <tbody id="TBody1">
+                                                        <tr id="TRow1" data-count="0" class="d-none" required>
+
+                                                            <td scope="row">1</td>
+
+
+
+                                                            <td>
+                                                                <input type="hidden" class="itmName" name="ADD_STOCK_REQUEST[0][itemName]">
+                                                                <select class="form-control itemCode"
+                                                                    onchange="getUnit(this)"
+                                                                    name="ADD_STOCK_REQUEST[0][itemCode]" required>
+                                                                    <option value="Select">Select</option>
+                                                                </select>
+                                                            </td>
+
+
+
+                                                            <td><input type="number"
+                                                                    class="form-control number-end quantity"
+                                                                    name="ADD_STOCK_REQUEST[0][quantity]"
+                                                                    autocomplete="off">
+                                                            </td>
+
+                                                            <td><input type="text" class="form-control text-end unit"
+                                                                    id="unit" name="ADD_STOCK_REQUEST[0][unit]"
+                                                                    oninput="this.value = this.value.toUpperCase();"
+                                                                    autocomplete="off">
+                                                            </td>
+
+
+                                                            <td><button type="button" class="btn btn-sm btn-danger"
+                                                                    onclick="BtnDel1(this)">Delete</button></td>
+
+                                                        </tr>
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-2 col-form-label fs15--design">Remark
+                                            </label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control remark" name="remark"
+                                                    autocomplete="off">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 mt-10">
+                                            <button type="submit" class="btn btn-primary btn-block">SAVE</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- MODAL END -->
+
+        <script>
+            var itemStr = '<option value=""  > Seletct Item Code</option>';
+            var itemOb = {};
+            var type = "Add";
+
+
+
+            var tabStr1 = `
+                <tr id="TRow1" data-count="0" class="d-none">
+                    <td scope="row">1</td>
+
+                    <td>
+                    <input type="hidden" class="itmName" name="ADD_STOCK_REQUEST[0][itemName]">
+                    <select class="form-control itemCode"
+                    name="ADD_STOCK_REQUEST[0][itemCode]"  onchange="getUnit(this)" 
+                    required>
+                    <option value=""></option>
+                    </select>
+                    </td>
+
+
+                    <td><input type="number"
+                        class="form-control number-end quantity"
+                        name="ADD_STOCK_REQUEST[0][quantity]" oninput="this.value = this.value.toUpperCase();" autocomplete="off" >
+                    </td>
+                    <td><input type="text" class="form-control text-end unit"  id="unit"
+                        name="ADD_STOCK_REQUEST[0][unit]" oninput="this.value = this.value.toUpperCase();" autocomplete="off" >
+                    </td>
+
+                    <td><button type="button" class="btn btn-sm btn-danger"
+                        onclick="BtnDel1(this)">Delete</button></td>
+
+                    </tr>            
+            `;
+            var DrawTableInquiry2;
+
+            $(document).ready(function () {
+
+                getItemCodeFixed($('.itemCode'))
+
+                var dataColumns2 = [{
+                    data: "_id",
+                    sTitle: "Id",
+                    visible: false
+                },
+
+                {
+                    data: "tranNo",
+                    sTitle: "TRAN",
+                    visible: true,
+                    className: "col-form-label fs15--design column-100",
+
+                },
+
+                {
+                    data: "ADD_STOCK_REQUEST",
+                    sTitle: "STOCK ITEMCODE NAME",
+                    visible: true,
+                    className: "col-form-label fs15--design column-550",
+
+                    render: function (data, type, row) {
+                        var html = "";
+                        if (row.ADD_STOCK_REQUEST) {
+                            html = `<table style="width:100%;"><tbody>`;
+                            for (var i = 1; i < row.ADD_STOCK_REQUEST.length; i++) {
+
+                                html += `
+                            <tr>
+                                <td class="fs15--design" style="width:30%;">${row.ADD_STOCK_REQUEST[i].itemCode}</td>
+                             
+
+                            </tr>
+                            `;
+                            }
+                            html += `</tbody></table>`;
+                        }
+                        return html;
+                    }
+                },
+
+                {
+                    data: "ADD_STOCK_REQUEST",
+                    sTitle: "QUANTITY",
+                    visible: true,
+                    className: "col-form-label fs15--design column-100",
+
+                    render: function (data, type, row) {
+                        var html = "";
+                        if (row.ADD_STOCK_REQUEST) {
+                            html = `<table style="width:100%;"><tbody>`;
+                            for (var i = 1; i < row.ADD_STOCK_REQUEST.length; i++) {
+
+                                html += `
+                            <tr>
+                                
+                                <td style="width:15%;">${row.ADD_STOCK_REQUEST[i].quantity}</td>
+                              
+
+                            </tr>
+                            `;
+                            }
+                            html += `</tbody></table>`;
+                        }
+                        return html;
+                    }
+                },
+
+                {
+                    data: "ADD_STOCK_REQUEST",
+                    sTitle: "UNIT",
+                    visible: true,
+                    className: "col-form-label fs15--design column-550",
+
+                    render: function (data, type, row) {
+                        var html = "";
+                        if (row.ADD_STOCK_REQUEST) {
+                            html = `<table style="width:100%;"><tbody>`;
+                            for (var i = 1; i < row.ADD_STOCK_REQUEST.length; i++) {
+
+                                html += `
+                            <tr>
+                            
+                                <td style="width:15%;">${row.ADD_STOCK_REQUEST[i].unit}</td>
+                              
+
+                            </tr>
+                            `;
+                            }
+                            html += `</tbody></table>`;
+                        }
+                        return html;
+                    }
+                },
+
+                {
+                    data: "remark",
+                    sTitle: "REMARK",
+                    visible: true,
+                    className: "col-form-label fs15--design column-350",
+
+                },
+
+
+                {
+                    data: "A",
+                    sTitle: "Action",
+                    visible: true,
+                    className: "fs14--design column-60",
+                    render: function (data, type, row) {
+                        //console.log(row);
+                        var html =
+                            ' <span class="btn btn-primary btn-block" data-id="' + row
+                                ._id +
+                            '" onclick="getstockRequest2(this) ">Edit</span>';
+                        return html;
+                    }
+                },
+
+                ];
+
+                DrawTableInquiry2 = DrawCustomDataTable("uspList2", 350,
+                    "/route/addStockReq/grid-data", dataColumns2, [
+                    [0, "asc"]
+                ], "frm_grid_search", null, true, true);
+                $('.itemCode').change(function () {
+                    var obj = {
+                        "F_ITEMCD": $('.itemCode').val(),
+
+                    };
+                    console.log("objobjobj", obj)
+                    $.ajax({
+                        method: "POST",
+                        url: "/route/addStockReq/getItemCodeUnit",
+                        data: JSON.stringify(obj),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (result) {
+                            console.log("resultresultresult", result)
+                            $('#unit').val(result.data.ITM_UNIT);
+
+                        }
+                    });
+                })
+
+                $("#frm_grid_search").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        DrawTableInquiry2.ajax.reload();
+                    }
+                });
+                $('.textUpper').on('keyup', function (e) {
+                    $(this).val($(this).val().toUpperCase());
+                });
+
+                $("form#regForm2").submit(function (e) {
+                    //$('#newUserBox').modal('hide');
+                    e.preventDefault();
+                });
+
+
+
+                $("#regForm2").validate({
+                    rules: {
+                        //suppliercat: "required",
+                    },
+                    messages: {
+                        // suppliercat: "Supplier Category is required",
+                    },
+
+                    errorPlacement: function (error, element) {
+                        offset = element.offset();
+                        error.insertAfter(element)
+                        error.addClass('message');
+                        error.css('display', 'block!important');
+                        error.css('color', 'red');
+                    },
+
+                    submitHandler: function (form) {
+
+                        $('#newUserBox2').modal('hide');
+                        var $form = $(form);
+                        var formData = $form.serializeObject();
+
+
+                        var method = "post";
+                        var url = "/route/addStockReq/create";
+                        // console.log(formData);
+                        if (formData.id != 0) {
+                            url =
+                                '/route/addStockReq/Update/' +
+                                formData.id;
+                            method = "put";
+                        }
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(formData),
+                            dataType: "json",
+                            success: function (result) {
+                                if (result.status) {
+                                    DrawTableInquiry2.ajax.reload();
+                                    alert(result.msg);
+                                    $("#regForm2")[0].reset();
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+            function getUnit(e) {
+                var parent = e.closest("tr");
+                parent.querySelector('.unit').value = itemOb[e.value].ITM_UNIT;
+                parent.querySelector('.itmName').value = itemOb[e.value].F_ITEMNM;
+            }
+            function addNewUser2() {
+                type = "Add";
+                $('.itemCode').val('');
+                $("#TBody1").html(tabStr1);
+                $('.idBranch').val('0');
+                $("#regForm2")[0].reset();
+                $('#newUserBox2').modal('show');
+              
+
+            }
+
+            function populate(frm, data) {
+                $.each(data, function (key, value) {
+                    $('[name=' + key + ']', frm).val(value);
+                });
+                $('.sector').select2();
+            }
+
+
+            function getstockRequest2(element) {
+                type = "Upd1";
+                var id = element.getAttribute('data-id');
+                $('.idBranch').val(id);
+
+                $.ajax({
+                    url: "/route/addStockReq/getData",
+                    type: "get",
+                    data: { id: id },
+                    success: function (result) {
+                        var tranNO = '&nbsp;&nbsp;&nbsp;&nbsp;Tran No :- ' + result.data.tranNo;
+                        $("#topTranNo2").html(tranNO);
+
+                        var iddata = { id: result.data._id };
+                        let str1 = tabStr1; // Assuming tabStr1 is defined somewhere in your code
+
+                        // Get item codes first
+                        getItemCodeFixed().done(function (optionList2) {
+                            for (let i = 1; i < result.data.ADD_STOCK_REQUEST.length; i++) {
+                                let stockRequest = result.data.ADD_STOCK_REQUEST[i];
+
+                                str1 += `
+                    <tr data-count="${i}">
+                        <td scope="row">${i}</td>
+                        <td>
+                            <input type="hidden" class="itmName" name="ADD_STOCK_REQUEST[${i}][itemName]">
+                            <select class="form-control itemCode" onchange="getUnit(this)" name="ADD_STOCK_REQUEST[${i}][itemCode]" required>`;
+
+                                optionList2.forEach(function (item) {
+                                    str1 += `<option value="${item.code}" ${item.code === stockRequest.itemCode ? 'selected' : ''}>${item.name}</option>`;
+
+                                });
+
+                                str1 += `</select>
+                        </td>
+                        <td><input type="number" class="form-control number-end quantity"
+                        name="ADD_STOCK_REQUEST[${i}][quantity]" value="${stockRequest.quantity}" oninput="this.value = this.value.toUpperCase();" autocomplete="off"></td>
+                        <td><input type="text" class="form-control text-end unit"  id="unit"
+                        name="ADD_STOCK_REQUEST[${i}][unit]" value="${stockRequest.unit}" oninput="this.value = this.value.toUpperCase();" autocomplete="off"></td>
+                        <td><button type="button" class="btn btn-sm btn-danger" onclick="BtnDel1(this)">Delete</button></td>
+                    </tr>`;
+                            }
+
+                            $('#TBody1').html(str1);
+                            $.when($('#regForm2').populate(result.data)).done(function () {
+                              
+                              //  DrawTableInquiry2.ajax.reload();
+                                
+                              $('#newUserBox2').modal('show');
+                            });
+
+
+                        });
+                    }
+                });
+            }
+
+            function getItemCodeFixed(e) {
+                var tray_url = "/route/addStockReq/getItemCode";
+                return $.getJSON(tray_url).then(function (result) {
+                    var optionList2 = [];
+                    for (var i = 0; i < result.data.length; i++) {
+                        optionList2.push({ code: result.data[i].F_ITEMCD, name: result.data[i].F_ITEMNM });
+                        itemOb[result.data[i].F_ITEMCD] = { F_ITEMCD: result.data[i].F_ITEMCD, F_ITEMNM: result.data[i].F_ITEMNM, ITM_UNIT: result.data[i].ITM_UNIT };
+                        itemStr += '<option value="' + result.data[i].F_ITEMCD + '">' + result.data[i].F_ITEMNM + '</option>';
+                    }
+                    return optionList2;
+                });
+            }
+
+        
+
+            function BtnAdd1() {
+                var x = document.querySelectorAll('#TBody1 tr');
+                var attrNo1 = 1;
+                if (x.length >= 1) {
+
+                    attrNo1 = x.length;
+
+                }
+                if (x.length == 2 && type == "Upd1") {
+                    attrNo1 = 2;
+                }
+                /*Add Button*/
+                var v = $("#TRow1").clone().appendTo("#TBody1");
+                $(v).find("input").val('');
+                $(v).removeClass("d-none");
+                $(v).find("td").first().html(attrNo1);
+                $(v).removeAttr('id');
+                $(v).find('.itemCode').html(itemStr);
+                $(v).find('.itemCode').attr('name', "ADD_STOCK_REQUEST[" + attrNo1 + "][itemCode]");
+                $(v).find('.quantity').attr('name', "ADD_STOCK_REQUEST[" + attrNo1 + "][quantity]");
+                $(v).find('.unit').attr('name', "ADD_STOCK_REQUEST[" + attrNo1 + "][unit]");
+
+
+
+            }
+
+            function BtnDel1(v) {
+                $(v).parent().parent().remove();
+                $("#TBody1").find("tr").each(
+                    function (index) {
+                        $(this).find("td").first().html(index);
+                    }
+
+                );
+            }
+
+
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+
+
+        </script>
+        <% include ../partials/footer %>

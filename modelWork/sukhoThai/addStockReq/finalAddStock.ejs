@@ -1,0 +1,749 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+
+    <style>
+        .pd-0 {
+            padding: 0px;
+        }
+
+        .ui-widget-content {
+            background-color: white !important;
+            max-height: 200px !important;
+            overflow-y: auto !important;
+            list-style: none !important;
+            max-width: 200px !important;
+            padding-left: 0px !important;
+        }
+
+        .ui-widget-content {
+            max-height: 300px;
+            overflow: auto;
+        }
+
+        .modal-header h5,
+        .modal-header {
+            color: #b7bbba;
+        }
+
+        .pd-3 {
+            padding-left: 10px;
+        }
+
+        .ui-autocomplete {
+            z-index: 2147483647;
+        }
+
+        .contentRow {
+            white-space: break-spaces !important;
+        }
+
+        .tourcode,
+        .formno {
+            text-transform: uppercase;
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .tourname {
+            font-size: 12px;
+        }
+
+        .tour-detials {
+            font-size: 15px;
+            white-space: nowrap;
+        }
+
+        .background-box {
+            background: #dadada;
+            padding: 1px 5px;
+            border-radius: 4px;
+        }
+
+        .col-150 {
+            min-width: 150px;
+            max-width: 150px;
+            width: 150px;
+        }
+
+        .col-50 {
+            min-width: 50px;
+            max-width: 50px;
+            width: 50px;
+        }
+
+        .alert {
+            width: auto;
+            padding: 20px;
+            font-size: 15px;
+            top: 63px !important;
+            right: 20px !important;
+            z-index: 999999 !important;
+        }
+
+        .ibTable tr td {
+            padding: 3px;
+        }
+
+        .calIpBox {
+            border-bottom: 1px solid #fff;
+        }
+
+        label.error {
+            display: block !important;
+        }
+
+        /* ------tab s------ */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #eaeeed;
+            font-family: 'sans-serif', sans-serif;
+        }
+
+        .tab-container {
+            margin: 5% 10%;
+            background-color: #b7bbba;
+            padding: 3%;
+            border-radius: 4px;
+        }
+
+        .tab-menu {}
+
+        .tab-menu ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        .tab-menu ul li {
+            list-style-type: none;
+            display: inline-block;
+        }
+
+        .tab-menu ul li a {
+            text-decoration: none;
+            color: #333;
+            background-color: #e0e6e4;
+            padding: 7px 25px;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+
+        .tab-menu ul li a.active-a {
+            background-color: #777;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .tab {
+            display: none;
+        }
+
+        .tab h2 {
+            color: rgba(0, 0, 0, .7);
+        }
+
+        .tab p {
+            color: rgba(0, 0, 0, 0.6);
+            text-align: justify;
+        }
+
+        .tab-active {
+            display: block;
+        }
+
+        .tab .badge {
+            margin-right: 5px;
+        }
+
+        #uspList_wrapper table,
+        #uspList_wrapper .dataTables_scrollHeadInner {
+            width: 100% !important;
+        }
+
+        .spa-loc .checkbox>input[type=checkbox] {
+            left: 10px !important;
+            top: 10px !important;
+            opacity: 1 !important;
+        }
+
+        .btn-group,
+        .btn-group-vertical {
+            display: block;
+        }
+
+        .custom-table {
+            margin-left: 12px;
+        }
+
+        .main-title {
+            color: #fff;
+        }
+
+        /* -----e----- */
+    </style>
+
+    <div class="box-body">
+        <div class="row gutter--3px">
+            <div class="col-md-12">
+                <span class="btn btn-primary " onclick="addNewUser2(this)"><i class="fa fa-plus"></i> Add Stock
+                    Request </span>
+            </div>
+            <div class="col-md-12 r-col">
+                <table id="uspList2" class="table table-bordered table-striped"
+                    style="width:100%;">
+                    <tbody class="appar">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Table end -->
+
+    <!-- MODAL START -->
+    <div class="modal fade" id="newUserBox2" tabindex="-1" role="dialog" aria-labelledby="newUserBox2"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-custom" role="document">
+
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="main-title">Stock Request Details</h5>
+                    <button type="submit" class="close custom-close" data-dismiss="modal" onclick="closeNav(this)">
+                        <span>×</span>
+                    </button>
+
+                </div>
+                <div class="modal-body">
+                    <form id="regForm2">
+                        <div class="row gutter--3px">
+                            <div class="col-lg-12">
+                                <div class="row gutter--3px pd-3">
+                                    <div class="form-group row col-sm-12 mb-0">
+                                        <input type="hidden" class="form-control idBranch" name="id" value="0">
+                                    </div>
+
+                                    <h4><strong>Add Stock Item </strong></h4>
+
+                                    <!-- item  list start -->
+                                    <div class="form-group row col-sm-12">
+                                        <div class="form-group row col-sm-12 ">
+                                            <table class="table table-bordered">
+                                                <thead class="form-group  table-success">
+                                                    <tr data-cnt="0">
+                                                        <th style="width: 30px;" scope="col">No</th>
+                                                        <th style="width: 200px;" scope="col">Item Code
+                                                        </th>
+                                                        <th style="width: 400px;" scope="col">Item Code Name
+                                                        </th>
+
+                                                        <th style="width: 100px;" scope="col" class="text-end">
+                                                            Quantity</th>
+                                                        <th style="width: 100px;" scope="col" class="text-end"> Unit
+                                                        </th>
+
+                                                        <th style="width: 50px;" scope="col">
+                                                            <button type="button" class="btn btn-sm btn-success"
+                                                                onclick="BtnAdd1()">Add </button>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <!-- onchange="setsupplierDetails(this)" -->
+
+                                                <tbody id="TBody1">
+                                                    <tr id="TRow1" data-count="0" class="">
+
+                                                        <td scope="row">1</td>
+
+
+
+                                                        <td>
+
+                                                            <select class="form-control F_ITEMCD Xtdtd"
+                                                                onchange="getUnit(this)" name="STPURDT[0][F_ITEMCD]"
+                                                                required>
+                                                                <option value="Select">Select</option>
+                                                            </select>
+                                                        </td>
+
+                                                        <td><input type="text"
+                                                                class="form-control text-end itemOfName"
+                                                                name="STPURDT[0][itemOfName]"
+                                                                oninput="this.value = this.value.toUpperCase();"
+                                                                autocomplete="off">
+                                                        </td>
+
+
+
+                                                        <td><input type="number"
+                                                                class="form-control number-end F_QTY"
+                                                                name="STPURDT[0][F_QTY]" autocomplete="off">
+                                                        </td>
+
+                                                        <td><input type="text" class="form-control text-end UNIT"
+                                                                name="STPURDT[0][UNIT]"
+                                                                oninput="this.value = this.value.toUpperCase();"
+                                                                autocomplete="off">
+                                                        </td>
+
+
+                                                        <td><button type="button" class="btn btn-sm btn-danger"
+                                                                onclick="BtnDel1(this)">Delete</button></td>
+
+                                                    </tr>
+                                                </tbody>
+
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-2 col-form-label fs15--design">Remark
+                                        </label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control F_STKREM" name="F_STKREM"
+                                                autocomplete="off">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 mt-10">
+                                        <button type="submit" class="btn btn-primary btn-block">SAVE</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MODAL END -->
+
+    <script>
+        var itemStr = '<option value=""  > Seletct Item Code</option>';
+        var itemOb = {};
+        var type = "Add";
+
+
+
+        var tabStr1 = `
+            <tr id="TRow1" data-count="0" class="">
+                <td scope="row">1</td>
+
+                <td>
+                
+                <select class="form-control F_ITEMCD "
+                name="STPURDT[0][F_ITEMCD]"  onchange="getUNIT(this)" 
+                required>
+                <option value=""></option>
+                </select>
+                </td>
+
+                <td><input type="text" class="form-control text-end itemOfName"
+                                                            name="STPURDT[0][itemOfName]"
+                                                            oninput="this.value = this.value.toUpperCase();"
+                                                            autocomplete="off">
+                                                        </td>
+
+
+                <td><input type="number"
+                    class="form-control number-end F_QTY"
+                    name="STPURDT[0][F_QTY]" oninput="this.value = this.value.toUpperCase();" autocomplete="off" >
+                </td>
+                <td><input type="text" class="form-control text-end UNIT"  
+                    name="STPURDT[0][UNIT]" oninput="this.value = this.value.toUpperCase();" autocomplete="off" >
+                </td>
+
+                <td><button type="button" class="btn btn-sm btn-danger"
+                    onclick="BtnDel1(this)">Delete</button></td>
+
+                </tr>            
+        `;
+        var DrawTableInquiry2;
+
+        $(document).ready(function () {
+
+            getF_ITEMCDFixed($('.F_ITEMCD'))
+
+            var dataColumns2 = [{
+                data: "_id",
+                sTitle: "Id",
+                visible: false
+            },
+
+            {
+                data: "F_TRANNO",
+                sTitle: "TRAN",
+                visible: true,
+                className: "col-form-label fs15--design column-100",
+
+            },
+
+            {
+                data: "STPURDT",
+                sTitle: "STOCK ITEMCODE ",
+                visible: true,
+                className: "col-form-label fs15--design column-550",
+
+                render: function (data, type, row) {
+                    var html = "";
+                    if (row.STPURDT) {
+                        html = `<table style="width:100%;"><tbody>`;
+                        for (var i = 0; i < row.STPURDT.length; i++) {
+
+                            html += `
+                        <tr>
+                            <td class="fs15--design" style="width:30%;">${row.STPURDT[i].F_ITEMCD}</td>
+                            
+
+                        </tr>
+                        `;
+                        }
+                        html += `</tbody></table>`;
+                    }
+                    return html;
+                }
+            },
+
+            {
+                data: "STPURDT",
+                sTitle: "STOCK ITEMCODE NAME",
+                visible: true,
+                className: "col-form-label fs15--design column-550",
+
+                render: function (data, type, row) {
+                    var html = "";
+                    if (row.STPURDT) {
+                        html = `<table style="width:100%;"><tbody>`;
+                        for (var i = 0; i < row.STPURDT.length; i++) {
+
+                            html += `
+                        <tr>
+                            <td class="fs15--design" style="width:30%;">${row.STPURDT[i].itemOfName}</td>
+                            
+
+                        </tr>
+                        `;
+                        }
+                        html += `</tbody></table>`;
+                    }
+                    return html;
+                }
+            },
+
+            {
+                data: "STPURDT",
+                sTitle: "QUANTITY",
+                visible: true,
+                className: "col-form-label fs15--design column-100",
+
+                render: function (data, type, row) {
+                    var html = "";
+                    if (row.STPURDT) {
+                        html = `<table style="width:100%;"><tbody>`;
+                        for (var i = 0; i < row.STPURDT.length; i++) {
+
+                            html += `
+                        <tr>
+                            
+                            <td style="width:15%;">${row.STPURDT[i].F_QTY}</td>
+                            
+
+                        </tr>
+                        `;
+                        }
+                        html += `</tbody></table>`;
+                    }
+                    return html;
+                }
+            },
+
+            {
+                data: "STPURDT",
+                sTitle: "UNIT",
+                visible: true,
+                className: "col-form-label fs15--design column-550",
+
+                render: function (data, type, row) {
+                    var html = "";
+                    if (row.STPURDT) {
+                        html = `<table style="width:100%;"><tbody>`;
+                        for (var i = 0; i < row.STPURDT.length; i++) {
+
+                            html += `
+                        <tr>
+                        
+                            <td style="width:15%;">${row.STPURDT[i].UNIT}</td>
+                            
+
+                        </tr>
+                        `;
+                        }
+                        html += `</tbody></table>`;
+                    }
+                    return html;
+                }
+            },
+
+            {
+                data: "F_STKREM",
+                sTitle: "REMARK",
+                visible: true,
+                className: "col-form-label fs15--design column-350",
+
+            },
+
+
+            {
+                data: "A",
+                sTitle: "Action",
+                visible: true,
+                className: "fs14--design column-60",
+                render: function (data, type, row) {
+                    //console.log(row);
+                    var html =
+                        ' <span class="btn btn-primary btn-block" data-id="' + row
+                            ._id +
+                        '" onclick="getstockRequest2(this) ">Edit</span>';
+                    return html;
+                }
+            },
+
+            ];
+
+            DrawTableInquiry2 = DrawCustomDataTable("uspList2", 350,
+                "/route/addStockReq/grid-data", dataColumns2, [
+                [0, "asc"]
+            ], "frm_grid_search", null, true, true);
+
+
+            $("#frm_grid_search").validate({
+                errorPlacement: function (error, element) { },
+                submitHandler: function (form) {
+                    DrawTableInquiry2.ajax.reload();
+                }
+            });
+            $('.textUpper').on('keyup', function (e) {
+                $(this).val($(this).val().toUpperCase());
+            });
+
+            $("form#regForm2").submit(function (e) {
+                //$('#newUserBox').modal('hide');
+                e.preventDefault();
+            });
+
+
+
+            $("#regForm2").validate({
+                rules: {
+                    //suppliercat: "required",
+                },
+                messages: {
+                    // suppliercat: "Supplier Category is required",
+                },
+
+                errorPlacement: function (error, element) {
+                    offset = element.offset();
+                    error.insertAfter(element)
+                    error.addClass('message');
+                    error.css('display', 'block!important');
+                    error.css('color', 'red');
+                },
+
+                submitHandler: function (form) {
+
+                    $('#newUserBox2').modal('hide');
+                    var $form = $(form);
+                    var formData = $form.serializeObject();
+
+
+                    var method = "post";
+                    var url = "/route/addStockReq/create";
+                    console.log(formData);
+                    if (formData.id != 0) {
+                        url =
+                            '/route/addStockReq/Update/' +
+                            formData.id;
+                        method = "put";
+                    }
+
+                    $.ajax({
+                        url: url,
+                        type: method,
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify(formData),
+                        dataType: "json",
+                        success: function (result) {
+
+
+                            if (result.status) {
+                                DrawTableInquiry2.ajax.reload();
+                                alert(result.msg);
+                                $("#regForm2")[0].reset();
+                            }
+                        }
+                    });
+
+
+
+                }
+            });
+        });
+
+        function getUNIT(e) {
+            var parent = e.closest("tr");
+            parent.querySelector('.UNIT').value = itemOb[e.value].ITM_UNIT;
+            parent.querySelector('.itemOfName').value = itemOb[e.value].F_ITEMNM;
+        }
+
+        function addNewUser2() {
+            type = "Add";
+            $('.F_ITEMCD').val('');
+            //$('.itemOfName').val(tabStr1);
+            $("#TBody1").html(tabStr1);
+            $('.idBranch').val('0');
+            $("#regForm2")[0].reset();
+            $('#newUserBox2').modal('show');
+            getF_ITEMCDFixed();
+        }
+
+        function populate(frm, data) {
+            $.each(data, function (key, value) {
+                $('[name=' + key + ']', frm).val(value);
+            });
+            $('.sector').select2();
+        }
+
+
+        function getstockRequest2(element) {
+            type = "Upd1";
+            var id = element.getAttribute('data-id');
+            $('.idBranch').val(id);
+
+            $.ajax({
+                url: "/route/addStockReq/getData",
+                type: "get",
+                data: { id: id },
+                success: function (result) {
+                    var F_TRANNO = '&nbsp;&nbsp;&nbsp;&nbsp;Tran No :- ' + result.data.F_TRANNO;
+                    $("#topF_TRANNO2").html(F_TRANNO);
+
+                    var iddata = { id: result.data._id };
+                    let str1 = ``; // Assuming tabStr1 is defined somewhere in your code
+
+                    // Get item codes first
+                    getF_ITEMCDFixed().done(function (optionList2) {
+                        for (let i = 0; i < result.data.STPURDT.length; i++) {
+                            let stockRequest = result.data.STPURDT[i];
+
+                            str1 += `
+                            <tr id="TRow${i+1}" data-count="${i}">
+                                <td scope="row">${i+1}</td>
+                                <td>
+                                    <select class="form-control F_ITEMCD" onchange="getUNIT(this)" name="STPURDT[${i}][F_ITEMCD]" required>`;
+                                    optionList2.forEach(function (item) {
+                                    str1 += `<option value="${item.code}" ${item.code === stockRequest.F_ITEMCD ? 'selected' : ''}>${item.code}</option>`;
+                                    });
+
+                                str1 += `</select>
+                                </td>
+
+                                <td><input type="text" class="form-control text-end itemOfName"
+                                    name="STPURDT[${i}][itemOfName]" value="${stockRequest.itemOfName}" oninput="this.value = this.value.toUpperCase();" autocomplete="off">  </td>
+                    
+                                <td><input type="number" class="form-control number-end F_QTY"
+                                    name="STPURDT[${i}][F_QTY]" value="${stockRequest.F_QTY}" oninput="this.value = this.value.toUpperCase();" autocomplete="off"></td>
+                                <td><input type="text" class="form-control text-end UNIT" 
+                                    name="STPURDT[${i}][UNIT]" value="${stockRequest.UNIT}" oninput="this.value = this.value.toUpperCase();" autocomplete="off"></td>
+                                <td><button type="button" class="btn btn-sm btn-danger" onclick="BtnDel1(this)">Delete</button></td>
+                            </tr>`;
+                        }
+
+                        $('#TBody1').html(str1);
+                        $.when($('#regForm2').populate(result.data)).done(function () {
+
+                            //  DrawTableInquiry2.ajax.reload();
+
+                            $('#newUserBox2').modal('show');
+                        });
+
+
+                    });
+                }
+            });
+        }
+
+        function getF_ITEMCDFixed(e) {
+            var tray_url = "/route/addStockReq/getItemCode";
+            return $.getJSON(tray_url).then(function (result) {
+                var optionList2 = [];
+                for (var i = 0; i < result.data.length; i++) {
+                    optionList2.push({ code: result.data[i].F_ITEMCD, name: result.data[i].F_ITEMNM });
+                    itemOb[result.data[i].F_ITEMCD] = { F_ITEMCD: result.data[i].F_ITEMCD, F_ITEMNM: result.data[i].F_ITEMNM, ITM_UNIT: result.data[i].ITM_UNIT };
+                    itemStr += '<option value="' + result.data[i].F_ITEMCD + '">' + result.data[i].F_ITEMCD + '</option>';
+                }
+                $('.F_ITEMCD').html(itemStr);
+                return optionList2;
+            });
+        }
+
+
+
+        function BtnAdd1() {
+            var x = document.querySelectorAll('#TBody1 tr');
+            var attrNo1 = 0;
+            var count = 0;
+            if (x.length > 0) {
+                console.log("rrrrrrrrrrr");
+                count = x.length;
+                attrNo1 = x.length + 1;
+
+            }
+            if (x.length == 1 && type == "Upd1") {
+                console.log("xxxxxxxxxxx");
+                count = 1;
+                attrNo1 = 1;
+            }
+
+            /*Add Button*/
+            var v = $("#TRow1").clone().appendTo("#TBody1");
+            $(v).find("input").val('');
+            $(v).removeClass("d-none");
+            $(v).find("td").first().html(attrNo1);
+            $(v).removeAttr('id');
+            $(v).find('.F_ITEMCD').html('');
+            $(v).find('.F_ITEMCD').html(itemStr);
+            $(v).find('.F_ITEMCD').attr('name', "STPURDT[" + count + "][F_ITEMCD]");
+            $(v).find('.F_QTY').attr('name', "STPURDT[" + count + "][F_QTY]");
+            $(v).find('.UNIT').attr('name', "STPURDT[" + count + "][UNIT]");
+            $(v).find('.itemOfName').attr('name', "STPURDT[" + count + "][itemOfName]");
+
+
+            //console.log("vvvvvvvvvvvv" , v);
+
+        }
+
+        function BtnDel1(v) {
+            $(v).parent().parent().remove();
+            $("#TBody1").find("tr").each(
+                function (index) {
+                    $(this).find("td").first().html(index);
+                }
+
+            );
+        }
+
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+
+
+    </script>
+<% include ../partials/footer %>

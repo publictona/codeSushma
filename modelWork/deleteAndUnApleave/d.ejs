@@ -1,0 +1,311 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+        <style>
+            @media print {
+                table {
+                    width: 100%;
+                    border: 1px solid #000000;
+                    border-collapse: collapse;
+                    font-size: 11pt;
+                }
+            }
+
+            table {
+                font-family: monospace;
+                font-size: 12px;
+            }
+
+            .table>tbody>tr>td,
+            .table>thead>tr>td,
+            .table>thead>tr>th {
+                font-size: 12px;
+            }
+
+            .tourcode,
+            .formno {
+                text-transform: uppercase;
+                font-size: 16px;
+                font-weight: 800;
+            }
+
+            .tourname {
+                font-size: 12px;
+            }
+
+            .tour-detials {
+                font-size: 15px;
+                white-space: nowrap;
+            }
+
+            .background-box {
+                background: #dadada;
+                padding: 1px 5px;
+                border-radius: 4px;
+            }
+
+            .col-150 {
+                min-width: 150px;
+                max-width: 150px;
+                width: 150px;
+            }
+
+            .col-50 {
+                min-width: 50px;
+                max-width: 50px;
+                width: 50px;
+            }
+
+            .alert {
+                width: auto;
+                padding: 20px;
+                font-size: 15px;
+                top: 63px !important;
+                right: 20px !important;
+                z-index: 999999 !important;
+            }
+
+            .ibTable tr td {
+                padding: 3px;
+            }
+
+            .calIpBox {
+                border-bottom: 1px solid #fff;
+            }
+
+            label.error {
+                display: block !important;
+            }
+
+            .txtalign {
+                text-align: right;
+            }
+        </style>
+        <div id="mySidenav" class="hamburger-menu">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <div class="hamburger-content">
+                <form id="frm_grid_search" name="frm_grid_search">
+
+                </form>
+            </div>
+        </div>
+        <div class="box">
+            <div class="box-header with-border with-hamburger">
+                <a href="javascript:void(0);" class="box-header-hamburger-menu" onclick="openNav()">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </a>
+                <h3 class="box-title">Delete Approved And Unapproved Leave</h3>
+            </div>
+            <div class="box-body">
+                <div class="row gutter--3px">
+
+                    <div class="col-md-2">
+                        <label class="fs12--design">
+                            Year <span style="color: rgb(173, 6, 6); font-size: medium;">*</span>
+                        </label>
+                        <input type="number" class="form-control F32_YEAR" name="F32_YEAR" required />
+                    </div>
+
+
+
+                    <div class="col-md-2">
+                        <label class="fs12--design">
+                            Leave Type <span style="color: rgb(173, 6, 6); font-size: medium;">*</span>
+                        </label>
+                        <select class="form-control F32_APPYN" name="F32_APPYN" id="F32_APPYN" required>
+                            <option value="Select">Select</option>
+                            <option value="Y">Approved</option>
+                            <option value="">Unapproved</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="fs12--design">
+                            ID No <span style="color: rgb(173, 6, 6); font-size: medium;">*</span>
+                        </label>
+                        <input type="text" class="form-control F32_IDNO" name="F32_IDNO" required
+                            oninput="this.value = this.value.toUpperCase();" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <div style="margin-top: 20px;">
+                            <span class="btn btn-primary" onclick="psaSummary()">Details</span>
+                            <span class="btn btn-success" onclick="printData4()">
+                                <i class="fa fa-print" aria-hidden="true" style="color: white;"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 printdata">
+                        <div class="col-md-12 infotxt"></div>
+                        <table class="table table-bordered table-striped display nowrap order-column addtr" border="1"
+                            cellpadding="5" cellspacing="0" style="width:100%;">
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+
+        <script>
+            var DrawTableInquiry;
+
+            $(document).ready(function () {
+                // Initial page load setup if needed
+            });
+
+            function psaSummary() {
+                // Get values from the input fields
+                var F32_YEAR = $('.F32_YEAR').val();
+                var F32_APPYN = $('.F32_APPYN').val();
+                var F32_IDNO = $('.F32_IDNO').val();
+
+                // Make the AJAX call
+                $.ajax({
+                    url: '/route/deleteApprovedAndUnapprovedLeave/deleteAUaLeave',  // Check if this is correct
+                    method: 'POST',
+                    contentType: 'application/json',  // Ensure that the backend expects JSON
+                    data: JSON.stringify({
+                        'F32_APPYN': F32_APPYN,
+                        'F32_IDNO': F32_IDNO,
+                        'F32_YEAR': F32_YEAR
+                    }),
+                    success: function (response) {
+                        console.log("Response from psaSummary:", response);
+
+                        // Initialize the HTML content
+                        var html = '';
+                        var html1 = '<h4>Delete Approved and Unapproved Leave</h4>';
+                        var res = response.data;
+
+                        // Build the table headers
+                        html += `<thead>
+                <tr>
+                    <th style="font-family: monospace; font-size: 12px;">TRAN</th>
+                    <th style="font-family: monospace; font-size: 12px;">Year</th>
+                    <th style="font-family: monospace; font-size: 12px;">Leave</th>
+                    <th style="font-family: monospace; font-size: 12px;">Dates</th>
+                    <th style="font-family: monospace; font-size: 12px;">Staff ID</th>
+                    <th style="font-family: monospace; font-size: 12px;">Balance</th>
+                    <th style="font-family: monospace; font-size: 12px;">Approve</th>
+                    <th style="font-family: monospace; font-size: 12px;">Remark</th>
+                    <th style="font-family: monospace; font-size: 12px;">Action</th>
+                </tr>
+            </thead>
+            <tbody>`;
+
+                        // Loop through the response data and build table rows
+                        for (var i = 0; i < res.length; i++) {
+                            html += `<tr>
+                    <td style="font-family: monospace; font-size: 12px;">${res[i].F32_TRANNO}</td>
+                    <td style="font-family: monospace; font-size: 12px;">${res[i].F32_YEAR}</td>
+                    <td style="font-family: monospace; font-size: 12px;">${res[i].F32_CLPL}</td>
+                    <td style="font-family: monospace; font-size: 12px;">${dateFormat(res[i].F32_FROMDT)} - ${dateFormat(res[i].F32_TILLDT)}</td>
+                    <td style="font-family: monospace; font-size: 12px;">${res[i].F32_IDNO}</td>
+                    <td style="font-family: monospace; font-size: 12px;">0</td>
+                    <td style="font-family: monospace; font-size: 12px;">${res[i].F32_APPYN}</td>
+                    <td style="font-family: monospace; font-size: 12px;">${res[i].F32_REMARK}</td>
+                    <td style="font-family: monospace; font-size: 12px;">
+                        <button class="btn btn-danger btn-sm" data-id="${res[i]._id}" data-f32-idno="${res[i].F32_IDNO}" onclick="deleteLeaveDetails(this)">Delete</button>
+                    </td>
+                </tr>`;
+                        }
+
+                        // Close the table body
+                        html += '</tbody>';
+
+                        // Append the header and table data to the page
+                        $('.infotxt').html(html1);
+                        $('.addtr').html(html);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Error:", error);
+                    }
+                });
+            }
+
+
+            // function deleteLeaveDetails(button) {
+            //     // Extract the ID from the data-id attribute
+            //     const id = button.getAttribute("data-id");
+            //     console.log("idididid" , id)
+            //     // Confirm with the user before deletion
+            //     if (confirm("Are you sure you want to delete this item?")) {
+            //         // Send the POST request to the server
+            //         $.ajax({
+            //             url: "/route/deleteApprovedAndUnapprovedLeave/deleteTourDetails",
+            //             method: "POST",
+            //             contentType: "application/json", // Ensure correct content type
+            //             data: JSON.stringify({ _id: id }), // Pass the ID in the request body
+            //             success: function (response) {
+            //                 console.log("responseresponseresponse" , response)
+            //                 if (response.status) {
+            //                     alert("Item deleted successfully.");
+                             
+            //                 } else {
+            //                     alert(response.msg || "Failed to delete item.");
+            //                 }
+            //             },
+            //             error: function () {
+            //                 alert("An error occurred while deleting the item.");
+            //             }
+            //         });
+            //     }
+            // }
+
+  function deleteLeaveDetails(button) {
+    // Extract the ID from the data-id attribute
+    const id = button.getAttribute("data-id");
+    const f32IdNo = button.getAttribute("data-f32-idno");  // Assuming F32_IDNO is stored in the button's data attributes
+    console.log("id:", id, "F32_IDNO:", f32IdNo);
+
+    // Confirm with the user before deletion
+    if (confirm("Are you sure you want to delete this item?")) {
+        // Send the POST request to the server
+        $.ajax({
+            url: "/route/deleteApprovedAndUnapprovedLeave/deleteTourDetails",
+            method: "POST",
+            contentType: "application/json", // Ensure correct content type
+            data: JSON.stringify({ _id: id, F32_IDNO: f32IdNo }), // Pass both _id and F32_IDNO
+            success: function (response) {
+                console.log("Response:", response);
+                if (response.status) {
+                    alert("Item deleted successfully.");
+                } else {
+                    alert(response.msg || "Failed to delete item.");
+                }
+            },
+            error: function () {
+                alert("An error occurred while deleting the item.");
+            }
+        });
+    }
+}
+
+
+            // Function to handle print functionality
+            function printData4() {
+                const printContent = document.querySelector('.printdata').innerHTML;
+                if (!printContent.trim()) {
+                    console.warn("No content to print in .printdata element.");
+                    return;
+                }
+
+                var newWin = window.open("", "_blank");
+                newWin.document.write(`
+            <html>
+                <body>
+                    ${printContent}
+                </body>
+            </html>
+        `);
+                newWin.document.close();
+
+                setTimeout(function () {
+                    newWin.print();
+                    newWin.close();
+                }, 500);
+            }
+        </script>
+
+        <% include ../partials/footer %>

@@ -1,0 +1,753 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+
+        <style>
+            .pd-3 {
+                padding-left: 10px;
+            }
+
+            .ui-autocomplete {
+                z-index: 2147483647;
+            }
+
+            .contentRow {
+                white-space: break-spaces !important;
+            }
+
+            .tourcode,
+            .formno {
+                text-transform: uppercase;
+                font-size: 16px;
+                font-weight: 800;
+            }
+
+            .tourname {
+                font-size: 12px;
+            }
+
+            .tour-detials {
+                font-size: 15px;
+                white-space: nowrap;
+            }
+
+            .background-box {
+                background: #dadada;
+                padding: 1px 5px;
+                border-radius: 4px;
+            }
+
+            .col-150 {
+                min-width: 150px;
+                max-width: 150px;
+                width: 150px;
+            }
+
+            .col-50 {
+                min-width: 50px;
+                max-width: 50px;
+                width: 50px;
+            }
+
+            .alert {
+                width: auto;
+                padding: 20px;
+                font-size: 15px;
+                top: 63px !important;
+                right: 20px !important;
+                z-index: 999999 !important;
+            }
+
+            .ibTable tr td {
+                padding: 3px;
+            }
+
+            .calIpBox {
+                border-bottom: 1px solid #fff;
+            }
+
+            label.error {
+                display: block !important;
+            }
+
+            /* ------s------ */
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                background-color: #eaeeed;
+                font-family: 'sans-serif', sans-serif;
+            }
+
+            .tab-container {
+                margin: 5% 10%;
+                background-color: #b7bbba;
+                padding: 3%;
+                border-radius: 4px;
+            }
+
+            .tab-menu {}
+
+            .tab-menu ul {
+                margin: 0;
+                padding: 0;
+            }
+
+            .tab-menu ul li {
+                list-style-type: none;
+                display: inline-block;
+            }
+
+            .tab-menu ul li a {
+                text-decoration: none;
+                color: #333;
+                background-color: #e0e6e4;
+                padding: 7px 25px;
+                border-radius: 4px;
+                margin-left: 10px;
+            }
+
+            .tab-menu ul li a.active-a {
+                background-color: #777;
+                color: #ffffff;
+                font-weight: bold;
+            }
+
+            .tab {
+                display: none;
+            }
+
+            .tab h2 {
+                color: rgba(0, 0, 0, .6);
+            }
+
+            .tab p {
+                color: rgba(0, 0, 0, 0.6);
+                text-align: justify;
+            }
+
+            .tab-active {
+                display: block;
+            }
+
+            .tab .badge {
+                margin-right: 5px;
+            }
+
+
+
+
+
+
+
+
+            /* -----e----- */
+        </style>
+
+
+
+
+        <div class="box">
+            <div class="box-header with-border with-hamburger">
+                <a href="javascript:void(0);" class="box-header-hamburger-menu" onclick="openNav()">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </a>
+                <h3 class="box-title">Consulate Online Payment</h3>
+            </div>
+            <div class="box-body">
+                <div class="row gutter--3px">
+                    <!-- <div class="col-md-12">
+                        <span class="btn btn-primary" onclick="addNewUser()"><i class="fa fa-plus"></i> Add Consulate
+                            Online Payment
+                        </span>
+                    </div> -->
+                    <div class="col-md-12 r-col">
+                        <table id="uspList" class="table table-bordered table-striped display nowrap order-column"
+                            style="width:100%;">
+                            <tbody class="appar">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="newUserBox" tabindex="-1" role="dialog" aria-labelledby="newUserBox"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+
+                <div class="modal-content">
+                    <div class="modal-header">Add Consulate Online Payment Details
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="regForm">
+                            <div class="row gutter--3px ">
+                                <div class="col-md-12">
+                                    <div class="row gutter--3px pd-3">
+
+
+                                        <h4><span id="codeid"></span> <span id="countryid"></span></h4>
+
+                                        <div class="form-group row col-sm-6">
+                                            <input type="hidden" class="form-control id" name="id" value="0">
+                                            <label for="" class="col-sm-7 col-form-label fs15--design">FIT/KMice Visa
+                                                Working Days</label>
+                                            <div class="col-sm-5">
+                                                <input type="number" class="form-control" name="VISDAY_FIT"
+                                                    autocomplete="off" />
+                                            </div>
+                                        </div>
+
+
+
+
+                                        <!-- <div class="form-group row col-md-12">
+                                            <input type="hidden" class="form-control F_ONLINYN" name="F_ONLINYN"
+                                                value="">
+                                            <label for="OnlinSub" class="col-sm-3 col-form-label fs15--design">Online
+                                                Submission</label>
+                                            <div class="col-sm-9">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="F_ONLINYN1"
+                                                        id="onlineSubmissionY" data-val="Y" onchange="onlineYN(this)">
+                                                    <label class="form-check-label" for="onlineSubmissionY">Y</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="F_ONLINYN1"
+                                                        id="onlineSubmissionN" data-val="N" onchange="onlineYN(this)">
+                                                    <label class="form-check-label" for="onlineSubmissionN">N</label>
+                                                </div>
+                                            </div>
+                                        </div> -->
+
+                                        <div class="form-group row col-md-12">
+                                            <input type="hidden" class="form-control F_ONLINYN" name="F_ONLINYN"
+                                                value="">
+                                            <label for="OnlinSub" class="col-sm-3 col-form-label fs15--design">Online
+                                                Submission</label>
+                                            <div class="col-sm-9">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="F_ONLINYN1"
+                                                        id="onlineSubmissionY" data-val="Y" onchange="onlineYN(this)">
+                                                    <label class="form-check-label" for="onlineSubmissionY">Y</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="F_ONLINYN1"
+                                                        id="onlineSubmissionN" data-val="N" onchange="onlineYN(this)">
+                                                    <label class="form-check-label" for="onlineSubmissionN">N</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                         <div class="form-group row col-md-12">
+                                            <input type="hidden" class="form-control F_ONLINYN" name="F_ONLINYN"
+                                                value="">
+                                            <label for="OnlinSub" class="col-sm-3 col-form-label fs15--design">Application thru
+                                                VFS</label>
+                                            <div class="col-sm-9">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="F_ONLINYN1"
+                                                        id="onlineSubmissionY" data-val="Y" onchange="onlineYN(this)">
+                                                    <label class="form-check-label" for="onlineSubmissionY">Y</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="F_ONLINYN1"
+                                                        id="onlineSubmissionN" data-val="N" onchange="onlineYN(this)">
+                                                    <label class="form-check-label" for="onlineSubmissionN">N</label>
+                                                </div>
+                                            </div>
+                                        </div> 
+
+                                       
+
+                                       
+
+                                     
+
+
+                                        <!-- <div class="form-group row col-md-6">
+                                            <input type="hidden" class="form-control F_VFSYN" name="F_VFSYN" value="">
+                                            <label for="applicationVFS"
+                                                class="col-sm-6 col-form-label fs15--design">Application thru
+                                                VFS</label>
+
+
+                                            <div class="col-sm-6">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="F_VFSYN1"
+                                                        id="applicationVFS" value="Y" onchange="appVFS(this)">
+                                                    <label class="form-check-label" for="applicationVFS">Y</label>
+                                                </div>
+
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="F_VFSYN1"
+                                                        id="applicationVFS" value="N" onchange="appVFS(this)">
+                                                    <label class="form-check-label" for="applicationVFS">N</label>
+
+                                                </div>
+                                            </div>
+                                        </div> -->
+
+                                        <!-- <div class="form-group row col-md-6">
+                                            <input type="hidden" class="form-control F_HTLVOYN" name="F_HTLVOYN"
+                                                value="">
+                                            <label for="hotelVouReq" class="col-sm-6 col-form-label fs15--design">Hotel
+                                                Voucher Required</label>
+
+
+                                            <div class="col-sm-6">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="F_HTLVOYN1"
+                                                        id="hotelVouReq" value="Y" onchange="hotelVou(this)">
+                                                    <label class="form-check-label" for="hotelVouReq">Y</label>
+                                                </div>
+
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="F_HTLVOYN1"
+                                                        id="hotelVouReq" value="N" onchange="hotelVou(this)">
+                                                    <label class="form-check-label" for="hotelVouReq">N</label>
+
+                                                </div>
+                                            </div>
+                                        </div> -->
+
+                                        <!-- <div class="form-group row col-md-6">
+                                            <input type="hidden" class="form-control F_OLDPPYN" name="F_OLDPPYN"
+                                                value="">
+                                            <label for="oldPassReq" class="col-sm-6 col-form-label fs15--design">Old
+                                                Passport Required</label>
+
+                                            <div class="col-sm-6">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="F_OLDPPYN1"
+                                                        id="oldPassReq" value="Y" onchange="oldPass(this)">
+                                                    <label class="form-check-label" for="oldPassReq">Y</label>
+                                                </div>
+
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="F_OLDPPYN1"
+                                                        id="oldPassReq" value="N" onchange="oldPass(this)">
+                                                    <label class="form-check-label" for="oldPassReq">N</label>
+
+                                                </div>
+                                            </div>
+                                        </div> -->
+
+                                        <!-- <div class="form-group row col-md-6">
+                                            <input type="hidden" class="form-control F_AIRTKT" name="F_AIRTKT" value="">
+                                            <label for="airTktReq" class="col-sm-6 col-form-label fs15--design">Air
+                                                Ticket Required</label>
+
+                                            <div class="col-sm-6">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="F_AIRTKT1"
+                                                        id="airTktReq1" value="Y" onchange="airTicket(this)">
+                                                    <label class="form-check-label" for="airTktReq1">Y</label>
+                                                </div>
+
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="F_AIRTKT1"
+                                                        id="airTktReq2" value="N" onchange="airTicket(this)">
+                                                    <label class="form-check-label" for="airTktReq2">N</label>
+
+                                                </div>
+                                            </div>
+                                        </div> -->
+
+
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-7 col-form-label fs15--design">Mode Of
+                                                Payment</label>
+                                            <div class="col-sm-5">
+                                                <select class="form-control F_PAYMODE" name="F_PAYMODE">
+                                                    <option value="Select">Select</option>
+                                                    <option value="DD">DD</option>
+                                                    <option value="CHQ">CHQ</option>
+                                                    <option value="CC">CASH</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+
+
+                                        <div class="row">
+                                            <div class="form-group col-md-12">
+                                                <label for="Tour" class="fs15--design">SMS Message</label>
+                                                <span class="text-red">*</span></label>
+
+                                                <textarea rows="3" class="form-control" name="F_MESSG1"> </textarea>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-3 col-form-label fs15--design">Send SMS
+                                                Link</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" name="SMS_LINK"
+                                                    autocomplete="off" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <br>
+                                </div>
+                                <div class="col-md-12 mt-10">
+
+                                    <button type="submit" class="btn btn-primary btn-block">SAVE</button>
+                                </div>
+                            </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        </div>
+
+
+
+        <script>
+
+            var DrawTableInquiry;
+            $(document).ready(function () {
+
+                var dataColumns = [{
+                    data: "_id",
+                    sTitle: "Id",
+                    visible: false
+                },
+
+                {
+                    data: "CONSUL_CD",
+                    sTitle: "CONSUL CD#",
+                    visible: true,
+                    className: "fs14--design",
+                    render: function (data, type, row) {
+                        var html =
+                            ' <span class="text-blue cls-pointer" data-id="' + row
+                                ._id +
+                            '"  data-code="' + row.CONSUL_CD + '" data-country="' + row.COUNTRY + '"onclick="getUser(this) ">' + row.CONSUL_CD + ' </span>';
+                        return html;
+                    }
+
+                },
+
+                {
+                    data: "COUNTRY",
+                    sTitle: "COUNTRY#",
+                    visible: true,
+                    className: "fs14--design",
+
+                },
+
+                {
+                    data: "F_ONLINYN",
+                    sTitle: "F_ONLINYN#",
+                    visible: true,
+                    className: "fs14--design",
+
+                },
+
+                {
+                    data: "F_VFSYN",
+                    sTitle: "F_VFSYN#",
+                    visible: true,
+                    className: "fs14--design",
+
+                },
+
+                {
+                    data: "F_HTLVOYN",
+                    sTitle: "F_HTLVOYN#",
+                    visible: true,
+                    className: "fs14--design",
+
+                },
+
+                {
+                    data: "F_OLDPPYN",
+                    sTitle: "F_OLDPPYN#",
+                    visible: true,
+                    className: "fs14--design",
+
+                },
+
+                {
+                    data: "F_AIRTKT",
+                    sTitle: "F_AIRTKT#",
+                    visible: true,
+                    className: "fs14--design",
+
+                },
+
+                {
+                    data: "F_PAYMODE",
+                    sTitle: "F_PAYMODE#",
+                    visible: true,
+                    className: "fs14--design",
+
+                },
+
+                {
+                    data: "VISDAY_FIT",
+                    sTitle: "VISDAY_FIT#",
+                    visible: true,
+                    className: "fs14--design",
+
+                },
+
+                {
+                    data: "SMS_LINK",
+                    sTitle: "SMS_LINK#",
+                    visible: true,
+                    className: "fs14--design",
+
+                },
+
+                    // {
+                    //     data: "VISA",
+                    //     sTitle: "Action",
+                    //     visible: true,
+                    //     render: function (data, type, row) {
+                    //         //console.log(row);
+                    //         var html =
+                    //             ' <span class="btn btn-primary btn-block" data-id="' + row
+                    //                 ._id +
+                    //             '" onclick="getUser(this) "> Edit</span>';
+                    //         return html;
+                    //     }
+                    // },
+
+                ];
+
+                DrawTableInquiry = DrawCustomDataTable("uspList", 350,
+                    "/route/consulateOnlineSub/grid-data", dataColumns, [
+                    [0, "asc"]
+                ], "frm_grid_search", null, true, true);
+
+                $("#frm_grid_search").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        DrawTableInquiry.ajax.reload();
+                    }
+                });
+                $('.textUpper').on('keyup', function (e) {
+                    $(this).val($(this).val().toUpperCase());
+                });
+
+                $("form#regForm").submit(function (e) {
+                    //$('#newUserBox').modal('hide');
+                    e.preventDefault();
+                });
+
+                $("#regForm").validate({
+                    rules: {
+
+
+                    },
+                    messages: {
+
+
+                    },
+
+                    errorPlacement: function (error, element) {
+                        offset = element.offset();
+                        error.insertAfter(element)
+                        error.addClass('message');
+                        error.css('display', 'block!important');
+                        error.css('color', 'red');
+                    },
+
+                    submitHandler: function (form) {
+
+                        //$('#newUserBox').modal('hide');
+                        var $form = $(form);
+                        var formData = $form.serializeObject();
+                        console.log(formData);
+                        var method = "post";
+                        var url = "/route/consulateOnlineSub/create";
+                        //  console.log(formData.id);
+                        if (formData.id != 0) {
+                            url =
+                                '/route/consulateOnlineSub/update/' +
+                                formData.id;
+                            method = "put";
+                        }
+
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(formData),
+                            dataType: "json",
+
+                            success: function (result) {
+                                //console.log("resultresultresult", result)
+                                if (result.status) {
+                                    notification({
+                                        type: "success",
+                                        message: result
+                                            .msg
+                                    });
+
+                                    $('#newUserBox').modal('hide')
+
+                                    DrawTableInquiry.ajax
+                                        .reload();
+                                }
+                            }
+                        });
+
+                    }
+                });
+            });
+
+            function addNewUser() {
+                $('#newUserBox').modal('show');
+            }
+
+            function populate(frm, data) {
+                $.each(data, function (key, value) {
+                    $('[name=' + key + ']', frm).val(value);
+                });
+                $('.sector').select2();
+            }
+
+            function getUser(id) {
+                var code = id.getAttribute('data-code');
+                var country = id.getAttribute('data-country');
+                var id = id.getAttribute('data-id');
+                //alert(id)
+
+
+
+                $('#codeid').text(code);
+                $("#countryid").text(country);
+                $.ajax({
+                    url: "/route/consulateOnlineSub/getData",
+                    type: "get",
+                    data: {
+                        id: id
+                    },
+                    success: function (result) {
+                        var iddata = {
+                            id: result.data._id
+                        }
+                        $.when($('#regForm').populate(result.data)).done(function (x) {
+
+                        });
+
+                        if (result.data.F_ONLINYN == "Y") {
+                            //console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@")
+                            document.querySelector('input[data-val="Y"]').checked = true;
+                        } else if (result.data.F_ONLINYN == "N") {
+                            document.querySelector('input[data-val="N"]').checked = true;
+                        }
+
+                        if (result.data.F_VFSYN == "Y") {
+                            // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@")
+                            document.querySelector('input[data-val="Y"]').checked = true;
+                        } else if (result.data.F_VFSYN == "N") {
+                            document.querySelector('input[data-val="N"]').checked = true;
+                        }
+
+                        if (result.data.F_HTLVOYN == "Y") {
+                            // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@")
+                            document.querySelector('input[data-val="Y"]').checked = true;
+                        } else if (result.data.F_HTLVOYN == "N") {
+                            document.querySelector('input[data-val="N"]').checked = true;
+                        }
+
+                        if (result.data.F_OLDPPYN == "Y") {
+                            // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@")
+                            document.querySelector('input[data-val="Y"]').checked = true;
+                        } else if (result.data.F_OLDPPYN == "N") {
+                            document.querySelector('input[data-val="N"]').checked = true;
+                        }
+
+                        if (result.data.F_ONLINYN == "Y") {
+                            // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@")
+                            document.querySelector('input[data-val="Y"]').checked = true;
+                        } else if (result.data.F_ONLINYN == "N") {
+                            document.querySelector('input[data-val="N"]').checked = true;
+                        }
+
+                        if (result.data.F_AIRTKT == "Y") {
+                            // console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@")
+                            document.querySelector('input[data-val="Y"]').checked = true;
+                        } else if (result.data.F_AIRTKT == "N") {
+                            document.querySelector('input[data-val="N"]').checked = true;
+                        }
+
+
+                        // populate('#regForm', result.data);
+                        // populate('#regForm', iddata);
+
+                        $('#newUserBox').modal('show');
+
+                    }
+                })
+            }
+
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+
+
+            function onlineYN(e) {
+                //  console.log(e,e.checked);
+                console.log($(".F_ONLINYN"));
+                if (e.checked) {
+                    $(".F_ONLINYN").val(e.getAttribute('data-val'));
+                }
+            }
+
+            function appVFS(e) {
+                // console.log(e,e.checked);
+                console.log($(".F_VFSYN"));
+                if (e.checked) {
+                    $(".F_VFSYN").val(e.getAttribute('data-val'));
+                }
+            }
+
+            function hotelVou(e) {
+                // console.log(e,e.checked);
+                console.log($(".F_HTLVOYN"));
+                if (e.checked) {
+                    $(".F_HTLVOYN").val(e.getAttribute('data-val'));
+                }
+            }
+
+            function oldPass(e) {
+                //console.log(e,e.checked);
+                console.log($(".F_OLDPPYN"));
+                if (e.checked) {
+                    $(".F_OLDPPYN").val(e.getAttribute('data-val'));
+                }
+            }
+
+            function airTicket(e) {
+                // console.log(e,e.checked);
+                console.log($(".F_AIRTKT"));
+                if (e.checked) {
+                    $(".F_AIRTKT").val(e.getAttribute('data-val'));
+                }
+            }
+
+
+
+
+
+        </script>
+        <% include ../partials/footer %>

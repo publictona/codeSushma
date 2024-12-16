@@ -1,0 +1,334 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+        <style>
+            #poForm .modal-dialog {
+                max-width: 1000px;
+                padding: 0 15px;
+            }
+
+            .ui-menu {
+                z-index: 9999;
+            }
+
+            #itemTable td {
+                padding: 2px !important;
+                border: 1px solid #d3d3d3;
+            }
+
+            #itemTable td:first-child {
+                text-align: center;
+            }
+
+            .sukho--tag {
+                color: indigo;
+                font-weight: 500;
+                cursor: pointer;
+            }
+
+            td .form-control {
+                color: #000 !important;
+            }
+
+            .pt-15 {
+                padding-top: 15px;
+            }
+
+            .f-500 {
+                font-weight: 500;
+            }
+
+            #spaLoc {
+                padding-left: 10px;
+            }
+
+            .table-scroll {
+                height: 70vh;
+                overflow-y: auto;
+            }
+
+            .table-scroll th {
+                position: sticky;
+                top: -1px;
+                z-index: 11;
+            }
+
+            .addtr {
+                position: relative;
+                z-index: 1;
+            }
+        </style>
+
+        <div class="content__inner">
+            <div class="page-title-with-icon">
+                <a href="javascript:void(0);" onclick="openNav(this)" class="page-title-with-icon__icon">
+                    <i class="zmdi zmdi-menu"></i>
+                </a>
+                <h2 class="page-title">Stock Request</h2>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-12 printdata">
+                        <div class="col-md-12 infotxt">
+                        </div>
+                        <div class="table-scroll">
+                            <table class="table table-bordered table-striped display nowrap order-column addtr"
+                                border="1" cellpadding="5" cellspacing="0" style="width:100%;">
+                            </table>
+                        </div>
+                    </div>
+                    <table id="poTable" class="table table-bordered table-striped order-column" style="width:100%;">
+                        <tbody class="">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- <aside id="mySidenav" class="sidenav-filter">
+            <div class="sidenav-filter__overlay"></div>
+            <div class="sidenav-filter__inner vertical-scroll">
+                <a href="javascript:void(0)" class="sidenav-filter__close" onclick="closeNav()">
+                    <i class="zmdi zmdi-close"></i>
+                </a>
+                <div class="card">
+                    <form id="frm_grid_search" name="frm_grid_search">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="">Branch</label>
+                                <select  class="form-control ST_BRN" name="ST_BRN" id="ST_BRN">
+                                    <option value="">Please select branch</option>
+                                </select>
+
+                            </div>
+                        </div> 
+
+                       <div class="card-footer">
+                            <button type="submit" class="btn btn-block btn-primary btn-guest"
+                                onclick="closeNav()">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </aside> -->
+
+
+        <aside id="mySidenav" class="sidenav-filter">
+            <div class="sidenav-filter__overlay"></div>
+            <div class="sidenav-filter__inner vertical-scroll">
+                <a href="javascript:void(0)" class="sidenav-filter__close" onclick="closeNav()">
+                    <i class="zmdi zmdi-close"></i>
+                </a>
+                <div class="card">
+                    <form id="frm_grid_search" name="frm_grid_search" onsubmit="return handleSearch()">
+                        <div class="card-body">
+
+                            
+                                <div class="form-group">
+                                    <label for="F_TRANDT">Date</label>
+                                    <input type="text" class="form-control F_TRANDT date-picker" name="F_TRANDT" id="F_TRANDT" />
+                                    <i class="form-group__bar"></i>
+                                </div>
+
+                               
+
+                            <div class="form-group">
+                                <label for="ST_BRN">Branch</label>
+                                <select class="form-control ST_BRN" name="ST_BRN" id="ST_BRN">
+                                    <option value="">Please select branch</option>
+
+                                </select>
+                            </div>
+
+                         </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-block btn-primary btn-guest" onclick="closeNav()">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </aside>
+
+        <script type="text/javaScript">
+
+               function handleSearch() {
+                        // Get the selected branch value
+                        var selectedBranch = document.getElementById('ST_BRN').value;
+                        var selectedDate = document.getElementById('F_TRANDT').value;
+
+                        // Call the issue function with the selected branch value
+                        issue(selectedBranch , selectedDate);
+
+                        // Close the sidebar (if necessary)
+                        closeNav();
+
+                        // Prevent the form from submitting in the traditional way
+                        return false;
+                    }
+
+  $(document).ready(function() {
+        getBranchCode();
+        issue();
+        var DrawTableInquiry = "";
+        
+    $("#frm_grid_search").validate({
+            errorPlacement: function(error, element) {},
+            submitHandler: function(form) {
+               // DrawTableInquiry.ajax.reload();
+               var selectedBranch = $('#ST_BRN').val();
+                var selectedDate = $('#F_TRANDT').val();
+                issue(selectedBranch, selectedDate);
+               
+            }
+        });
+
+        });
+
+   
+
+    function issue(ST_BRN, F_TRANDT) {
+    // Initialize the query object with ST_BRN
+    var obj = {
+        ST_BRN: ST_BRN || ""   
+    };
+
+    // Only format and include F_TRANDT if a date is provided
+    if (F_TRANDT) {
+       // F_TRANDT = moment(F_TRANDT).format('DD/MM/YYYY');
+        F_TRANDT = moment(F_TRANDT).format('MM/DD/YYYY');
+        obj.F_TRANDT = F_TRANDT;
+    }
+
+    console.log("obj", obj);
+
+    $.ajax({
+        url: "/route/stockRequest/getIssue",
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        data: obj, // Pass obj directly as query parameters
+        success: function(response) {
+            console.log("response", response);
+            var res = response.data;
+            var html = `
+                <thead>
+                    <tr>
+                        <th style="font-family: monospace;font-size: 12px;">Tran</th>
+                        <th style="font-family: monospace;font-size: 12px;">Tran Dt</th>
+                        <th style="font-family: monospace;font-size: 12px;">Branch</th>
+                        <th style="font-family: monospace;font-size: 12px;">Item Code</th>
+                        <th style="font-family: monospace;font-size: 12px;">Item Name</th>
+                        <th style="font-family: monospace;font-size: 12px;">Request Qty</th>
+                        <th style="font-family: monospace;font-size: 12px;">Issue Qty</th>
+                        <th style="font-family: monospace;font-size: 12px;">Balance</th>
+                        <th style="font-family: monospace;font-size: 12px;">Issue Dt</th>
+                        <th style="font-family: monospace;font-size: 12px;">Action</th>
+                        <th style="font-family: monospace;font-size: 12px;">Received Qty</th>
+                        <th style="font-family: monospace;font-size: 12px;">Excess Qty</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+            var dt = new Date();
+            for (var i = 0; i < res.length; i++) {
+                html += `<tr>
+                    <td style="font-family: monospace;font-size: 12px;">${res[i].F_TRANNO}</td>
+                    <td style="font-family: monospace;font-size: 12px;">${res[i].F_TRANDT}</td>
+                    <td style="font-family: monospace;font-size: 12px;">${res[i].ST_BRN}</td>
+                    <td class="txtalign" style="font-family: monospace;font-size: 12px; width:20px;">${res[i].F_ITEMCD}</td>
+                    <td class="txtalign" style="font-family: monospace;font-size: 12px;">${res[i].itemOfName}</td>
+                    <td class="txtalign" id="QTY${i}">${res[i].F_QTY}</td>
+                    <td class="txtalign" style="font-family: monospace;font-size: 12px;text-align:right;">
+                        <input type="text" class="form-control" data-id="${i}" onkeyup="addBalance(this)" name="F_ISSUEQTY" id="issueQty${i}" value="${res[i].F_ISSUEQTY ? res[i].F_ISSUEQTY : 0}"/>
+                    </td>
+                    <td style="font-family: monospace;font-size: 12px;" id="balance${i}">${res[i].F_BALANCE ? res[i].F_BALANCE : 0}</td>
+                    <td style="font-family: monospace;font-size: 12px;">${res[i].F_ISSUEDT ? res[i].F_ISSUEDT : moment(dt).format('DD/MM/YYYY')}</td>
+                    <td style="font-family: monospace;font-size: 12px;">
+                        <span class="btn btn-info" data-F_TRANNO="${res[i].F_TRANNO}" data-F_ITEMCD="${res[i].F_ITEMCD}" data-id="${i}" onclick="addIssue(this)">ADD</span>
+                        <input type="hidden" id="pendding" value="">
+                    </td>
+                    <td style="font-family: monospace;font-size: 12px;">${res[i].F_Received ? res[i].F_Received : 0}</td>
+                    <td style="font-family: monospace;font-size: 12px;">${res[i].F_EXCESSQTY ? res[i].F_EXCESSQTY : 0}</td>
+                </tr>`;
+            }  
+            html += `</tbody>`;
+            $('.addtr').html(html);
+        },
+        error: function(xhr, status, error) {
+            console.error('Failed to fetch issue data:', error);
+        }
+    });
+}
+
+
+function getBranchCode() {
+var optionList = '<option value="">SELECT</option>';
+$.ajax({
+    url: "/route/spaLocationST/getLocationListNew",
+    type: "GET",
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function (filterResult) {
+        if (filterResult && filterResult.length > 0) {
+            optionList += '<option value="IN000">IN000-HO/ Mumbai Depot</option>';
+            $.each(filterResult, function (index, data) {
+
+                optionList += '<option value="' + data.ST_BRN + '">' + data.ST_BRN + '</option>';
+            });
+        }
+        
+        $(".ST_BRN").html(optionList);
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+        alert("Error in loading branch data.Please refresh page.");
+    }
+});
+}
+
+     function openNav() {
+        document.getElementById("mySidenav").classList.add('open');
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").classList.remove('open');
+    }
+    
+    function addBalance(idd){
+        var id=idd.getAttribute('data-id');
+    var QTY=$("#QTY"+id).text();
+    var F_ISSUEQTY= $(idd).val();
+    if(parseInt(F_ISSUEQTY) > parseInt(QTY)){
+        alert("Issue Quantity not bigger then Request Quantity");
+    }else{
+       F_ISSUEQTY=F_ISSUEQTY?F_ISSUEQTY:0;
+       
+        var bal =parseInt(QTY) - parseInt(F_ISSUEQTY);
+        if(bal>0){
+            $("#pendding").val("Y");
+        }
+        $("#balance"+id).text(bal);
+    }
+}
+
+function addIssue(idd){
+    var id=idd.getAttribute('data-id');
+    var F_TRANNO=idd.getAttribute('data-F_TRANNO');
+    var F_ITEMCD=idd.getAttribute('data-F_ITEMCD');
+    var F_ISSUEQTY= $("#issueQty"+id).val();
+    var F_ISSUEDT= moment(new Date()).format('MM/DD/YYYY');
+    var F_BALANCE = $("#balance"+id).text();
+    var F_Pending =$("#pendding").val();
+
+    $.ajax({
+    url: "/route/stockRequest/addIssue",
+    type: "POST",
+    
+    data:{F_TRANNO:F_TRANNO,F_ITEMCD:F_ITEMCD,F_ISSUEQTY:F_ISSUEQTY,F_ISSUEDT:F_ISSUEDT,F_BALANCE:F_BALANCE,F_Pending:F_Pending},
+   
+
+    success: function (response) {
+        alert(response.msg);
+    }
+})
+}
+        </script>
+
+        <% include ../partials/footer %>

@@ -1,0 +1,978 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+        <style>
+            .contentRow {
+                white-space: break-spaces !important;
+            }
+
+            .tourcode,
+            .formno {
+                text-transform: uppercase;
+                font-size: 16px;
+                font-weight: 800;
+            }
+
+            .tourname {
+                font-size: 12px;
+            }
+
+            .tour-detials {
+                font-size: 15px;
+                white-space: nowrap;
+            }
+
+            .background-box {
+                background: #dadada;
+                padding: 1px 5px;
+                border-radius: 4px;
+            }
+
+            .col-150 {
+                min-width: 150px;
+                max-width: 150px;
+                width: 150px;
+            }
+
+            .col-50 {
+                min-width: 50px;
+                max-width: 50px;
+                width: 50px;
+            }
+
+            .alert {
+                width: auto;
+                padding: 20px;
+                font-size: 15px;
+                top: 63px !important;
+                right: 20px !important;
+                z-index: 999999 !important;
+            }
+
+            .ibTable tr td {
+                padding: 3px;
+            }
+
+            .calIpBox {
+                border-bottom: 1px solid #fff;
+            }
+
+            label.error {
+                display: block !important;
+                color: red !important;
+            }
+
+            /* ------tab s------ */
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                background-color: #eaeeed;
+                font-family: 'sans-serif', sans-serif;
+            }
+
+            .tab-container {
+                margin: 5% 10%;
+                background-color: #b7bbba;
+                padding: 4%;
+                border-radius: 4px;
+            }
+
+            .tab-menu {}
+
+            .tab-menu ul {
+                margin: 0;
+                padding: 0;
+            }
+
+            .tab-menu ul li {
+                list-style-type: none;
+                display: inline-block;
+            }
+
+            .tab-menu ul li a {
+                text-decoration: none;
+                color: #333;
+                background-color: #e0e6e4;
+                padding: 7px 25px;
+                border-radius: 4px;
+                margin-left: 10px;
+            }
+
+            .tab-menu ul li a.active-a {
+                background-color: #777;
+                color: #ffffff;
+                font-weight: bold;
+            }
+
+            .tab {
+                display: none;
+            }
+
+            .tab h2 {
+                color: rgba(0, 0, 0, .7);
+            }
+
+            .tab p {
+                color: rgba(0, 0, 0, 0.6);
+                text-align: justify;
+            }
+
+            .tab-active {
+                display: block;
+            }
+
+            .tab .badge {
+                margin-right: 5px;
+            }
+
+            #uspList1_wrapper table,
+            #uspList_wrapper .dataTables_scrollHeadInner {
+                width: 100% !important;
+            }
+
+            .spa-loc .checkbox>input[type=checkbox] {
+                left: 10px !important;
+                top: 10px !important;
+                opacity: 1 !important;
+            }
+
+            .btn-group,
+            .btn-group-vertical {
+                display: block;
+            }
+
+            .custom-table {
+                margin-left: 12px;
+            }
+
+            /* -----e----- */
+        </style>
+        <div id="mySidenav" class="hamburger-menu">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <div class="hamburger-content">
+                <form id="frm_grid_search" name="frm_grid_search">
+                    <div class="bgff">
+                        <label> Tour Series</label>
+                        <input type="text" class="form-control F_TCD2" name="F_TCD2" autocomplete="false"
+                            oninput="this.value = this.value.toUpperCase();" minlength="2" maxlength="2" />
+                    </div>
+                    <div class="bgff">
+                        <button type="submit" class="btn btn-primary btn-guest height-30 btn-block" onclick="closeNav()"
+                            style="" onclick="closeNav()">SEARCH</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="box">
+            <div class="box-header with-border with-hamburger">
+                <a href="javascript:void(0);" class="box-header-hamburger-menu" onclick="openNav()">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </a>
+                <h3 class="box-title"> Internet/Jio SIM Details </h3>
+            </div>
+            <div class="box-body">
+                <div class="row gutter--3px">
+
+                    <div class="tab-menu">
+                        <ul>
+                            <li><a href="#" class="tab-a active-a" data-id="tab1" onclick="test1()">JIO  Data</a>
+                            </li>
+                            <li><a href="#" class="tab-a" data-id="tab2" onclick="test2()">Communication/Internet</a>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                    <br>
+                    <!-- ----------------tab1-------------------------------------- -->
+                    <div class="tab tab-active" data-id="tab1">
+
+                        <div class="col-md-6">
+                            <span class="btn btn-primary" id="AddData"><i class="fa fa-plus"></i> Add New JIO 
+                                Data</span>
+
+                        </div>
+
+                        <div class="col-md-12 r-col">
+                            <table id="uspList" class="table table-bordered table-striped display nowrap order-column"
+                                style="width:100%;">
+                                <tbody class="appar">
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="modal fade" id="newUserBox" tabindex="-1" role="dialog" aria-labelledby="newUserBox"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-md" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">JIO Details</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="regForm">
+                                            <div class="row gutter--3px">
+                                                <div class="col-md-12">
+                                                    <div class="row gutter--3px ">
+                                                        <!-- oninput="this.value = this.value.toUpperCase();" -->
+                                                        <div class="form-group row col-sm-12">
+                                                            <input type="hidden" class="form-control uniqueID" name="id"
+                                                                value="0">
+                                                        </div>
+
+                                                        <!-- <div class="form-group row col-sm-12">
+                                                            <input type="hidden" class="form-control uniqueID" name="id"
+                                                                value="0">
+                                                            <label class="col-sm-3 col-form-label fs15--design">Dongle
+                                                                Category
+                                                                <span style="color: rgb(158, 6, 6);">*</span></label>
+                                                            <div class="col-sm-9">
+                                                                <select class="form-control dongleCat" name="dongleCat"
+                                                                    required>
+                                                                    <option value="">Select</option>
+                                                                    <option value="TTML">TTML</option>
+                                                                    <option value="MTNL">MTNL</option>
+                                                                    <option value="BSNL">BSNL</option>
+                                                                    <option value="AIRTEL">AIRTEL</option>
+                                                                    <option value="ACT FIBER NET">ACT FIBER NET</option>
+                                                                    <option value="INNOVATIVE FIBER SOLUTIONS PVT LTD">
+                                                                        INNOVATIVE FIBER
+                                                                        SOLUTIONS PVT LTD</option>
+
+                                                                </select>
+                                                            </div>
+                                                        </div> -->
+
+                                                        <!-- <div class="form-group row col-sm-12">
+
+                                                            <label for=""
+                                                                class="col-sm-3 col-form-label fs15--design">Sub
+                                                                Category
+                                                            </label>
+                                                            <div class="col-sm-9">
+                                                                <input type="text" class="form-control dongleSubCat"
+                                                                    name="dongleSubCat" autocomplete="off"
+                                                                    oninput="this.value = this.value.toUpperCase();">
+                                                            </div>
+                                                        </div> -->
+
+
+                                                        <div class="form-group row col-sm-12">
+
+                                                            <label for=""
+                                                                class="col-sm-3 col-form-label fs15--design">MSISDN
+                                                                <span style="color: rgb(158, 6, 6);">*</span></label>
+                                                            <div class="col-sm-9">
+                                                                <input type="number" class="form-control MSISDN"
+                                                                    name="MSISDN" autocomplete="off" minlength="10"
+                                                                    maxlength="10" required>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row col-sm-12">
+
+                                                            <label for=""
+                                                                class="col-sm-3 col-form-label fs15--design">SIM No.
+                                                                <span style="color: rgb(158, 6, 6);">*</span></label>
+                                                            <div class="col-sm-9">
+                                                                <input type="number" class="form-control simNo"
+                                                                    name="simNo" autocomplete="off" required>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row col-sm-12">
+                                                            <label for=""
+                                                                class="col-sm-3 col-form-label fs15--design">RSID
+                                                                <span style="color: rgb(158, 6, 6);">*</span></label>
+                                                            <div class="col-sm-9">
+                                                                <select class="form-control rsid" name="rsid" required
+                                                                    id="F21_SRNO" onchange="setEmployeeDetails(this)">
+                                                                    <option value=""></option>
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row col-sm-12">
+
+                                                            <label for=""
+                                                                class="col-sm-3 col-form-label fs15--design">Name
+                                                            </label>
+                                                            <div class="col-sm-9">
+                                                                <input type="text" class="form-control name" name="name"
+                                                                    id="employee" autocomplete="off">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row col-sm-12">
+
+                                                            <label for=""
+                                                                class="col-sm-3 col-form-label fs15--design">Location
+                                                            </label>
+                                                            <div class="col-sm-9">
+                                                                <input type="text" class="form-control location"
+                                                                    name="location" id="loc" autocomplete="off">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row col-sm-12">
+
+                                                            <label for=""
+                                                                class="col-sm-3 col-form-label fs15--design">Department
+                                                            </label>
+                                                            <div class="col-sm-9">
+                                                                <input type="text" class="form-control department"
+                                                                    name="department" id="depart" autocomplete="off">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mt-10">
+
+                                                    <button type="submit"
+                                                        class="btn btn-primary btn-block">SAVE</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ------------------------tab2---------------------------- -->
+                    <div class="tab" data-id="tab2">
+
+                        <div class="col-md-6">
+                            <span class="btn btn-primary" id="AddData1"><i class="fa fa-plus"></i> Add
+                                Communication/Internet Data</span>
+                        </div>
+                        <div class="col-md-12 r-col">
+                            <table id="uspList1" class="table table-bordered table-striped display nowrap order-column"
+                                style="width:100%;">
+                                <tbody class="appar">
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="modal fade" id="newUserBox1" tabindex="-1" role="dialog"
+                            aria-labelledby="newUserBox1" aria-hidden="true">
+                            <div class="modal-dialog modal-md" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header"> Communication/Internet Details</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="regForm1">
+                                            <div class="row gutter--3px">
+                                                <div class="col-md-12">
+                                                    <div class="row gutter--3px ">
+                                                        <!-- oninput="this.value = this.value.toUpperCase();" -->
+
+                                                        <div class="form-group row col-sm-12">
+                                                            <input type="hidden" class="form-control internetID"
+                                                                name="id" value="0">
+                                                            <label class="col-sm-4 col-form-label fs15--design">Dongle
+                                                                Category
+                                                                <span style="color: rgb(158, 6, 6);">*</span></label>
+                                                            <div class="col-sm-8">
+                                                                <select class="form-control dongleCat" name="dongleCat"
+                                                                    required>
+                                                                    <option value="">Select</option>
+                                                                    <option value="TTML">TTML</option>
+                                                                    <option value="MTNL">MTNL</option>
+                                                                    <option value="BSNL">BSNL</option>
+                                                                    <option value="AIRTEL">AIRTEL</option>
+                                                                    <option value="ACT FIBER NET">ACT FIBER NET</option>
+                                                                    <option value="INNOVATIVE FIBER SOLUTIONS PVT LTD">
+                                                                        INNOVATIVE FIBER
+                                                                        SOLUTIONS PVT LTD</option>
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row col-sm-12">
+
+                                                            <label for=""
+                                                                class="col-sm-4 col-form-label fs15--design">Sub
+                                                                Category
+                                                            </label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control dongleSubCat"
+                                                                    name="dongleSubCat" autocomplete="off"
+                                                                    oninput="this.value = this.value.toUpperCase();">
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="form-group row col-sm-12">
+
+                                                            <label for=""
+                                                                class="col-sm-4 col-form-label fs15--design">Account No
+                                                            </label>
+                                                            <div class="col-sm-8">
+                                                                <input type="number" class="form-control accountNo"
+                                                                    name="accountNo" autocomplete="off">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row col-sm-12">
+
+                                                            <label for=""
+                                                                class="col-sm-4 col-form-label fs15--design">Tele/Consumer
+                                                                No
+                                                            </label>
+                                                            <div class="col-sm-8">
+                                                                <input type="number"
+                                                                    class="form-control telePloneConsumer"
+                                                                    name="telePloneConsumer" autocomplete="off">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row col-sm-12">
+
+                                                            <label for=""
+                                                                class="col-sm-4 col-form-label fs15--design">Mobile No.
+                                                            </label>
+                                                            <div class="col-sm-8">
+                                                                <input type="number" class="form-control mobile"
+                                                                    name="mobile" autocomplete="off" minlength="10"
+                                                                    maxlength="10"
+                                                                    title="Mobile number must have exactly 10 digits.">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row col-sm-12">
+
+                                                            <label for=""
+                                                                class="col-sm-4 col-form-label fs15--design">Branch
+                                                            </label>
+                                                            <div class="col-sm-8">
+
+                                                                <select class="form-control branch" name="branch"
+                                                                    id="F21_BRANCH">
+
+                                                                    <option value="">Branch</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mt-10">
+
+                                                    <button type="submit"
+                                                        class="btn btn-primary btn-block">SAVE</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ------------------script for JIO Dongle --------------------------------- -->
+        <script>
+            var DrawTableInquiry;
+
+            $(document).ready(function () {
+                getF21_SRNO();
+
+                var dataColumns = [{
+                    data: "_id",
+                    sTitle: "Id",
+                    visible: false
+                },
+                {
+                    data: "tranNo",
+                    sTitle: "Sr No",
+                    visible: true,
+                    className: "fs15--design column-50",
+                },
+
+                {
+                    data: "rsid",
+                    sTitle: "RSID",
+                    visible: true,
+                    className: "fs15--design column-50",
+                },
+
+
+                // {
+                //     data: "dongleCat",
+                //     sTitle: "Dongle Cat.",
+                //     visible: true,
+                //     className: "fs15--design column-50",
+                // },
+
+                // {
+                //     data: "dongleSubCat",
+                //     sTitle: "Sub Category",
+                //     visible: true,
+                //     className: "fs15--design column-100",
+                // },
+
+                {
+                    data: "MSISDN",
+                    sTitle: "MSISDN",
+                    visible: true,
+                    className: "fs15--design column-50",
+                },
+
+                {
+                    data: "simNo",
+                    sTitle: "SIM Number",
+                    visible: true,
+                    className: "fs15--design column-150",
+                },
+
+                {
+                    data: "name",
+                    sTitle: "Name",
+                    visible: true,
+                    className: "fs15--design column-200",
+                },
+
+                {
+                    data: "location",
+                    sTitle: "Location",
+                    visible: true,
+                    className: "fs15--design column-50",
+                },
+
+                {
+                    data: "department",
+                    sTitle: "Department",
+                    visible: true,
+                    className: "fs15--design column-100",
+                },
+
+                {
+                    data: "action",
+                    sTitle: "Action",
+                    visible: true,
+                    className: "fs15--design column-50",
+                    render: function (data, type, row) {
+                        //console.log(row);
+                        var html =
+                            ' <span class="btn btn-primary btn-block" data-id="' + row
+                                ._id +
+                            '" onclick="getUser(this) "><i class="fa fa-pencil"></i> Edit</span>';
+                        return html;
+                    }
+                }
+
+                ];
+
+                DrawTableInquiry = DrawCustomDataTable("uspList", 350,
+                    "/route/jioDongle/grid-data", dataColumns, [
+                    [0, "asc"]
+                ], "frm_grid_search", null, true, true);
+
+                $("#frm_grid_search").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        DrawTableInquiry.ajax.reload();
+                    }
+                });
+
+                $('.tab-a').click(function () {
+                    $(".tab").removeClass('tab-active');
+                    $(".tab[data-id='" + $(this).attr('data-id') + "']").addClass("tab-active");
+                    $(".tab-a").removeClass('active-a');
+                    $(this).parent().find(".tab-a").addClass('active-a');
+                });
+
+                $('.textUpper').on('keyup', function (e) {
+                    $(this).val($(this).val().toUpperCase());
+                });
+
+                $("form#regForm").submit(function (e) {
+                    // $('#newUserBox').modal('hide');
+                    e.preventDefault();
+                });
+
+                $("#regForm").validate({
+                    rules: {
+                    },
+                    messages: {
+                    },
+                    errorPlacement: function (error, element) {
+                        offset = element.offset();
+                        error.insertAfter(element)
+                        error.addClass('message');
+                        error.css('display', 'block!important');
+                        error.css('color', 'red!important');
+
+                    },
+                    submitHandler: function (form) {
+                        $('#newUserBox').modal('hide');
+                        var $form = $(form);
+                        var formData = $form.serializeObject();
+                        var method = "post";
+                        var url = "/route/jioDongle/create";
+                        console.log(formData.id);
+                        if (formData.id != 0) {
+                            url =
+                                '/route/jioDongle/updateData/' +
+                                formData.id;
+                            method = "put";
+                        }
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(formData),
+                            //data: formData,
+                            dataType: "json",
+                            success: function (result) {
+
+                                if (result.status) {
+                                    notification({
+                                        type: "success",
+                                        message: result.msg
+
+                                    });
+                                    DrawTableInquiry.ajax.reload();
+
+                                    //$("#regForm")[0].reset();
+                                }
+
+                            }
+                        });
+                    }
+                });
+            });
+
+            $(document).on("click", "#AddData", function () {
+                $('.uniqueID').val("0");
+                $("#newUserBox").modal("show");
+                DrawTableInquiry.ajax.reload();
+                $("#regForm")[0].reset();
+                $("#F21_SRNO").select2();
+                $("#F21_SRNO")[0].reset();
+            });
+
+            function populate(frm, data) {
+                $.each(data, function (key, value) {
+                    $('[name=' + key + ']', frm).val(value);
+                });
+                $('.sector').select2();
+                $("#F21_SRNO").select2();
+            }
+
+            function getUser(id) {
+                var id = id.getAttribute('data-id');
+                $('.uniqueID').val(id);
+                $.ajax({
+                    url: "/route/jioDongle/getdata",
+                    type: "get",
+                    data: {
+                        id: id
+                    },
+                    success: function (result) {
+
+                        var iddata = {
+                            id: result.data._id
+                        }
+                        $("#F21_SRNO").select2();
+                        populate('#regForm', result.data);
+                        populate('#regForm', iddata);
+                        $('#newUserBox').modal('show');
+
+                    }
+                })
+            }
+
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+
+
+            function getF21_SRNO() {
+                var tray_url = "/route/jioDongle/getF21_SRNO";
+                $.getJSON(tray_url, function (data) {
+                    var optionList3 = '<option value="">Select Name</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        //console.log("optionList1", data[i]);
+                        optionList3 += '<option value="' + data[i].F21_SRNO + '">' + data[i].F21_SRNO + ' - ' + data[i].F21_FNAME + ' ' + data[i].F21_SNAME + '</option>';
+                    }
+
+                    $('#F21_SRNO').html(optionList3);
+                    $('#F21_SRNO').select2();
+                });
+            }
+
+            function setEmployeeDetails() {
+                var obj = {
+                    "F21_SRNO": $('#F21_SRNO').val(),
+                    //"F_HLPNAME": e,
+                };
+                // console.log("objobjobjobj", obj)
+                $.ajax({
+                    method: "POST",
+                    url: "/route/jioDongle/setEmployee",
+                    data: JSON.stringify(obj),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        //console.log("resultresultresult", result)
+                        $('#employee').val(result.Data.F21_NAME);
+                        $('#loc').val(result.Data.F21_BRANCH);
+                        $('#depart').val(result.Data.F21_DEPT);
+
+                    }
+                });
+            }
+
+            function test1() {
+                DrawTableInquiry.ajax.reload();
+            }
+        </script>
+
+
+        <!-- ----------------------script for Comm/Internet--------------------------------------------------- -->
+        <script>
+            var DrawTableInquiry1;
+            $(document).ready(function () {
+                getBranch();
+
+                var dataColumns = [{
+                    data: "_id",
+                    sTitle: "Id",
+                    visible: false
+                },
+                {
+                    data: "tranNo",
+                    sTitle: "Sr No",
+                    visible: true,
+                    className: "fs15--design column-50",
+                },
+
+
+
+                {
+                    data: "dongleCat",
+                    sTitle: "Category",
+                    visible: true,
+                    className: "fs15--design column-100",
+                },
+
+                {
+                    data: "dongleSubCat",
+                    sTitle: "Sub Category",
+                    visible: true,
+                    className: "fs15--design column-150",
+                },
+
+
+                {
+                    data: "accountNo",
+                    sTitle: "Account No",
+                    visible: true,
+                    className: "fs15--design column-150",
+                },
+
+                {
+                    data: "telePloneConsumer",
+                    sTitle: "TelePlone Consumer",
+                    visible: true,
+                    className: "fs15--design column-100",
+                },
+
+                {
+                    data: "mobile",
+                    sTitle: "Mobile No",
+                    visible: true,
+                    className: "fs15--design column-50",
+                },
+
+                {
+                    data: "branch",
+                    sTitle: "Branch",
+                    visible: true,
+                    className: "fs15--design column-50",
+                },
+
+                {
+                    data: "action",
+                    sTitle: "Action",
+                    visible: true,
+                    className: "fs15--design column-50",
+                    render: function (data, type, row) {
+                        //console.log(row);
+                        var html =
+                            ' <span class="btn btn-primary btn-block" data-id="' + row
+                                ._id +
+                            '" onclick="getUser1(this) "><i class="fa fa-pencil"></i> Edit</span>';
+                        return html;
+                    }
+                }
+
+                ];
+
+                DrawTableInquiry1 = DrawCustomDataTable("uspList1", 350,
+                    "/route/jioDongle/grid-data1", dataColumns, [
+                    [0, "asc"]
+                ], "frm_grid_search", null, true, true);
+
+                $("#frm_grid_search").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        DrawTableInquiry1.ajax.reload();
+                    }
+                });
+
+                $('.tab-a').click(function () {
+                    $(".tab").removeClass('tab-active');
+                    $(".tab[data-id='" + $(this).attr('data-id') + "']").addClass("tab-active");
+                    $(".tab-a").removeClass('active-a');
+                    $(this).parent().find(".tab-a").addClass('active-a');
+                });
+
+                $('.textUpper').on('keyup', function (e) {
+                    $(this).val($(this).val().toUpperCase());
+                });
+
+                $("form#regForm1").submit(function (e) {
+                    // $('#newUserBox1').modal('hide');
+                    e.preventDefault();
+                });
+
+                $("#regForm1").validate({
+                    rules: {
+                    },
+                    messages: {
+                    },
+                    errorPlacement: function (error, element) {
+                        offset = element.offset();
+                        error.insertAfter(element)
+                        error.addClass('message');
+                        error.css('display', 'block!important');
+                        error.css('color', 'red!important');
+
+                    },
+                    submitHandler: function (form) {
+                        $('#newUserBox1').modal('hide');
+                        var $form = $(form);
+                        var formData = $form.serializeObject();
+                        var method = "post";
+                        var url = "/route/jioDongle/create1";
+                        console.log(formData.id);
+                        if (formData.id != 0) {
+                            url =
+                                '/route/jioDongle/updateData1/' +
+                                formData.id;
+                            method = "put";
+                        }
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(formData),
+                            //data: formData,
+                            dataType: "json",
+                            success: function (result) {
+
+                                if (result.status) {
+                                    notification({
+                                        type: "success",
+                                        message: result.msg
+
+                                    });
+                                    DrawTableInquiry1.ajax.reload();
+
+                                }
+
+                            }
+                        });
+                    }
+                });
+            });
+
+            $(document).on("click", "#AddData1", function () {
+                $('.internetID').val("0");
+                $("#newUserBox1").modal("show");
+                DrawTableInquiry1.ajax.reload();
+                $("#regForm1")[0].reset();
+                $("#F21_BRANCH").select2();
+                $("#F21_BRANCH")[0].reset();
+            });
+
+            function populate(frm, data) {
+                $.each(data, function (key, value) {
+                    $('[name=' + key + ']', frm).val(value);
+                });
+                $('.sector').select2();
+                $("#F21_BRANCH").select2();
+            }
+
+            function getUser1(id) {
+                var id = id.getAttribute('data-id');
+                $('.internetID').val(id);
+                $.ajax({
+                    url: "/route/jioDongle/getdata1",
+                    type: "get",
+                    data: {
+                        id: id
+                    },
+                    success: function (result) {
+
+                        var iddata = {
+                            id: result.data._id
+                        }
+                        $("#F21_BRANCH").select2();
+                        populate('#regForm1', result.data);
+                        populate('#regForm1', iddata);
+                        $('#newUserBox1').modal('show');
+
+                    }
+                })
+            }
+
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+
+            function test2() {
+                DrawTableInquiry1.ajax.reload();
+            }
+
+            function getBranch() {
+                var tray_url = "/route/appraisalReport/getF21_BRANCH";
+                $.getJSON(tray_url, function (data) {
+                    var optionList3 = '<option value="">Branch</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        //  console.log("optionList1",data)
+                        optionList3 += '<option value="' + data[i] + '">' +
+                            data[i] + '</option>'
+                    }
+
+                    $('#F21_BRANCH').html(optionList3);
+                    $('#F21_BRANCH').select2();
+                });
+            }
+        </script>
+        <% include ../partials/footer %>

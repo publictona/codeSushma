@@ -1,0 +1,1024 @@
+<% include ../partials/head %>
+<% include ../partials/header %>
+
+<style type="text/css">
+    /* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+</style>
+
+
+
+
+
+
+
+<div class="modal fade" id="namechg" role="dialog">
+    <div class="modal-dialog modal-width modal-sm">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title bdgDetailsDtl" id="bdgDetailsDtlTitle">Budget Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    
+                    <div class="col-md-12">
+                        <div class="col-md-12">
+                            <input type="hidden" name="fromDate" id="kid" class="form-control" placeholder="" value="">
+                            <input type="hidden" name="fromDate" id="knumber" class="form-control" placeholder="" value="">
+                            <label>Kesarian Name</label>
+                                    <select id="kesarianName1" class="form-control" name="kesarianName1">
+                                        <option value="">Select Kesarian</option>
+                                    </select>
+                        </div>
+                        <div class="col-md-12">
+                            <div>
+                                <button type="button" id="nameUpdate" class="btn btn-sm btn-basic" onclick="nameUpdate()">Update</button>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="tab">
+        <button class="tablinks" onclick="openCity(event, 'REPORT')">REPORT</button>
+        <button class="tablinks" onclick="openCity(event, 'Master')">Master</button>
+      </div>
+
+      <div id="REPORT" class="tabcontent" style="display:block;">
+        <div class="row gutter--3px">
+            <div class="col-md-8">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <div class="row">
+                            <div class="col-md-11">
+                                <h4 class="box-title form-title">OKOG BILLING REPORT</h4>
+                            </div>
+                            <div class="col-md-1">
+                                <div id="printDIV" class="printDIV printui">
+                                    <i class="fa fa-print fa-2x"></i>
+                                </div>
+                                <!-- <button type="button" class="btn btn-default printDIV pull-right" id="printDIV" style="display:none">Print</button> -->
+                            </div>
+                        </div>
+                    </div>	
+                    <div class="box-body">
+                        <form id="erp_form_grp" action="/route/OKOGbilling/createBillReport/" method="POST" autocomplete="OFF">
+                            <div class="row gutter--3px">
+                                    <div class="form-group col-md-5">
+                                        <label for="">COMPANY</label>
+                                        <select id="company" class="form-control company" name="company" required="">
+                                            <option value="">Select Company</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="">FROM DATE</label>
+                                        <input type="text" name="fromDate" id="fromDate" class="form-control datepicker" placeholder="From" required="">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="">TO DATE</label>
+                                        <input type="text" name="toDate" id="toDate" class="form-control datepicker" placeholder="To" required="">
+                                    </div>	
+                                    	
+                                    <div class="col-md-12">
+                                        <div id="companyChangeGenerateTable" class="table-responsive"></div>
+                                    </div>
+                                <div class="col-md-12 hideButtonForHRlogin">
+                                    <div class="box-footer">
+                                        <div class="">
+                                            <button type="submit" class="btn btn-primary btn-guest btn-block" id="erp_formSubmit">Submit
+                                            </button>
+                                        </div>
+                                        <div class="">
+                                            <div class="alert alert-success hide-alert-box" id="success-alert-item">
+                                                <button type="button" class="close" data-dismiss="alert">x</button>
+                                                <strong>Success! </strong> Record added successfully.
+                                            </div>
+                                            <div class="alert alert-success hide-alert-box" id="custom_success-item">
+                                                <button type="button" class="close" data-dismiss="alert">x</button>
+                                                <strong>Success! </strong> Record Update successfully.
+                                            </div>
+                                            <div class="alert alert-danger hide-alert-box" id="danger-alert">
+                                                <button type="button" class="close" data-dismiss="alert">x</button>
+                                                <strong>Error! </strong> <span class="custom_error"></span>
+                                            </div>
+                                        </div>	
+                                    </div> 
+                                </div>
+                            </div>
+                        </form>	
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="box">
+                    <div class="box-body">
+                        <table id="OKOGBillingTableReport" class="table table-bordered table-striped nowrap"></table>
+                    </div>
+                </div>
+            </div>
+        </div>	
+      </div>
+      
+      <div id="Master" class="tabcontent">
+        <div class="row" >
+            <div class="col-md-7">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h4 class="box-title form-title">OKOG BILLING MASTER</h4>
+                        <button  class="btn btn-primary pull-right btn-xs" id="clearScreen" type="submit">Clear Data</button>
+                    </div>
+                    <form id="erp_form_grp1" action="/route/OKOGbilling/" method="POST" autocomplete="OFF">
+                        <div class="row">
+                            <div class="box-body">
+                                <div class="form-group col-md-4" id="">
+                                    <label for="">Company</label>
+                                    <select id="company1" class="form-control" name="company" required="">
+                                        <option value="">Select Company</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4" id="">
+                                    <label for="">Location</label>
+                                    <select id="location" class="form-control" name="location">
+                                        <option value="">Select Location</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4" id="">
+                                    <label for="">Assignee</label>
+                                    <select id="department" class="form-control" name="assignee" required="">
+                                        <option value="">Select Assignee</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Kesarian Name</label>
+                                    <select id="kesarianName" class="form-control" name="kesarianName">
+                                        <option value="">Select Kesarian</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>OKOG Number</label>
+                                    <input type="text" id="OKOGno" class="form-control" name="OKOGNO" maxlength="10" ="" placeholder="OKOG Number" required="">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>FAID #</label>
+                                    <input type="text" id="faId" class="form-control" name="faId" placeholder="FAID">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Limit</label>
+                                    <input type="number" id="limit" class="form-control" name="limit" placeholder="Limit" required="">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="box-footer">
+                                    <button type="submit" class="btn btn-primary btn-guest btn-block" id="erp_formSubmit">Submit
+                                    </button> 
+                               
+                                    <div class="alert alert-success hide-alert-box" id="success-alert-item">
+                                        <button type="button" class="close" data-dismiss="alert">x</button>
+                                        <strong>Success! </strong> Record added successfully.
+                                    </div>
+                                    <div class="alert alert-success hide-alert-box" id="custom_success-item">
+                                        <button type="button" class="close" data-dismiss="alert">x</button>
+                                        <strong>Success! </strong> Record Update successfully.
+                                    </div>
+                                    <div class="alert alert-danger hide-alert-box" id="danger-alert">
+                                        <button type="button" class="close" data-dismiss="alert">x</button>
+                                        <strong>Error! </strong> <span class="custom_error"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>  
+            </div>
+            <div class="col-md-5">
+                <div class="box">
+                    <div class="box-body">
+                        <table id="OKOGBilling_table" class="table table-bordered table-striped nowrap"></table>
+                    </div> 
+                </div>
+            </div>
+        </div> 
+      </div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<input type="button" value="Master">
+            <input type="button" value="Report">
+		</div>
+	</div>
+	
+    
+    
+</div>
+
+<script>
+    function openCity(evt, cityName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+</script>
+<script>
+    //report
+    function LoadCompanyAndLocation(){
+        $.ajax({
+            type: 'GET',
+            url: "/route/rsData/view_schema_wrapper_collection_data/OKOG_BILLING_LOCATION",
+            cache: false,
+            success: function(result) {
+                RESULTCOMPANY = result;
+    
+                var ApiData = '';
+                result = JSON.parse(JSON.stringify(result));
+    
+                // FOR LOADING COMPANY DATA.
+                ApiData += '<option value="" disabled="false" selected>Select Company</option>'
+                for (var i = 0; i < result.length; i++) {
+                    ApiData += '<option value="'+result[i].COMPANY+'" data-index="'+i+'">'+result[i].COMPANY+'</option>'
+                }
+                $('#company').html(ApiData);
+                $('#company').select2();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Error In Loading Company And Location Data. Please Refresh Page.");
+            }
+        });
+    }
+    function getTotalValuesOfBillAmount(){
+        var value = 0 ;
+        $('.setExcessAmount').each(function(){
+            var inputval = $(this).val();
+            if(inputval && inputval!==undefined){
+                value += parseFloat(inputval);
+                $(".billAmountTotalVal").val(value);		
+            }
+        });
+    }
+    function getTotalValuesOfExcessCalculate(){
+        var value1 = 0 ;
+        $('.calculateExcessAmt').each(function(){
+            var inputval = $(this).val();
+            if(inputval && inputval!==undefined){
+                 value1 += parseFloat(inputval);
+                $(".excessAmountTotalVal").val(value1);		
+            }
+        });
+    }
+    
+    $(document).ready(function(){
+        // $(".printDIV").hide();
+        $(".hideButtonForHRlogin").show();
+        LoadCompanyAndLocation();
+        $(document).on('change','#company',function(){
+            var companyName = $(this).val();
+            $.ajax({
+                type: 'GET',
+                url: "/route/OKOGbilling/compnayWiseLocation/"+companyName,
+                cache: false,
+                success: function(data) {
+                    var Data = data.result;
+                    var jsonData = '';
+                    var KTName;
+                    var ktNameAfterSplit;
+    
+                    jsonData += '<table border="1" class="table nowrap table-bordered" style="border-collapse: collapse;">\
+                        <thead>\
+                            <tr>\
+                                <th style="background:#777;padding:2px;">Location</th>\
+                                <th style="background:#777;padding:2px;"> Assigne </th>\
+                                <th style="background:#777;padding:2px;">Name</th>\
+                                <th style="background:#777;padding:2px;">OKOG No</th>\
+                                <th style="background:#777;padding:2px;width:50px">Limit</th>\
+                                <th style="background:#777;padding:2px;width:50px">Bill Amount</th>\
+                                <th style="background:#777;padding:2px;width:50px">Excess Calculate</th>\
+                            </tr>\
+                        </thead>\
+                        <tbody>';
+                    var billlimitTotal = 0;
+                    var billAmountTotal = 0;
+                    var excessAmountTotal = 0;
+                    for (var i = 0; i < Data.length; i++) {
+                        KTName = Data[i].kesarianName ? Data[i].kesarianName.split('_') :''; 
+                        ktNameAfterSplit = KTName[1]; 
+                        jsonData += '<tr>\
+                            <td>\
+                                <input type="hidden" class="borderRemove" name="billingData['+i+'][location]" value="'+Data[i].location+'"/>'+Data[i].location+'\
+                            </td>\
+                            <td>\
+                                <input type="hidden" class="borderRemove" name="billingData['+i+'][assignee]" value="'+Data[i].assignee+'"/>'+Data[i].assignee+'\
+                            </td>\
+                            <td>\
+                                <input type="hidden" class="borderRemove" name="billingData['+i+'][kesarianName]" value="'+Data[i].kesarianName+'"/>'+ktNameAfterSplit+'\
+                            </td>\
+                            <td>\
+                                <input type="hidden" class="borderRemove" name="billingData['+i+'][okogNo]" value="'+Data[i].OKOGNO+'"/>'+Data[i].OKOGNO+'\
+                            </td>\
+                            <td>\
+                                <input type="hidden" class="borderRemove" name="billingData['+i+'][limit]" id="billAmountLimit'+i+'" value="'+Data[i].limit+'"/>'+Data[i].limit+'\
+                            </td>\
+                            <td>\
+                                <input type="number" name="billingData['+i+'][billAmount]" id="billAmount'+i+'" class="form-control setExcessAmount borderRemove" data-id="'+i+'" required>\
+                            </td>\
+                            <td>\
+                                <input type="number" name="billingData['+i+'][excessAmount]" id="excessAmount'+i+'" class="form-control calculateExcessAmt borderRemove" readonly>\
+                            </td>\
+                        </tr>';
+                        if(Data[i].limit && Data[i].limit > 0){
+                            billlimitTotal = parseInt(billlimitTotal) + parseInt(Data[i].limit);
+                        }
+                        /*if(Data[i].billAmount && Data[i].billAmount > 0){
+                            billAmountTotal = parseFloat(billAmountTotal) + parseFloat(billAmount);
+                        }
+                        if(Data[i].excessAmount && Data[i].excessAmount > 0){ 
+                            excessAmountTotal = parseFloat(excessAmountTotal) + parseFloat(Data[i].excessAmount); 
+                        }*/
+                    }
+                    jsonData += '<tr>\
+                            <td></td>\
+                            <td></td>\
+                            <td></td>\
+                            <td><b>TOTAL</b></td>\
+                            <td>\
+                                <input style="text-align:right" type="text" name="limitTotal" id="billlimitTotal'+i+'" value="'+billlimitTotal+'" class="form-control borderRemove" readonly/>\
+                            </td>\
+                            <td>\
+                                <input style="text-align:right;margin-right:15px" type="text" name="billAmountTotal" id="billAmountTotal'+i+'" class="form-control billAmountTotalVal borderRemove" value="'+billAmountTotal+'" readonly>\
+                            </td>\
+                            <td>\
+                                <input style="text-align:right;margin-right:15px" type="text" name="excessAmountTotal" id="excessAmountTotal'+i+'" value="'+excessAmountTotal+'" class="form-control excessAmountTotalVal borderRemove" readonly>\
+                            </td>\
+                        </tr>\
+                        </tbody>\
+                        </table>';
+                    $("#companyChangeGenerateTable").html(jsonData);		        
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Error In Loading. Please Refresh Page.");
+                }
+            });
+        })
+    
+    
+        $(document).on('change','.setExcessAmount',function(){
+            var ID = $(this).attr("data-id");
+            var billLimit = $('#billAmountLimit'+ID).val();
+            var billAmount = $('#billAmount'+ID).val();
+            console.log(billLimit,billAmount)
+            var diffAmount =parseFloat(billAmount) - parseFloat(billLimit) ;
+            $('#excessAmount'+ID).val(diffAmount.toFixed(2));
+    
+            getTotalValuesOfBillAmount();
+            getTotalValuesOfExcessCalculate();
+            /*var value = 0 ;
+            var value1 = 0 ;
+            $('.setExcessAmount').each(function(){
+                var inputval = $(this).val();
+                if(inputval && inputval!==undefined){
+                    value += parseInt(inputval);
+                    $(".billAmountTotalVal").val(value);		
+                }
+            });
+            $('.calculateExcessAmt').each(function(){
+                var inputval = $(this).val();
+                alert(inputval)
+                if(inputval && inputval!==undefined){
+                     value1 += parseInt(inputval);
+                    $(".excessAmountTotalVal").val(value1);		
+                }
+            });*/
+        });
+    
+        // CREATE PART.
+        var NewObject ;
+        var SubmitUrlId ;
+        var action_type = "POST";
+        $("#erp_form_grp").validate({
+            submitHandler: function (form) {
+    
+                var $form = $(form);
+                var url = $form.attr('action');
+                if(action_type=="PUT"){
+                    url+=SubmitUrlId;
+                }
+                var formdata = $form.serializeObject();
+                $.ajax({
+                    url: url,
+                    type: action_type || "POST",
+                    data: JSON.stringify(formdata),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    // beforeSend: function (xhr) {
+                    //     xhr.setRequestHeader("Authorization", "JWT " + "<%= token %>");
+                    // },
+                    success: function (result) {
+                        if (result.message) {
+                            $("#success-alert-item").alert();
+                            $("#success-alert-item").fadeTo(2000, 500).slideUp(500, function () {
+                            });
+    
+                            document.getElementById("erp_form_grp").reset();
+                            DrawTableInquiry.ajax.reload();
+                            // location.reload();
+                            $("#companyChangeGenerateTable").html('');
+                            $("#company").val('');
+                            $('#company').select2();
+                            action_type = "POST";
+                            SubmitUrlId = "";
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        $("#custom_success-item").alert();
+                        $("#custom_success-item").fadeTo(2000, 500).slideUp(500, function () {
+                        });
+                    }
+                });
+            }
+        });
+    
+        // DATATABLE VIEW.
+        var dataColumns = [{
+            data: "_id",
+            sTitle: "Id",
+            visible: false
+        }, {
+            data: "company",
+            sTitle: "Company",
+            visible: true,
+            render: function (data, type, row) {
+                return '<a href="#" class="grid-edit"  data-id="' + row._id + '">' + data + '</a>';
+            },
+        }, {
+            data: "fromDate",
+            sTitle: "From Date",
+            visible: true,
+            render: function (data, type, row) {
+                return '<p>' + dateFormat(data) + '</p>';
+            },
+        }, {
+            data: "toDate",
+            sTitle: "To Date",
+            visible: true,
+            render: function (data, type, row) {
+                return '<p>' + dateFormat(data) + '</p>';
+            },
+        }];
+    
+        var DrawTableInquiry = DrawCustomDataTable("OKOGBillingTableReport", 350, "/route/OKOGbilling/grid-view-report", dataColumns, [
+            [0, "desc"]
+            ], "frm-grid-search",null,true,true);
+    
+        $( "#frm-grid-search" ).validate({
+            errorPlacement: function(error, element) {
+            },submitHandler: function(form) {
+                DrawTableInquiry.ajax.reload();
+            } 
+        });
+    
+        $(document).on('click','.grid-edit',function() {
+            var reportId = $(this).attr("data-id");
+            action_type = "PUT";
+            SubmitUrlId = reportId;
+            $.ajax({
+                url: "/route/OKOGbilling/showReportView/" + reportId,
+                type: "GET",
+                success: function (data) {
+                    console.log("data",data);
+                    $.when($('#erp_form_grp').populate(data)).done(function (x) {
+                        var companyVal = data.company;
+                        //$("#company").trigger('change');
+                        $("#company").val(companyVal);
+                        $("#company").select2();
+                        $("#fromDate").datepicker("setDate", dateFormat(data.fromDate));
+                        $("#toDate").datepicker("setDate", dateFormat(data.toDate));
+                        var jsonData = '';
+                        var KTName;
+                        var ktNameAfterSplit;
+    
+                        var billlimitTotal = 0;
+                        var billAmountTotal = 0;
+                        var excessAmountTotal = 0;
+                        var className = '';
+                        var getDeptOfLoginUser = '<%= department %>';
+                        var limitCalculateForHRLogin = 0;
+                        var calculateBillAmtForHRLogin = 0;
+                        var excessCalculateForHRLogin = 0;
+                        jsonData += '<table border="1" class="table nowrap table-bordered print-table" style=" border-collapse: collapse;font-size:14px;">\
+                            <thead>\
+                                <tr>\
+                                    <th style="background:#777;padding:2px;">Location</th>\
+                                    <th style="background:#777;padding:2px;"> Assigne </th>\
+                                    <th style="background:#777;padding:2px;">Name</th>\
+                                    <th style="background:#777;padding:2px;">OKOG No</th>\
+                                    <th style="background:#777;padding:2px;width:50px">Limit</th>\
+                                    <th style="background:#777;padding:2px;width:50px">Bill Amount</th>\
+                                    <th style="background:#777;padding:2px;width:50px">Excess Calculate</th>\
+                                    <th style="background:#777;padding:2px;width:50px">Action</th>\
+                                </tr>\
+                            </thead>\
+                        <tbody>';
+                        // setTimeout(function(){
+                            for (var i = 0; i < data.billingData.length; i++) { 
+                                KTName = data.billingData[i].kesarianName ? data.billingData[i].kesarianName.split('_') :''; 
+                                ktNameAfterSplit = KTName[1];
+                                    if(data.billingData[i].billAmount > data.billingData[i].limit){
+                                        className = "colorClass";
+                                    }else{
+                                        className = '';
+                                    }
+                                    if(getDeptOfLoginUser == "HR"){
+                                        if(data.billingData[i].billAmount > data.billingData[i].limit){
+                                            calculateBillAmtForHRLogin += parseFloat(data.billingData[i].billAmount); 
+                                            excessCalculateForHRLogin += parseFloat(data.billingData[i].excessAmount);
+                                            limitCalculateForHRLogin += parseFloat(data.billingData[i].limit);
+                                            jsonData += '<tr class="'+className+'">\
+                                                <td style="padding:2px;" nowrap="">\
+                                                    <input type="hidden" name="billingData['+i+'][location]" value="'+data.billingData[i].location+'" class="borderRemove" style="border:0px"/>'+data.billingData[i].location+'\
+                                                </td>\
+                                                <td style="padding:2px;"nowrap="">\
+                                                    <input type="hidden" name="billingData['+i+'][assignee]" value="'+data.billingData[i].assignee+'" class="borderRemove" style="border:0px"/>'+data.billingData[i].assignee+'\
+                                                </td>\
+                                                <td style="padding:2px;"nowrap="">\
+                                                    <input type="hidden" name="billingData['+i+'][kesarianName]" value="'+data.billingData[i].kesarianName+'" class="borderRemove" style="border:0px"/>'+ktNameAfterSplit+'\
+                                                    </td>\
+                                                <td style="padding:2px;"nowrap="">\
+                                                    <input type="hidden" name="billingData['+i+'][okogNo]" value="'+data.billingData[i].okogNo+'" class="borderRemove" style="border:0px"/>'+data.billingData[i].okogNo+'\
+                                                </td>\
+                                                <td style="padding:2px;"nowrap="">\
+                                                    <input style="font-size:14px;text-align:center" type="hidden" name="billingData['+i+'][limit]" id="billAmountLimit'+i+'" value="'+data.billingData[i].limit+'" class="borderRemove" style="border:0px;text-align:right"/>'+data.billingData[i].limit+'\
+                                                </td>\
+                                                <td style="padding:2px;font-size:14px;text-align:right"nowrap="">'+data.billingData[i].billAmount+'</td>\
+                                                <td style="padding:2px;font-size:14px;text-align:right"nowrap=""	>'+(data.billingData[i].billAmount-data.billingData[i].limit).toFixed(2)+'</td>\
+                                                <td style="padding:2px;font-size:14px;text-align:right"nowrap=""	><span class="btn btn-primary"  data-id="' + data.billingData[i]._id + '" data-number="'+data.billingData[i].okogNo+'" onclick="nEdit(this)">Edit</span></td>\
+                                                </tr>';
+                                        }
+                                    }else{
+                                        jsonData += '<tr class="'+className+'">\
+                                            <td style="padding:2px;font-size:14px" nowrap="">\
+                                                <input type="hidden" name="billingData['+i+'][location]" style="border:0px" value="'+data.billingData[i].location+'" class="borderRemove" />'+data.billingData[i].location+'\
+                                            </td>\
+                                            <td style="padding:2px;font-size:14px" nowrap="">\
+                                                <input type="hidden" name="billingData['+i+'][assignee]" style="border:0px" value="'+data.billingData[i].assignee+'" class="borderRemove" />'+data.billingData[i].assignee+'\
+                                            </td>\
+                                            <td style="padding:2px;font-size:14px" nowrap="">\
+                                                <input type="hidden" name="billingData['+i+'][kesarianName]" style="border:0px" value="'+data.billingData[i].kesarianName+'" class="borderRemove" />'+ktNameAfterSplit+'\
+                                            </td>\
+                                            <td style="padding:2px;font-size:14px;width:150px" nowrap="">\
+                                                <input type="hidden" name="billingData['+i+'][okogNo]" style="border:0px" value="'+data.billingData[i].okogNo+'" class="borderRemove" />'+data.billingData[i].okogNo+'\
+                                            </td>\
+                                            <td style="padding:2px;font-size:14px;width:50px;text-align:right" nowrap="">\
+                                                <input type="hidden" name="billingData['+i+'][limit]" id="billAmountLimit'+i+'" style="border:0px" value="'+data.billingData[i].limit+'" class="borderRemove"/>'+data.billingData[i].limit+'\
+                                            </td>\
+                                            <td style="padding:2px;font-size:14px;width:50px;text-align:center" nowrap="">\
+                                                <input type="number" name="billingData['+i+'][billAmount]" id="billAmount'+i+'" class="form-control setExcessAmount borderRemove" data-id="'+i+'" style="border:0px;text-align:right;float:right" value='+data.billingData[i].billAmount+' required>\
+                                            </td>\
+                                            <td style="padding:2px;font-size:14px;width:50px;text-align:center" nowrap="">\
+                                                <input type="number" name="billingData['+i+'][excessAmount]" id="excessAmount'+i+'" class="form-control calculateExcessAmt borderRemove" style="border:0px;text-align:right;float:right" value='+(data.billingData[i].billAmount-data.billingData[i].limit).toFixed(2)+' readonly>\
+                                            </td>\
+                                            <td style="padding:2px;font-size:14px;text-align:right"nowrap=""	><span class="btn btn-primary"  data-id="' + data.billingData[i]._id + '" data-number="'+data.billingData[i].okogNo+'"  onclick="nEdit(this)">Edit</span></td>\
+                                            </tr>';
+                                    }
+                                /*if(Math.sign(data.billingData[i].excessAmount) == -1){
+                                    $("#billAmount"+i).parent().parent().addClass("colorClass");
+                                }*/
+                                if(data.billingData[i].billAmount > data.billingData[i].limit){
+                                    $("#billAmount"+i).parent().parent().addClass("colorClass");
+                                }
+                                if(data.billingData[i].limit && data.billingData[i].limit > 0){
+                                    billlimitTotal = parseInt(billlimitTotal) + parseInt(data.billingData[i].limit);
+                                }
+                            }
+                        // }, 100);
+                        if(getDeptOfLoginUser == "HR"){
+                            jsonData += '<tr>\
+                                            <td></td>\
+                                            <td></td>\
+                                            <td></td>\
+                                            <td><b>TOTAL</b></td>\
+                                            <td style="text-align:right">'+limitCalculateForHRLogin+'</td>\
+                                            <td style="text-align:right">'+calculateBillAmtForHRLogin+'</td>\
+                                            <td style="text-align:right">'+excessCalculateForHRLogin+'</td>';
+                            jsonData += '</tr>';
+                            $(".hideButtonForHRlogin").hide();
+                        }else{
+                            jsonData += '<tr>\
+                                            <td></td>\
+                                            <td></td>\
+                                            <td></td>\
+                                            <td><b>TOTAL</b></td>\
+                                            <td style="text-align:right">\
+                                                <input type="text" name="limitTotal" id="billlimitTotal'+i+'" style="border:0px;font-weight:bold;text-align:right" value="'+billlimitTotal+'" class="borderRemove" readonly/>\
+                                            </td>\
+                                            <td style="text-align:right">\
+                                                <input type="text" name="billAmountTotal" id="billAmountTotal'+i+'" class="billAmountTotalVal borderRemove" style="border:0px;text-align:right;font-weight:bold;flat:right;margin-right:10px" value="'+parseFloat(data.billAmountTotal).toFixed(2)+'" readonly>\
+                                            </td>\
+                                            <td style="text-align:right">\
+                                                <input type="text" name="excessAmountTotal" id="excessAmountTotal'+i+'" style="border:0px;text-align:right;flat:right;font-weight:bold;margin-right:10px" value="'+(data.billAmountTotal-billlimitTotal).toFixed(2)+'" class="excessAmountTotalVal borderRemove" readonly>\
+                                            </td>';
+                            jsonData += '</tr>';
+                        }
+                        jsonData += '</tbody>';
+                        jsonData += '</table>';
+                        $("#companyChangeGenerateTable").html(jsonData);
+                        $(".printDIV").show();
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $("#custom_success-item").alert();
+                    $("#custom_success-item").fadeTo(2000, 500).slideUp(500, function () {
+                    });
+                }
+            });
+        });
+    
+        $(document).on('click', "#printDIV", function(){
+            var company = $("#company").val();
+            var fromDate = $("#fromDate").val();
+            var toDate = $("#toDate").val();
+            var w = window.open();
+            var html = document.getElementById('companyChangeGenerateTable').innerHTML;
+            w.document.write(' <style>.print-table input{width:50px!important} .print-table thead tr th:nth-child(1),.print-table tbody tr td:nth-child(1){width: 100px!important;}.print-table thead tr th:nth-child(2),.print-table tbody tr td:nth-child(2){width: 100px!important;}.print-table thead tr th:nth-child(3),.print-table tbody tr td:nth-child(3){width: 250px!important;}.print-table thead tr th:nth-child(4),.print-table tbody tr td:nth-child(4){width: 100px!important;}.print-table thead tr th:nth-child(5),.print-table tbody tr td:nth-child(5){width: 80px!important;}.print-table thead tr th:nth-child(6),.print-table tbody tr td:nth-child(6){width: 80px!important;}.print-table thead tr th:nth-child(7),.print-table tbody tr td:nth-child(7){width: 150px!important;}</style>\
+            <table style="width:100%;">\
+                <tr>\
+                    <td>Company Name : '+company+'</td>\
+                    <td>From Date : '+fromDate+'</td>\
+                    <td>To Date : '+toDate+'</td>\
+                </tr>\
+                <tr>\
+                    <td height="10"></td>\
+                </tr>\
+            </table>'+html);
+            w.print();
+            w.close();
+        });
+    
+    });	
+    </script>
+
+
+<script>
+    var brn;
+var RESULTCOMPANY;
+function LoadCompanyAndLocation1(){
+    $.ajax({
+        type: 'GET',
+        url: "/route/rsData/view_schema_wrapper_collection_data/OKOG_BILLING_LOCATION",
+        cache: false,
+        success: function(result) {
+            RESULTCOMPANY = result;
+
+            var ApiData = '';
+            result = JSON.parse(JSON.stringify(result));
+
+            // FOR LOADING COMPANY DATA.
+            ApiData += '<option value="" disabled="false" selected>Select Company</option>'
+            for (var i = 0; i < result.length; i++) {
+                ApiData += '<option value="'+result[i].COMPANY+'" data-index="'+i+'">'+result[i].COMPANY+'</option>'
+            }
+            $('#company1').html(ApiData);
+            $('#company1').select2();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert("Error In Loading Company And Location Data. Please Refresh Page.");
+        }
+    });
+}
+
+function loadAssignee(){
+    $.ajax({
+        type: 'GET',
+        //url: "/route/rsData/view_schema_wrapper_collection_data/OKOG_BILLING_DEPT",
+        url: "/route/rsData/view_schema_wrapper_collection_data/Assignee_OKOG_BILLING",
+        cache: false,
+        //async:false,
+        success: function(result) {
+            var deptData = '';
+            deptData += '<option value="" disabled="false" selected="">Select Assignee</option>'
+            for (var i = 0; i < result.length; i++) {
+                //deptData += '<option value="'+result[i].DEPARTMENT+'">'+result[i].DEPARTMENT+'</option>'
+                deptData += '<option value="'+result[i].ASSIGNEE+'">'+result[i].ASSIGNEE+'</option>'
+            }
+            $('#department').html(deptData);
+            $('#department').select2();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert("Error In Loading Position Name. Please Refresh Page.");
+        }
+    });
+}
+
+/*$.ajax({
+    url: "/route/department",
+    async: false, 
+    success: function(apiData){
+        var apijson = '';
+        apijson+='<option value="" disabled="false" selected="">Select Department</option>';
+        for (var api = 0; api < apiData.length; api++) {
+            apijson+='<option value="'+apiData[api]['ou']+'">'+apiData[api]['ou']+'</option>';
+        };
+        $('#department').html(apijson);
+        $('.select2').select2();
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+        alert("Error In Loading Department. Please Refresh Page.");
+    }
+});*/
+
+function getKesarianNameData(){
+    $.ajax({
+        url: "/route/rsdata/getKesarianName/?all=true",
+        // url: "/route/F21_SLMS/getKesarianByMultiDepartment",
+        type:"GET",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(result) {
+            result = JSON.parse(JSON.stringify(result));
+            var options='<option value="">Select Kesarian</option>';
+            for (var i = 0; i < result.length; i++){
+                // if(result[i].F21_OKOGMO != ""){
+                    options+='<option value="'+(result[i].F21_SRNO+'_'+result[i].F21_NAME+'_'+result[i].F21_OKOGMO)+'">'+result[i].F21_NAME+'-'+result[i].F21_SRNO+ '</option>';
+                // }
+            }
+            $("#kesarianName").html(options);
+            $("#kesarianName").select2();
+        }
+    });
+}
+
+function getKesarianNameData1(){
+    $.ajax({
+        url: "/route/rsdata/getKesarianName/?all=true",
+        // url: "/route/F21_SLMS/getKesarianByMultiDepartment",
+        type:"GET",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(result) {
+            result = JSON.parse(JSON.stringify(result));
+            var options='<option value="">Select Kesarian</option>';
+            for (var i = 0; i < result.length; i++){
+                // if(result[i].F21_OKOGMO != ""){
+                    options+='<option value="'+(result[i].F21_SRNO+'_'+result[i].F21_NAME+'_'+result[i].F21_OKOGMO)+'">'+result[i].F21_NAME+'-'+result[i].F21_SRNO+ '</option>';
+                // }
+            }
+            $("#kesarianName1").html(options);
+            $("#kesarianName1").select2();
+        }
+    });
+}
+
+$(document).ready(function(){
+
+    LoadCompanyAndLocation();
+    LoadCompanyAndLocation1();
+    loadAssignee();
+    getKesarianNameData();
+    getKesarianNameData1();
+
+    // DATATABLE VIEW.
+    var dataColumns = [{
+        data: "_id",
+        sTitle: "Id",
+        visible: false
+    }, {
+        data: "company",
+        sTitle: "Company",
+        visible: true,
+        class:"column-10",
+        render: function (data, type, row) {
+            return '<a href="#" class="grid-edit1"  data-id="' + row._id + '">' + data + '</a>';
+        },
+    }, {
+        data: "location",
+        sTitle: "Location",
+        visible: true
+    }, {
+        data: "assignee",
+        sTitle: "Assignee",
+        visible: true
+    }, {
+        data: "OKOGNO",
+        sTitle: "OKOG Number",
+        visible: true
+    }, {
+        data: "limit",
+        sTitle: "Limit",
+        visible: true,
+        class:"column-20"
+    },{
+        data: "faId",
+        sTitle: "FAID #",
+        visible: true
+    }];
+
+    var DrawTableInquiry = DrawCustomDataTable("OKOGBilling_table", 350, "/route/OKOGbilling/grid-view", dataColumns, [
+        [0, "desc"]
+        ], "frm-grid-search",null,true,true,"","","","tableButtons");
+
+    $( "#frm-grid-search" ).validate({
+        errorPlacement: function(error, element) {
+        },submitHandler: function(form) {
+            DrawTableInquiry.ajax.reload();
+        } 
+    });
+
+    // RESET FORM ON BUTTON CLICK.
+    $("#clearScreen").click(function(){
+        document.getElementById("erp_form_grp1").reset();
+        $('#location').select2('destroy');
+        $('#company1').select2('destroy');
+        $('#department').select2('destroy');
+        $("#kesarianName").select2('destroy');
+    });
+
+    // ONCHANGE SET VALUE IN OKOG MOBILE NO.
+    $(document).on('change','#kesarianName',function(){
+        var value = $(this).val();
+        var splitValues = value.split('_');
+        $('#OKOGno').val(splitValues[2]);
+    });
+
+    // CREATE PART.
+    var NewObject ;
+    var SubmitUrlId ;
+    var action_type = "POST";
+    $("#erp_form_grp1").validate({
+        submitHandler: function (form) {
+
+            var $form = $(form);
+            var url = $form.attr('action');
+            if(action_type=="PUT"){
+                url+=SubmitUrlId;
+            }
+            var formdata = $form.serializeObject();
+            $.ajax({
+                url: url,
+                type: action_type || "POST",
+                data: JSON.stringify(formdata),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                // beforeSend: function (xhr) {
+                //     xhr.setRequestHeader("Authorization", "JWT " + "<%= token %>");
+                // },
+                success: function (result) {
+                    if (result.message) {
+                        $("#success-alert-item").alert();
+                        $("#success-alert-item").fadeTo(2000, 500).slideUp(500, function () {
+                        });
+
+                        document.getElementById("erp_form_grp1").reset();
+                        // $('#location').select2('destroy');
+                        // $('#company').select2('destroy');
+                        // $('#department').select2('destroy');
+                        // $("#kesarianName").select2('destroy');
+                        DrawTableInquiry.ajax.reload();
+                        location.reload();
+                        action_type = "POST";
+                        SubmitUrlId = "";
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    $("#custom_success-item").alert();
+                    $("#custom_success-item").fadeTo(2000, 500).slideUp(500, function () {
+                    });
+                }
+            });
+        }
+    });
+
+    // UPDATE PART.
+    $(document).on('click','.grid-edit1',function() {
+        var id = $(this).attr("data-id");
+        action_type = "PUT";
+        SubmitUrlId = id;
+        $.ajax({
+            url: "/route/OKOGbilling/" + id,
+            type: "GET",
+            success: function (data) {
+                $.when($('#erp_form_grp1').populate(data)).done(function (x) {
+                    var locationVal = data.location;
+                    brn=data.location;
+                    // $("#location").val(locationVal); 
+                    $("#company1").trigger("change");
+                    $("#location").val(locationVal); 
+                    $('#location').select2();
+                   
+                    $('#company1').select2();
+                    $('#department').select2();
+                    $("#kesarianName").trigger("change"); 
+                    $("#kesarianName").select2();
+                    /*setTimeout(function(){
+                        alert("Hello"); 
+                    }, 3000);*/
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                $("#custom_success-item").alert();
+                $("#custom_success-item").fadeTo(2000, 500).slideUp(500, function () {
+                });
+            }
+        });
+    });
+
+    // ON COMPANY SELECT LOAD LOCATION.
+    $(document).on('change','#company1',function() {
+        var value = $(this).find('option:selected').attr("data-index");
+
+        var data = RESULTCOMPANY[value].data;
+        var locationData = '';
+
+        locationData += '<option value="" disabled="false" selected="">Select Location</option>'
+        for(var i = 0; i < data.length; i++){
+            if(data[i]){
+                
+                if(brn && brn==data[i].LOCATION){
+                    locationData += '<option selected="selected" value="'+data[i].LOCATION+'">'+data[i].LOCATION+'</option>';
+                }else{
+                locationData += '<option value="'+data[i].LOCATION+'">'+data[i].LOCATION+'</option>';
+                }
+            }
+        }
+        // console.log(locationData);
+        $('#location').html(locationData);
+        $('#location').select2();
+    });
+});
+</script>
+<script>
+    function nEdit(id){
+        var nid=id.getAttribute('data-id');
+        $("#kid").val(nid);
+        var number = id.getAttribute('data-number');
+        $("#knumber").val(number);
+        $('#namechg').modal('show');
+    }
+    function nameUpdate(){
+        var id=$("#kid").val();
+        var number=$("#knumber").val();
+        var name=$("#kesarianName1").val();
+        var data={'id':id,'number':number,'name':name};
+        $.ajax({
+            type: 'POST',
+            data:data,
+            url: "/route/OKOGbilling/nameUpdate",
+            success: function(result) {
+                if(result.message){
+                    alert("Record Update successfully");
+                    $('#namechg').modal('hide');
+                }
+            }
+        })
+    }
+</script>
+<% include ../partials/footer %>

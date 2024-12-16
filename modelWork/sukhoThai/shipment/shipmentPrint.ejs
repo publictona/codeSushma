@@ -1,0 +1,102 @@
+<style>
+    @media print {
+        .page-break {
+            display: block;
+            page-break-before: always;
+        }
+
+        tfoot img {
+            position: fixed;
+            bottom: 0;
+        }
+    }
+</style>
+
+<div class="row">
+
+
+
+    <div class="col-md-12 text-right"><i class="fa fa-print btn btn-primary" onclick="shipmentPrint(this)"
+            style="margin-bottom:5px; "></i></div>
+            <div class="col-md-12 table-responsive" id="getShipmentPrints" style="line-height:30px; font-family:Arial, Helvetica, sans-serif; width: 800px; margin: 0 auto; ">
+                <table style="width:100%;">
+                    <%for(var i=1;i<=data.ship_printnos;i++){%>
+                  <tr  style=" display: block; page-break-before: always;">
+                    <!-- for kesari logo -->
+                    <td>
+                      <div style=" border: 1px solid #000; padding: 10px 50px 50px;">
+                        <div style="text-align: center; ">
+                          <img _ngcontent-serverapp-c61=""
+                            src="https://s3.ap-southeast-1.amazonaws.com/sukhothai.in/upload/SukhoThai+logo.png"
+                            style="/*! float: right; */ width: 87%;">
+                        </div>
+                        <div style="margin-bottom: 40px;">
+                          <h3 style="font-size: 25px; color:#000;">Shipped By</h3>
+                          <h1 style="font-size: 50px; color:#000"><%= data.ship_toname %> </h1>
+                          <span style="display:block; margin-bottom: 0px; color:#000; font-size: 25px;"></span>
+                          <span style="display:block; margin-bottom: 0px; width:60%; color: #000;font-size: 25px;">
+                            <%= data.ship_toaddress %> 
+                          </span>
+                          <span style="font-size: 40px; text-transform: uppercase;font-weight: bold;margin-right: 10px; color:#000"><%= data.ship_tocity %></span>
+                          <span style="color:#000; font-size: 25px;"><%= data.ship_topincode %> </span>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                          <span style="font-size:23px; color:#000;">Mobile No:<%=data.ship_tomobile%></span>
+                        </div>
+                        <div style="border-top: 1px solid #000; margin-bottom:20px;">
+                          <span style="font-size:23px; color:#000;">Note:<%=data.ship_remarks%></span>
+                        </div>
+                        <div style="padding-top: 20px;text-align: right; ">
+                         
+                          <span style="display:block; margin-bottom: 0px; font-size: 25px;">Shipment From</span>
+                          <span style="display:block;  font-size: 25px; color:#000; margin-bottom: 0px; font-weight: bold;"><%=data.ship_fromname%></span>
+                          <span style="display:block;  margin-bottom: 0px; font-size: 25px; color:#000;"><%=data.ship_fromaddress%></span>
+                        </div>
+                      </div>
+                      <div style="font-size: 90px;margin-top:60px; margin-bottom: 50px; color:#000; display:flex; justify-content:space-evenly;">
+                        <%=data.tranNo%><span style="font-size: 55px; justify-content:space-evenly;">(<%=i%>/<%=data.ship_content%>)</span>  
+                      </div>
+                    </td>
+                  </tr>
+                  <%}%>
+                </table>
+              </div>
+              
+             
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+</div>
+
+<script>
+
+    function shipmentPrint() {
+        var divToPrint = document.getElementById("getShipmentPrints");
+        console.log("divToPrint", divToPrint)
+        divToPrint.style.border = "1px";
+        newWin = window.open("");
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    };
+
+
+</script>

@@ -1,0 +1,545 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+        <style>
+            @media print {
+                table {
+                    width: 100%;
+                    border: 1px solid #000000;
+                    border-collapse: collapse;
+                    font-size: 11pt;
+                }
+            }
+
+            table {
+                font-family: monospace;
+                font-size: 12px;
+            }
+
+            .table>tbody>tr>td,
+            .table>thead>tr>td,
+            .table>thead>tr>th {
+                font-size: 12px;
+            }
+
+            .tourcode,
+            .formno {
+                text-transform: uppercase;
+                font-size: 16px;
+                font-weight: 800;
+            }
+
+            .tourname {
+                font-size: 12px;
+            }
+
+            .tour-detials {
+                font-size: 15px;
+                white-space: nowrap;
+            }
+
+            .background-box {
+                background: #dadada;
+                padding: 1px 5px;
+                border-radius: 4px;
+            }
+
+            .col-150 {
+                min-width: 150px;
+                max-width: 150px;
+                width: 150px;
+            }
+
+            .col-50 {
+                min-width: 50px;
+                max-width: 50px;
+                width: 50px;
+            }
+
+            .alert {
+                width: auto;
+                padding: 20px;
+                font-size: 15px;
+                top: 63px !important;
+                right: 20px !important;
+                z-index: 999999 !important;
+            }
+
+            .ibTable tr td {
+                padding: 3px;
+            }
+
+            .calIpBox {
+                border-bottom: 1px solid #fff;
+            }
+
+            label.error {
+                display: block !important;
+            }
+
+            .txtalign {
+                text-align: right;
+            }
+
+
+            /* .border-0 td{
+                border:0px !important;
+                
+            } */
+        </style>
+        <div id="mySidenav" class="hamburger-menu">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <div class="hamburger-content">
+                <form id="frm_grid_search" name="frm_grid_search">
+                    <!-- <div class="bgff">
+                        <label>Transaction Date</label>
+                        <input type="text" class="form-control dateRange" name="date1" autocomplete="false" />
+                    </div>
+                    <div class="bgff">
+                        <button type="submit" class="btn btn-primary btn-guest height-30 btn-block" onclick="closeNav()"
+                            style="">SEARCH</button>
+                    </div> -->
+                </form>
+            </div>
+        </div>
+        <div class="box">
+            <div class="box-header with-border with-hamburger">
+                <a href="javascript:void(0);" class="box-header-hamburger-menu" onclick="openNav()">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </a>
+                <h3 class="box-title">Asset Management Report</h3>
+            </div>
+            <div class="box-body">
+                <div class="row gutter--3px">
+                    <div class="col-md-2">
+                        <label class="fs12--design">
+                            Branch
+                        </label>
+                        <input type="text" class="form-control F21_BRANCH" name="F21_BRANCH" autocomplete="off"
+                            oninput="this.value = this.value.toUpperCase();">
+                    </div>
+
+                    <div class="col-md-8">
+                        <div style="margin-top: 20px;">
+                            <span class="btn btn-primary" onclick="assetSummary()">Summary</span>
+                            <span class="btn btn-primary" onclick="assetDetails()">Details</span>
+
+                            <span class="btn btn-success" onclick="printData4()">
+                                <i class="fa fa-print" aria-hidden="true" style="color: white;"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 printdata">
+                        <div class="col-md-12 infotxt">
+                        </div>
+                        <table class="table table-bordered table-striped display nowrap order-column addtr" border="1"
+                            cellpadding="5" cellspacing="0" style="width:100%;page-break-after: always;">
+                        </table>
+                        <div class="col-md-5">
+                            <table class="table table-bordered table-striped display nowrap order-column addtr1"
+                                border="1" cellpadding="5" cellspacing="0" style="width:100%;">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+        <script>
+
+            var DrawTableInquiry;
+            $(document).ready(function () { });
+
+            // function assetSummary() {
+            //     var F21_BRANCH = $('.F21_BRANCH').val();
+
+            //     // Check if the branch value is empty
+            //     if (!F21_BRANCH) {
+            //         alert('Please enter a branch value');
+            //         return;
+            //     }
+
+            //     $.ajax({
+            //         url: '/route/assetReportBrowse/getAssetReportBrowse1',
+            //         method: 'post',
+            //         data: { 'F21_BRANCH': F21_BRANCH },
+            //         success: function (response) {
+            //             console.log("response", response);
+
+            //             // Check if the response contains data
+            //             if (!response || !response.data || response.data.length === 0) {
+            //                 alert('No data available for the specified branch');
+            //                 return;
+            //             }
+
+            //             var html = '';
+            //             var ml = ``;
+            //             var html1 = '<h4> Asset Management Summary  </h4>';
+            //             var res = response.data;
+            //             console.log()
+            //             ml += `<thead>
+            //                 <tr>
+                           
+            //                 <th style="font-family: monospace;font-size: 12px;">Item Code</th>
+            //                 <th style="font-family: monospace;font-size: 12px;">Total</th>
+            //                 </tr>
+            //                 </thead>
+            //                 <tbody class="">`;
+
+            //             for (var j = 0; j < res.length; j++) {
+            //                 var count = 0;
+            //                 console.log(res[j]);
+            //                 if (res[j].totalAmount == 0) {
+            //                     count = res[j].count;
+            //                 } else {
+            //                     count = res[j].totalAmount;
+            //                 }
+            //                 ml += `<tr>
+            //                     <td style="font-family: monospace;font-size: 12px;"> ${res[j]._id} </td>
+            //                     <td style="font-family: monospace;font-size: 12px;">${count} </tr>`;
+
+            //             }
+            //             ml += `</tbody>`
+
+
+            //             $('.infotxt').html(html1);
+            //             $('.addtr').html(html);
+            //             $('.addtr1').html(ml);
+            //             $('.addtr1').show();
+            //         }
+            //     });
+            // }
+
+            function assetSummary() {
+                var F21_BRANCH = $('.F21_BRANCH').val();
+
+                // Check if the branch value is empty
+                if (!F21_BRANCH) {
+                    alert('Please enter a branch value');
+                    return;
+                }
+
+                $.ajax({
+                    url: '/route/assetReportBrowse/getAssetReportBrowse1',
+                    method: 'post',
+                    data: { 'F21_BRANCH': F21_BRANCH },
+                    success: function (response) {
+                        console.log("response", response);
+
+                        // Check if the response contains data
+                        if (!response || !response.data || response.data.length === 0) {
+                            alert('No data available for the specified branch');
+                            return;
+                        }
+
+                        var html = '';
+                        var ml = ``;
+                        var html1 = '<h4> Asset Management Summary  </h4>';
+                        var res = response.data;
+                        console.log()
+                        ml += `<thead>
+                            <tr>
+                           
+                            <th style="font-family: monospace;font-size: 12px;">Item Code</th>
+                            <th style="font-family: monospace;font-size: 12px;">Total</th>
+                            </tr>
+                            </thead>
+                            <tbody class="">`;
+
+                        for (var j = 0; j < res.length; j++) {
+                            var count = 0;
+                            
+                            console.log(res[j]);
+                            if (res[j].totalAmount == 0) {
+                                count = res[j].count;
+                            } else {
+                                count = res[j].totalAmount;
+                            }
+                            ml += `<tr>
+                                <td style="font-family: monospace;font-size: 12px;"> ${res[j]._id} </td>
+                                <td style="font-family: monospace;font-size: 12px;">${count} </tr>`;
+
+                        }
+                        ml += `</tbody>`
+
+
+                        $('.infotxt').html(html1);
+                        $('.addtr').html(html);
+                        $('.addtr1').html(ml);
+                        $('.addtr1').show();
+                    }
+                });
+            }
+
+            function assetDetails() {
+                var F21_BRANCH = $('.F21_BRANCH').val();
+
+                // Check if the branch value is empty
+                if (!F21_BRANCH) {
+                    alert('Please enter a branch value');
+                    return;
+                }
+
+                $.ajax({
+                    url: '/route/assetReportBrowse/getAssetReportBrowse',
+                    method: 'post',
+                    data: { 'F21_BRANCH': F21_BRANCH },
+                    success: function (response) {
+                        console.log(response);
+                        var html = ``;
+                        var html1 = `<h4> Asset Management Details  </h4>`;
+                        var res = response.data;
+                        var serialNumber = 1; // Initialize serial number counter here
+
+                        html += `<thead>
+                <tr>
+                    <th style="font-family: monospace;font-size: 12px; width:8px; text-align:center;">No</th>
+                    <th style="font-family: monospace;font-size: 12px; width:20px; text-align:center;" colspan="4">Staff Details</th>
+                    <th style="font-family: monospace;font-size: 12px; text-align:center;" colspan="4" >Asset Details</th>
+                </tr>
+                <tr>
+                    <th style="font-family: monospace;font-size: 12px; width:8px;"></th>
+                    <th style="font-family: monospace;font-size: 12px; width:20px;">Branch</th>
+                    <th style="font-family: monospace;font-size: 12px; width:20px;">Department</th>
+                    <th style="font-family: monospace;font-size: 12px; width:20px;">RSID</th>
+                    <th style="font-family: monospace;font-size: 12px; width:20px;">Name</th>
+                    <th style="font-family: monospace;font-size: 12px;">Item Code</th>
+                    <th style="font-family: monospace;font-size: 12px;">Brand</th>
+                    <th style="font-family: monospace;font-size: 12px;"> Model No</th>
+                    <th style="font-family: monospace;font-size: 12px;"> Serial No</th>
+                </tr>
+            </thead>
+            <tbody class="">`;
+
+                        for (var i = 0; i < res.length; i++) {
+                            html += `<tr>
+                          
+                    <td style="font-family: monospace;font-size: 12px; width:8px;">${serialNumber}</td>
+                    <td style="font-family: monospace;font-size: 12px; width:20px;">${res[i].F21_BRANCH}</td>
+                    <td style="font-family: monospace;font-size: 12px; width:20px;">${res[i].F21_DEPT}</td>
+                    <td style="font-family: monospace;font-size: 12px; width:20px;">${res[i].F21_SRNO}</td>
+                    <td style="font-family: monospace;font-size: 12px; width:20px;">${res[i].F21_FNAME + " " + res[i].F21_SNAME}</td>
+                    <td  style="font-family: monospace;font-size: 12px;padding:0px;">`;
+
+                            // Check if Asset_Trans array exists and has items
+                            if (res[i].Asset_Trans && res[i].Asset_Trans.length > 0) {
+                                // Include the label for Asset_Trans array only once
+                                html += `
+                        <table style="border-collapse: collapse; width: 100%; line-height: 20px;">
+                            <tbody>`;
+                                // Iterate over Asset_Trans array and include details in the nested table
+                                for (var j = 0; j < res[i].Asset_Trans.length; j++) {
+                                    html += `<tr>
+                            <td style="font-family: monospace;font-size: 12px; padding-left: 8px; border-bottom: 1px solid #ddd;">${res[i].Asset_Trans[j].itemCode}</td>
+                        </tr>`;
+                                }
+                                html += `</tbody></table>`;
+                            } else {
+                                // Handle the case when Asset_Trans array is empty
+                                html += `N/A`;
+                            }
+
+                            //--------------------------------1----------------------------------
+                            html += `</td>
+                    <td style="font-family: monospace;font-size: 12px; padding:0px">`;
+                            // Check if Asset_Trans array exists and has items
+                            if (res[i].Asset_Trans && res[i].Asset_Trans.length > 0) {
+                                // Include the label for Asset_Trans array only once
+                                html += `
+                            <table style="border-collapse: collapse; width: 100%; line-height: 20px;">
+                                <tbody>`;
+                                // Iterate over Asset_Trans array and include details in the nested table
+                                for (var j = 0; j < res[i].Asset_Trans.length; j++) {
+                                    console.log("es[i].Asset_Trans" , res[i].Asset_Trans)
+                                    html += `<tr>
+                            <td style="font-family: monospace;font-size: 12px; padding-left: 8px; border-bottom: 1px solid #ddd; ">${res[i].Asset_Trans[j].itemBrand}</td>
+                        </tr>`;
+                                }
+                                html += `</tbody></table>`;
+                            } else {
+                                // Handle the case when Asset_Trans array is empty
+                                html += `N/A`;
+                            }
+
+                            //--------------------------------2----------------------------------
+                            html += `</td>
+                    <td style="font-family: monospace;font-size: 12px; padding:0px">`;
+                            // Check if Asset_Trans array exists and has items
+                            if (res[i].Asset_Trans && res[i].Asset_Trans.length > 0) {
+                                // Include the label for Asset_Trans array only once
+                                html += `
+                            <table style="border-collapse: collapse; width: 100%; line-height: 20px;">
+                                <tbody>`;
+                                // Iterate over Asset_Trans array and include details in the nested table
+                                for (var j = 0; j < res[i].Asset_Trans.length; j++) {
+                                    html += `<tr>
+                            <td style="font-family: monospace;font-size: 12px; padding-left: 8px; border-bottom: 1px solid #ddd; ">${res[i].Asset_Trans[j].modelNo}</td>
+                        </tr>`;
+                                }
+                                html += `</tbody></table>`;
+                            } else {
+                                // Handle the case when Asset_Trans array is empty
+                                html += `N/A`;
+                            }
+
+                            //--------------------------------3----------------------------------
+                            html += `</td>
+                    <td style="font-family: monospace;font-size: 12px; padding:0px">`;
+                            // Check if Asset_Trans array exists and has items
+                            if (res[i].Asset_Trans && res[i].Asset_Trans.length > 0) {
+                                // Include the label for Asset_Trans array only once
+                                html += `
+                            <table style="border-collapse: collapse; width: 100%; line-height: 20px;">
+                                <tbody>`;
+                                // Iterate over Asset_Trans array and include details in the nested table
+                                for (var j = 0; j < res[i].Asset_Trans.length; j++) {
+                                    html += `<tr>
+                            <td style="font-family: monospace;font-size: 12px; padding-left: 8px; border-bottom: 1px solid #ddd; ">${res[i].Asset_Trans[j].serialNo}</td>
+                        </tr>`;
+                                }
+                                html += `</tbody></table>`;
+                            } else {
+                                // Handle the case when Asset_Trans array is empty
+                                html += `N/A`;
+                            }
+
+                      
+                         //====================end array=================================
+
+
+                          
+
+                        
+
+                            // Increment serialNumber for the next row
+                            serialNumber++;
+                        }
+
+                        html += `</tbody>`;
+                        $('.infotxt').html(html1);
+                        $('.addtr1').css("display", "none");
+                        $('.addtr').html(html);
+                    }
+                });
+            }
+
+        //    function assetDetails() {
+        //         var F21_BRANCH = $('.F21_BRANCH').val();
+        //         // Check if the branch value is empty
+        //         if (!F21_BRANCH) {
+        //             alert('Please enter a branch value');
+        //             return;
+        //         }
+        //         $.ajax({
+        //             url: '/route/assetReportBrowse/getAssetReportBrowse',
+        //             method: 'post',
+        //             data: { 'F21_BRANCH': F21_BRANCH },
+        //             success: function (response) {
+        //                 console.log(response);
+        //                 var html = ``;
+        //                 var html1 = `<h4> Asset Management Details  </h4>`;
+        //                 var res = response.data;
+        //                 var serialNumber = 1; // Initialize serial number counter here
+        //                 html += `<thead>
+        //         <tr>
+        //             <th style="font-family: monospace;font-size: 12px; width:8px; text-align:center;">No</th>
+        //             <th style="font-family: monospace;font-size: 12px; width:20px; text-align:center;" colspan="4">Staff Details</th>
+        //             <th style="font-family: monospace;font-size: 12px; text-align:center;" colspan="4" >Asset Details</th>
+        //         </tr>
+        //         <tr>
+        //             <th style="font-family: monospace;font-size: 12px; width:8px;"></th>
+        //             <th style="font-family: monospace;font-size: 12px; width:20px;">Branch</th>
+        //             <th style="font-family: monospace;font-size: 12px; width:20px;">Department</th>
+        //             <th style="font-family: monospace;font-size: 12px; width:20px;">RSID</th>
+        //             <th style="font-family: monospace;font-size: 12px; width:20px;">Name</th>
+        //             <th style="font-family: monospace;font-size: 12px;">Item Code</th>
+        //             <th style="font-family: monospace;font-size: 12px;">Brand</th>
+        //             <th style="font-family: monospace;font-size: 12px;"> Model No</th>
+        //             <th style="font-family: monospace;font-size: 12px;"> Serial No</th>
+        //         </tr>
+        //     </thead>
+        //     <tbody class="">`;
+        //                 for (var i = 0; i < res.length; i++) {
+        //                     html += `<tr>
+        //             <td style="font-family: monospace;font-size: 12px; width:8px;">${serialNumber}</td>
+        //             <td style="font-family: monospace;font-size: 12px; width:20px;">${res[i].F21_BRANCH}</td>
+        //             <td style="font-family: monospace;font-size: 12px; width:20px;">${res[i].F21_DEPT}</td>
+        //             <td style="font-family: monospace;font-size: 12px; width:20px;">${res[i].F21_SRNO}</td>
+        //             <td style="font-family: monospace;font-size: 12px; width:20px;">${res[i].F21_FNAME + " " + res[i].F21_SNAME}</td>
+        //             <td  style="font-family: monospace;font-size: 12px;padding:0px;">`;
+        //                     // Check if Asset_Trans array exists and has items
+        //                     if (res[i].Asset_Trans && res[i].Asset_Trans.length > 0) {
+        //                         // Include the label for Asset_Trans array only once
+        //                         html += `
+        //                 <table style="border-collapse: collapse; width: 100%; line-height: 20px;">
+        //                     <tbody>`;
+        //                         // Iterate over Asset_Trans array and include details in the nested table
+        //                         for (var j = 0; j < res[i].Asset_Trans.length; j++) {
+        //                             html += `<tr>
+        //                     <td style="font-family: monospace;font-size: 12px; padding-left: 8px; border-bottom: 1px solid #ddd;">${res[i].Asset_Trans[j].itemCode}</td>
+        //                 </tr>`;
+        //                         }
+        //                         html += `</tbody></table>`;
+        //                     } else {
+        //                         // Handle the case when Asset_Trans array is empty
+        //                         html += `N/A`;
+        //                     }
+        //                     html += `</td>
+        //             <td style="font-family: monospace;font-size: 12px; padding:0px">`;
+        //                     // Check if Asset_Trans array exists and has items
+        //                     if (res[i].Asset_Trans && res[i].Asset_Trans.length > 0) {
+        //                         // Include the label for Asset_Trans array only once
+        //                         html += `
+        //                     <table style="border-collapse: collapse; width: 100%; line-height: 20px;">
+        //                         <tbody>`;
+        //                         // Iterate over Asset_Trans array and include details in the nested table
+        //                         for (var j = 0; j < res[i].Asset_Trans.length; j++) {
+        //                             html += `<tr>
+        //                     <td style="font-family: monospace;font-size: 12px; padding-left: 8px; border-bottom: 1px solid #ddd; ">${res[i].Asset_Trans[j].itemBrand}</td>
+        //                 </tr>`;
+        //                         }
+        //                         html += `</tbody></table>`;
+        //                     } else {
+        //                         // Handle the case when Asset_Trans array is empty
+        //                         html += `N/A`;
+        //                     }
+        //                     html += `</td>
+        //             <td style="font-family: monospace;font-size: 12px; padding:0px">`;
+        //                     // Similar checks and code for other columns...
+        //                     // Increment serialNumber for the next row
+        //                     serialNumber++;
+        //                 }
+        //                 html += `</tbody>`;
+        //                 $('.infotxt').html(html1);
+        //                 $('.addtr1').css("display", "none");
+        //                 $('.addtr').html(html);
+        //             }
+        //         });
+        //     }
+            
+            
+            
+            function printData4() {
+                var newWin = window.open("");
+                newWin.document.write(document.querySelector('.printdata').innerHTML);
+                setTimeout(function () {
+                    newWin.print();
+                    newWin.close();
+                }, 500);
+            }
+
+
+
+
+            function printData4() {
+                var newWin = window.open("");
+                newWin.document.write(document.querySelector('.printdata').innerHTML);
+                setTimeout(function () {
+                    newWin.print();
+                    newWin.close();
+                }, 500);
+            }
+
+        </script>
+
+        <% include ../partials/footer %>

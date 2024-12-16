@@ -1,0 +1,629 @@
+<% include ../partials/head %>
+  <% include ../partials/header %>
+
+    <style>
+      .pd-3 {
+        padding-left: 10px;
+      }
+
+      .ui-autocomplete {
+        z-index: 2147483647;
+      }
+
+      .contentRow {
+        white-space: break-spaces !important;
+      }
+
+      .tourcode,
+      .formno {
+        text-transform: uppercase;
+        font-size: 16px;
+        font-weight: 800;
+      }
+
+      .tourname {
+        font-size: 12px;
+      }
+
+      .tour-detials {
+        font-size: 15px;
+        white-space: nowrap;
+      }
+
+      .background-box {
+        background: #dadada;
+        padding: 1px 5px;
+        border-radius: 4px;
+      }
+
+      .col-150 {
+        min-width: 150px;
+        max-width: 150px;
+        width: 150px;
+      }
+
+      .col-50 {
+        min-width: 50px;
+        max-width: 50px;
+        width: 50px;
+      }
+
+      .alert {
+        width: auto;
+        padding: 20px;
+        font-size: 15px;
+        top: 63px !important;
+        right: 20px !important;
+        z-index: 999999 !important;
+      }
+
+      .ibTable tr td {
+        padding: 3px;
+      }
+
+      .calIpBox {
+        border-bottom: 1px solid #fff;
+      }
+
+      label.error {
+        display: block !important;
+      }
+    </style>
+
+
+
+
+    <div class="box">
+      <div class="box-header with-border with-hamburger">
+        <a href="javascript:void(0);" class="box-header-hamburger-menu" onclick="openNav()">
+          <i class="fa fa-bars" aria-hidden="true"></i>
+        </a>
+        <h3 class="box-title"> Visa Consulate Address</h3>
+      </div>
+      <div class="box-body">
+        <div class="row gutter--3px">
+          <div class="col-md-12">
+            <span class="btn btn-primary" onclick="addNewUser()"><i class="fa fa-plus"></i> Add Visa Consulate Address
+            </span>
+          </div>
+          <div class="col-md-12 r-col">
+            <table id="uspList" class="table table-bordered table-striped display nowrap order-column"
+              style="width:100%;">
+              <tbody class="appar">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="newUserBox" tabindex="-1" role="dialog" aria-labelledby="newUserBox" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+
+        <div class="modal-content">
+          <div class="modal-header">Add Visa Consulate Address Details
+
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="regForm">
+              <div class="row gutter--3px">
+                <div class="col-md-12">
+                  <div class="row gutter--3px pd-3">
+
+
+
+                    <!-- <fieldset class="gutter--3px"> -->
+                    <div class="form-group col-md-3">
+                      <label for="Tour">CODE</label>
+                      <input type="hidden" class="form-control id" name="id" value="0">
+                      <input type="text" class="form-control" name="CONSUL_CD" id="CONSUL_CD" placeholder="CODE NAME"
+                        required />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">COUNTRY</label>
+                      <input type="text" class="form-control" name="COUNTRY" id="COUNTRY" placeholder="COUNTRY NAME"
+                        required />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">NATION DAY</label>
+                      <input type="text" class="form-control datepicker" name="NATION_DAY" id="NATION_DAY"
+                        placeholder="NATION DAY" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">COUNSEL</label>
+                      <input type="text" class="form-control" name="CONSUL" id="CONSUL" placeholder="COUNSEL NAME" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">TIMINGS</label>
+                      <input type="text" class="form-control" name="TIMINGS" id="TIMINGS" placeholder="TIMINGS" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">OFFICE</label>
+                      <input type="text" class="form-control" name="OFFI" id="OFFI" placeholder="OFFICE" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">ADDRESS</label>
+                      <input type="text" class="form-control" name="ADDR1" id="ADDR1" placeholder="Address1" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">&nbsp;</label>
+                      <input type="text" class="form-control" name="ADDR2" id="ADDR2" placeholder="Address2" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">&nbsp;</label>
+                      <input type="text" class="form-control" name="ADDR3" id="ADDR3" placeholder="Address3" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">PIN</label>
+                      <input type="text" class="form-control" name="PIN" id="PIN" placeholder="PIN" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">TELEPHONE</label>
+                      <input type="text" class="form-control" name="TELNO" id="TELNO" placeholder="TELNO" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">FAX</label>
+                      <input type="text" class="form-control" name="FAXNO" id="FAXNO" placeholder="FAXNO" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">SUBMISSION TIME</label>
+                      <input type="text" class="form-control" name="SUBM_TIME" id="SUBM_TIME"
+                        placeholder="SUBMISSION TIME" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">COLLECTION TIME</label>
+                      <input type="text" class="form-control" name="COLL_TIME" id="COLL_TIME"
+                        placeholder="SUBMISSION TIME" />
+                    </div>
+
+                    <div class="col-md-12" style="background-color:#a9a9a9;">
+                      <center>
+                        <h5 class="text--white">VISA TYPES</h5>
+                      </center>
+                    </div>
+
+
+                    <div class="form-group col-md-4 desc_iframe">
+                      <label for="Tour">TOURIST</label>
+                      <textarea class="form-control textarea" name="VISA_TOUR" id="VISA_TOUR"></textarea>
+                    </div>
+                    <div class="form-group col-md-4 desc_iframe">
+                      <label for="Tour">TRANSIT</label>
+                      <textarea class="form-control textarea" name="VISA_TRAN" id="VISA_TRAN"></textarea>
+                    </div>
+                    <div class="form-group col-md-4 desc_iframe">
+                      <label for="Tour">BUSINESS</label>
+                      <textarea class="form-control textarea" name="VISA_BUSS" id="VISA_BUSS"></textarea>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">VALIDITY</label>
+                      <input type="text" class="form-control" name="VISA_VLD1" id="VISA_VLD1" placeholder="VALIDITY" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">WEBSITE</label>
+                      <input type="text" class="form-control" name="VISA_WEB" id="VISA_WEB" placeholder="WEBSITE" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">VISAS</label>
+                      <input type="text" class="form-control" name="VISA_BAN1" id="VISA_BAN1" placeholder="VISAS" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">BANNED</label>
+                      <input type="text" class="form-control" name="VISA_BAN2" id="VISA_BAN2" placeholder="BANNED" />
+                    </div>
+
+                    <div class="col-md-12" style="background-color:#a9a9a9;">
+                      <center>
+                        <h5 class="text--white">E-VISA</h5>
+                      </center>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">E- VISA(YN)</label>
+                      <input type="text" class="form-control" name="EVISA_YN" id="EVISA_YN" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">CURRENCY</label>
+                      <input type="text" class="form-control" name="EVISA_CURR" id="EVISA_CURR" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">AMOUNT</label>
+                      <input type="text" class="form-control" name="EVISA_AMT" id="EVISA_AMT" />
+                    </div>
+
+                    <!-- <div class="col-md-12" style="background-color:#a9a9a9;">
+                                              <center><h5 class="text--white">FEES</h5></center>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                              <label for="Tour">SINGLE FEES</label>
+                                              <input type="text" class="form-control"  name="VISA_SGL" id="VISA_SGL" placeholder="FEES" />
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                              <label for="Tour">DOUBLE FEES</label>
+                                              <input type="text" class="form-control"  name="VISA_DBL" id="VISA_DBL" placeholder="FEES"/>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                              <label for="Tour">TRIPLE FEES</label>
+                                              <input type="text" class="form-control"  name="VISA_TRP" id="VISA_TRP" placeholder="FEES"/>
+                                            </div> 
+                                            <div class="form-group col-md-3">
+                                              <label for="Tour">MULTIPLE FEES</label>
+                                              <input type="text" class="form-control"  name="VISA_MUL" id="VISA_MUL" placeholder="FEES"/>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                              <label for="Tour">CURRENCY</label>
+                                              <input type="text" class="form-control"  name="CURRENCY" id="CURRENCY" placeholder="CURRENCY"/>
+                                            </div> 
+                                            <div class="form-group col-md-3">
+                                              <label for="Tour">VISA DAYS</label>
+                                              <input type="text" class="form-control"  name="VISA_DAYS" id="VISA_DAYS" placeholder="VISA DAYS"/>
+                                            </div>-->
+                    <div class="col-md-12" style="background-color:#a9a9a9;">
+                      <center>
+                        <h5 class="text--white">EMBASSIES</h5>
+                      </center>
+                    </div>
+                    <div class="form-group col-md-12">
+                      <label for="Tour"><span class='badge'>1</span>PLACE</label>
+                      <input type="text" class="form-control" name="IE_PLC1" id="IE_PLC1" placeholder="VISA DAYS" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">ADDRESS</label>
+                      <input type="text" class="form-control" name="IE_ADD11" id="IE_ADD11" placeholder="ADDRESS 1" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">&nbsp;</label>
+                      <input type="text" class="form-control" name="IE_ADD12" id="IE_ADD12" placeholder="ADDRESS 2" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">TEL / FAX</label>
+                      <input type="text" class="form-control" name="IE_TEL1" id="IE_TEL1" placeholder="TEL / FAX" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">EMAIL </label>
+                      <input type="text" class="form-control" name="IE_EMAIL1" id="IE_EMAIL1" placeholder="EMAIL" />
+                    </div>
+                    <div class="form-group col-md-12">
+                      <label for="Tour"><span class='badge'>2</span>PLACE</label>
+                      <input type="text" class="form-control" name="IE_PLC2" id="IE_PLC2" placeholder="PLACE" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">ADDRESS</label>
+                      <input type="text" class="form-control" name="IE_ADD21" id="IE_ADD21" placeholder="ADDRESS 1" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">&nbsp;</label>
+                      <input type="text" class="form-control" name="IE_ADD22" id="IE_ADD22" placeholder="ADDRESS 2" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">TEL / FAX</label>
+                      <input type="text" class="form-control" name="IE_TEL2" id="IE_TEL2" placeholder="TEL / FAX" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">EMAIL </label>
+                      <input type="text" class="form-control" name="IE_EMAIL2" id="IE_EMAIL2" placeholder="EMAIL" />
+                    </div>
+                    <div class="form-group col-md-12">
+                      <label for="Tour"><span class='badge'>3</span>PLACE</label>
+                      <input type="text" class="form-control" name="IE_PLC2" id="IE_PLC3" placeholder="PLACE" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">ADDRESS</label>
+                      <input type="text" class="form-control" name="IE_ADD31" id="IE_ADD31" placeholder="ADDRESS 1" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">&nbsp;</label>
+                      <input type="text" class="form-control" name="IE_ADD32" id="IE_ADD32" placeholder="ADDRESS 2" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">TEL / FAX</label>
+                      <input type="text" class="form-control" name="IE_TEL3" id="IE_TEL3" placeholder="TEL / FAX" />
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="Tour">EMAIL </label>
+                      <input type="text" class="form-control" name="IE_EMAIL3" id="IE_EMAIL3" placeholder="EMAIL" />
+                    </div>
+
+
+                    <!-- <div class="col-md-12" style="background-color:#a9a9a9;">
+                                              <center><h5 class="text--white">AGENT & SMS LINK</h5></center>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                              <label for="Tour">ONLINE SUBMISSION</label>
+                                              <input type="text" class="form-control"  name="F_ONLINYN" id="F_ONLINYN" placeholder="ONLINE SUBMISSION"/>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                              <label for="Tour">APPLICATION THRU VFS</label>
+                                              <input type="text" class="form-control"  name="F_VFSYN" id="F_VFSYN" placeholder="APPLICATION THRU VFS"/>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                              <label for="Tour">HOTEL VOUCHER REQ.</label>
+                                              <input type="text" class="form-control"  name="F_HTLVOYN" id="F_HTLVOYN" placeholder="HOTEL VOUCHER REQ."/>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                              <label for="Tour">OLD PASSPORT REQ.</label>
+                                              <input type="text" class="form-control"  name="F_OLDPPYN" id="F_OLDPPYN" placeholder="OLD PASSPORT REQ."/>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                              <label for="Tour">AIR TICKET REQ.</label>
+                                              <input type="text" class="form-control"  name="F_AIRTKT" id="F_AIRTKT" placeholder="AIR TICKET REQ."/>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                              <label for="Tour">MODE OF PAYMENT</label>
+                                              <input type="text" class="form-control"  name="F_PAYMODE" id="F_PAYMODE" placeholder="MODE OF PAYMENT"/>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                              <label for="Tour">FIT / MICE VISA WORKING DAYS</label>
+                                              <input type="text" class="form-control"  name="VISDAY_FIT" id="VISDAY_FIT" placeholder="FIT / MICE VISA WORKING DAYS"/>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                              <label for="Tour">SMS MESSAGE</label>
+                                              <input type="text" class="form-control"  name="F_MESSG1" id="F_MESSG1" placeholder=""/>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                              <label for="Tour"></label>
+                                              <input type="text" class="form-control"  name="F_MESSG2" id="F_MESSG2" placeholder=""/>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                              <label for="Tour">SMS LINK</label>
+                                              <input type="text" class="form-control"  name="SMS_LINK" id="SMS_LINK" placeholder="SMS LINK"/>
+                                            </div> -->
+                    <!-- </fieldset> -->
+
+ </div>
+
+                </div>
+                <div class="col-md-12 mt-10">
+
+                  <button type="submit" class="btn btn-primary btn-block">SAVE</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <script>
+
+      var DrawTableInquiry;
+      $(document).ready(function () {
+        //getsuppliercat();
+
+        var dataColumns = [{
+          data: "_id",
+          sTitle: "Id",
+          visible: false
+        },
+
+
+
+        {
+          data: "COUNTRY",
+          sTitle: "COUNTRY#",
+          visible: true,
+          className: "fs14--design column-12",
+
+        },
+
+        {
+          data: "CONSUL_CD",
+          sTitle: "CONSUL CD#",
+          visible: true,
+          className: "fs14--design",
+
+        },
+
+        {
+          data: "TM_FINSECT",
+          sTitle: "TM FINSECT#",
+          visible: true,
+          className: "fs14--design",
+
+        },
+
+        {
+          data: "VISA_DAYS",
+          sTitle: "VISA DAYS#",
+          visible: true,
+          className: "fs14--design",
+
+        },
+
+
+        {
+          data: "EVISA_YN",
+          sTitle: "EVISA YN#",
+          visible: true,
+          className: "fs14--design",
+
+        },
+
+        {
+          data: "EVISA_CURR",
+          sTitle: "EVISA CURR#",
+          visible: true,
+          className: "fs14--design",
+
+        },
+
+        {
+          data: "EVISA_AMT",
+          sTitle: "EVISA AMT#",
+          visible: true,
+          className: "fs14--design",
+
+        },
+
+        {
+          data: "CONS_NAM1",
+          sTitle: "CONS NAM1#",
+          visible: true,
+          className: "fs14--design",
+
+        },
+
+        {
+          data: "NATION_DAY",
+          sTitle: "NATION DAY#",
+          visible: true,
+          className: "fs14--design",
+          render: function (data, type, row) {
+            var html = "";
+            return dateFormat(row.NATION_DAY);
+          }
+        },
+
+
+
+        {
+          data: "VISA",
+          sTitle: "Action",
+          visible: true,
+          render: function (data, type, row) {
+            //console.log(row);
+            var html =
+              ' <span class="btn btn-primary btn-block" data-id="' + row
+                ._id +
+              '" onclick="getUser(this) "> Edit</span>';
+            return html;
+          }
+        },
+
+        ];
+
+        DrawTableInquiry = DrawCustomDataTable("uspList", 350,
+          "/route/consulateAddress/grid-data", dataColumns, [
+          [0, "asc"]
+        ], "frm_grid_search", null, true, true);
+
+        $("#frm_grid_search").validate({
+          errorPlacement: function (error, element) { },
+          submitHandler: function (form) {
+            DrawTableInquiry.ajax.reload();
+          }
+        });
+        $('.textUpper').on('keyup', function (e) {
+          $(this).val($(this).val().toUpperCase());
+        });
+
+        $("form#regForm").submit(function (e) {
+          //$('#newUserBox').modal('hide');
+          e.preventDefault();
+        });
+
+        $("#regForm").validate({
+          rules: {
+            //suppliercat: "required",
+          },
+          messages: {
+            //suppliercat: "Supplier Category is required",
+          },
+
+          errorPlacement: function (error, element) {
+            offset = element.offset();
+            error.insertAfter(element)
+            error.addClass('message');
+            error.css('display', 'block!important');
+            error.css('color', 'red');
+          },
+
+          submitHandler: function (form) {
+
+            $('#newUserBox').modal('hide');
+            var $form = $(form);
+            var formData = $form.serializeObject();
+
+            var method = "post";
+            var url = "/route/consulateAddress/create";
+            console.log(formData.id);
+            if (formData.id != 0) {
+              url =
+                '/route/consulateAddress/update/' +
+                formData.id;
+              method = "put";
+            }
+            $.ajax({
+              url: url,
+              type: method,
+              contentType: "application/json; charset=utf-8",
+              data: JSON.stringify(formData),
+              dataType: "json",
+
+              success: function (result) {
+                console.log("resultresultresult", result)
+                if (result.status) {
+                  notification({
+                    type: "success",
+                    message: result
+                      .msg
+                  });
+
+                  DrawTableInquiry.ajax
+                    .reload();
+                }
+              }
+            });
+          }
+        });
+      });
+
+      function addNewUser() {
+        $('#newUserBox').modal('show');
+      }
+
+      function populate(frm, data) {
+        $.each(data, function (key, value) {
+          $('[name=' + key + ']', frm).val(value);
+        });
+        $('.sector').select2();
+      }
+
+      function getUser(id) {
+        var id = id.getAttribute('data-id');
+        $.ajax({
+          url: "/route/consulateAddress/getData",
+          type: "get",
+          data: {
+            id: id
+          },
+          success: function (result) {
+
+            // var tranNO = '&nbsp;&nbsp;&nbsp;&nbsp;Tran No :- ' + result.data.tranNo;
+            // $("#topTranNo").html(tranNO);
+
+            var iddata = {
+              id: result.data._id
+            }
+            $.when($('#regForm').populate(result.data)).done(function (x) {
+
+            });
+            // $("#suppliercat").select2();
+            // $("#Place").select2();
+            // $(".supplier").html();
+
+
+            // ------
+            populate('#regForm', result.data);
+            populate('#regForm', iddata);
+
+            $('#newUserBox').modal('show');
+
+          }
+        })
+      }
+
+      function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+      }
+
+      function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+      }
+
+    </script>
+    <% include ../partials/footer %>

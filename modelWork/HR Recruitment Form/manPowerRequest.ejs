@@ -1,0 +1,60 @@
+<div class="col-md-5">
+    <div class="box box-primary">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box-header">
+                            <div class="box-tools">
+                                <div style="width: 150px;" class="input-group">
+                                    <input type="text" placeholder="Search"
+                                        class="form-control input-sm pull-right height25"
+                                        name="search_by" id="grid_search_by">
+                                    <div class="input-group-btn">
+                                        <button
+                                            class="btn btn-sm btn-default search-icon-dv height25"><i
+                                                class="fa fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="space--10"></div>
+                        <section class="grid-table" id="ajaxtable">
+                            <div class="box-body table-responsive">
+                                <table
+                                    class="table table-hover table-fixed ajax_table_fixed table-bordered table-striped module-table"
+                                    id="table-grid-view">
+                                    <thead>
+                                        <tr>
+                                            <% var columns_arr=columns.split(" ");
+                                %>
+                                <% for(var i=0; i<columns_arr.length; i++) { %>
+                                <th data-sortable=" true" data-field="<%= columns_arr[i]; %>"
+                                                class="col-sortable" data-order="desc">
+                                                <%= columns_arr[i].toUpperCase().replace("_"," "); %>
+                                    <i class=" fa fa-fw fa-sort sort-col-<%=columns_arr[i]; %>"></i>
+                                                    </th>
+                                                    <% } %>
+                                        </tr>
+                                        <!--  <th colspan="4">Actions</th> -->
+                                    </thead>
+                                    <tbody id="tbody-grid-view">
+                                    </tbody>
+                                </table>
+                                <div style="display:none;" id="table-grid-nav">
+                                    <a href="#">nav</a>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                        </section>
+                        <div id="pop1" class="popbox">
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/.col (left) -->
+</div>

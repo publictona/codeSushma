@@ -1,0 +1,544 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+        <style>
+            .tourcode,
+            .formno {
+                text-transform: uppercase;
+                font-size: 16px;
+                font-weight: 800;
+            }
+
+            .tourname {
+                font-size: 12px;
+            }
+
+            .tour-detials {
+                font-size: 15px;
+                white-space: nowrap;
+            }
+
+            .background-box {
+                background: #dadada;
+                padding: 1px 5px;
+                border-radius: 4px;
+            }
+
+            .col-150 {
+                min-width: 150px;
+                max-width: 150px;
+                width: 150px;
+            }
+
+            .col-50 {
+                min-width: 50px;
+                max-width: 50px;
+                width: 50px;
+            }
+
+            .alert {
+                width: auto;
+                padding: 20px;
+                font-size: 15px;
+                top: 63px !important;
+                right: 20px !important;
+                z-index: 999999 !important;
+            }
+
+            .column-10 {
+                min-width: 10px !important;
+                max-width: 10px !important;
+                width: 10px !important;
+            }
+
+            .ibTable tr td {
+                padding: 3px;
+            }
+
+            .calIpBox {
+                border-bottom: 1px solid #fff;
+            }
+        </style>
+
+        <div id="mySidenav" class="hamburger-menu">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <div class="hamburger-content">
+                <form id="frm_grid_search" name="frm_grid_search">
+
+                    <div class="bgff row">
+                        <div class="col-md-9">
+                            <label>Publication Date</label>
+                            <input type="text" class="form-control dateRange" name="date1" autocomplete="false" />
+                        </div>
+                        <div class="col-md-3">
+                            <label> </label><br>
+                            <span class="btn btn-danger btn-sm" onclick="clearTourdt(this)"><i class="fa fa-times"
+                                    style="margin-top: 6px;"></i></span>
+                        </div>
+                    </div>
+                    <div class="bgff row">
+                        <div class="col-md-9">
+                            <label>Art Work DeadLine</label>
+                            <input type="text" class="form-control dateRange" name="date2" autocomplete="false" />
+                        </div>
+                        <div class="col-md-3">
+                            <label> </label><br>
+                            <span class="btn btn-danger btn-sm" onclick="clearTourdt(this)"><i class="fa fa-times"
+                                    style="margin-top: 6px;"></i></span>
+                        </div>
+                    </div>
+                    <div class="bgff">
+                        <label>Publication</label>
+                        <select class="form-control publicationSearch" name="publication" autocomplete="false">
+                            <option value=""></option>
+                            </option>
+                        </select>
+                    </div>
+                    <div class="bgff">
+                        <label>Media Type</label>
+                        <select class="form-control mediaSearch" name="mediaType" autocomplete="false">
+                            <option value=""></option>
+                            </option>
+                        </select>
+                    </div>
+                    <div class="bgff">
+                        <button type="submit" class="btn btn-primary btn-guest height-30 btn-block" onclick="closeNav()"
+                            style="">SEARCH</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="box-header with-border with-hamburger">
+                <a href="javascript:void(0);" class="box-header-hamburger-menu" onclick="openNav()">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </a>
+                <h3 class="box-title">Load Contract Supplier </h3>
+            </div>
+            <div class="box-body">
+                <div class="row gutter--3px">
+                    <div class="col-md-12">
+                        <span class="btn btn-primary" onclick="addNewIb()"><i class="fa fa-plus"></i> Add Load Contract
+                            Supplier</span>
+                    </div>
+                    <div class="col-md-12">
+                        <table id="admaster" class="table table-bordered table-striped display nowrap order-column"
+                            style="width:100%;">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="newAdBox" tabindex="-1" role="dialog" aria-labelledby="newUserBox"
+            aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">Load Contract Supplier Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="regForm">
+                            <div class="row gutter--3px">
+                                <div class="col-md-12">
+                                    <div class="row gutter--3px">
+
+                                        <div class="col-md-4 mt-10">
+                                            <label class="fs12--design">Publish On Date</label>
+                                        </div>
+                                        <div class="col-md-8 mt-10">
+                                            <input type="hidden" class="tranNo" name="tranNo" value="0">
+                                            <input type="text" class="form-control datepicker publishDate"
+                                                name="publishDate" onchange="getArtWorkReady(this)" required>
+                                        </div>
+
+
+
+                                        <div class="col-md-4 mt-10">
+                                            <label class="fs12--design">Tour Series</label>
+                                        </div>
+                                        <div class="col-md-8 mt-10">
+
+                                            <input type="text" class="form-control tourSeries" name="tourSeries"
+                                                style="text-transform: uppercase;" autocomplete="off" maxlength="2">
+                                        </div>
+
+                                        <div class="col-md-4 mt-10">
+                                            <label class="fs12--design">
+                                                Date
+                                            </label>
+
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="col-md-4 mt-10" style="width: 50%;">
+                                                <input type="text" class="form-control datepicker fromDate"
+                                                    name="fromDate" placeholder="From">
+                                            </div>
+
+                                            <div class="col-md-4 mt-10" style="width: 50%;">
+                                                <input type="text" class="form-control datepicker toDate" name="toDate"
+                                                    placeholder="To">
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-4 mt-10">
+                                            <label class="fs12--design">
+                                                Contract Content
+                                            </label>
+
+                                        </div>
+
+                                        <div class="col-md-8 mt-10">
+                                            <textarea class="form-control" name="contract_content" required></textarea>
+                                        </div>
+                                        <div class="col-md-4 mt-10">
+                                            <label class="fs12--design">
+                                                Supplier
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8 mt-10">
+                                            <select class="form-control adMedia" name="adMedia" required>
+                                                <option value=""></option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-4 mt-10">
+                                            <label class="fs12--design">
+                                                Upload File
+                                            </label>
+
+                                        </div>
+                                        <div class="col-md-8 mt-10">
+                                            <input type="hidden" class="artFile" name="file">
+                                            <input type="file" class="form-control upload_img">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-10">
+
+                                    <span class="btn btn-primary btn-block adsavebtn"
+                                        onclick="saveAdSchedule(this)">Save Supplier Details</span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <script>
+            function getArtWorkReady(e) {
+                if (new Date(convertToDate($('.publishDate').val())).getTime() > new Date().getTime()) {
+                    var artWorkReadyOnDt = moment(convertToDate($('.publishDate').val())).subtract(3, 'days').format('DD/MM/YYYY');
+                    $('.artWorkReadyOn').val(artWorkReadyOnDt)
+                } else {
+                    $('.publishDate').val('');
+                    notification({ type: "danger", "message": "Publish Date Should not less than today" });
+                }
+
+            }
+
+
+
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+
+
+            function addNewIb() {
+                $('#newAdBox').modal('show');
+            }
+
+            function getMasters() {
+                $.ajax({
+                    url: "/route/loadContractSupplier/getMaster",
+                    type: "post",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({}),
+                    dataType: "json",
+                    success: function (result) {
+                        var mediaStr = `<option value=""></option>`;
+                        var mediaRegion = `<option value=""></option>`;
+                        var mediaLanguage = `<option value=""></option>`;
+                        var mediaSize = `<option value=""></option>`;
+                        //var mediaType=`<option value=""></option>`;
+                        var adPublication = `<option value=""></option>`;
+                        var adLocation = `<option value=""></option>`;
+                        if (result.status) {
+                            for (var i = 0; i < result.data.MKT_MAST.length; i++) {
+                                switch (result.data.MKT_MAST[i].F_FLAG) {
+                                    case 'M': mediaStr += `<option value="${result.data.MKT_MAST[i].F_CODE}">${result.data.MKT_MAST[i].F_CODE}</option>`;
+                                        break;
+                                    case 'R': mediaRegion += `<option value="${result.data.MKT_MAST[i].F_CODE}">${result.data.MKT_MAST[i].F_CODE}</option>`;
+                                        break;
+                                    case 'L': mediaLanguage += `<option value="${result.data.MKT_MAST[i].F_CODE}">${result.data.MKT_MAST[i].F_CODE}</option>`;
+                                        break;
+                                    case 'S': mediaSize += `<option value="${result.data.MKT_MAST[i].F_CODE}">${result.data.MKT_MAST[i].F_CODE}</option>`;
+                                        break;
+                                    //case 'T':mediaType+=`<option value="${result.data.MKT_MAST[i].F_CODE}">${result.data.MKT_MAST[i].F_CODE}</option>`;
+                                    //  break;
+                                }
+                            }
+
+                            for (var i = 0; i < result.data.F74_PAPR.length; i++) {
+                                switch (result.data.F74_PAPR[i].F74_FLAG) {
+                                    case 'Advt. Position': adLocation += `<option value="${result.data.F74_PAPR[i].F74_PAPER}">${result.data.F74_PAPR[i].F74_PAPER}</option>`;
+                                        break;
+                                    case 'Publication': adPublication += `<option value="${result.data.F74_PAPR[i].F74_PAPER}">${result.data.F74_PAPR[i].F74_PAPER}</option>`;
+                                        break;
+
+                                }
+                            }
+                        }
+                        $('.adMedia').html(mediaStr);
+                        $('.adRegion').html(mediaRegion);
+                        $('.adLanguage').html(mediaLanguage);
+                        $('.adSize').html(mediaSize);
+                        //$('.adType').html(mediaType);
+                        $('.adPublication').html(adPublication);
+                        $('.adLocation').html(adLocation);
+                        $('.publicationSearch').html(adPublication);
+                        $('.mediaSearch').html(mediaStr);
+                        $('.adMedia').select2();
+                        $('.adRegion').select2();
+                        $('.adLanguage').select2();
+                        $('.adSize').select2();
+                        //$('.adType').select2();
+                        $('.adPublication').select2();
+                        $('.adLocation').select2();
+                        $('.publicationSearch').select2();
+                        $('.mediaSearch').select2();
+                    }
+                });
+            }
+            function clearTourdt() {
+                $('.dateRange').val('');
+            }
+
+            function updateAdDetails(tranNo) {
+                $('.tranNo').val(tranNo);
+                $.ajax({
+                    url: "/route/loadContractSupplier/getDetails",
+                    type: "post",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ tranNo: parseInt(tranNo) }),
+                    dataType: "json",
+                    success: function (resultData) {
+                        if (resultData.status) {
+                            console.log(resultData);
+                            $.when($('#regForm').populate(resultData.data)).done(function (x) {
+                            });
+                            $('.toDate').val(dateFormat(resultData.data.toDate));
+                            $('.fromDate').val(dateFormat(resultData.data.fromDate));
+                            $('.tourSeries').val(resultData.data.tourSeries);
+                            $('.contract_content').val(resultData.data.contract_content);
+                            $('.adMedia').select2();
+                            $('.adRegion').select2();
+                            $('.adLanguage').select2();
+                            $('.adSize').select2();
+                            //$('.adType').select2();
+                            $('.adPublication').select2();
+                            $('.adLocation').select2();
+                            $('#newAdBox').modal('show');
+                        } else {
+                            notification({ type: "danger", message: resultData.message });
+                        }
+
+                    }
+                });
+            }
+
+            function saveAdSchedule(e) {
+                e.setAttribute('disable', 'disable');
+                var $form = $('#regForm');
+                var formData = $form.serializeObject();
+                var isValid = true;
+                var errMsg = [];
+
+                if (isValid) {
+                    $.ajax({
+                        url: "/route/loadContractSupplier/saveAd",
+                        type: "post",
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify(formData),
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.status) {
+                                e.removeAttribute('disable');
+                                notification({ type: "success", message: result.message });
+                                DrawTableInquiry.ajax.reload();
+                                $('#newAdBox').modal('hide');
+                                $("#regForm")[0].reset();
+                            } else {
+                                notification({ type: "danger", message: result.message });
+                            }
+                        }
+                    });
+                } else {
+                    notification({ type: "danger", message: errMsg.join('<br><br>&#9658;') });
+                }
+            }
+
+            $(document).ready(function () {
+                getMasters()
+                $('.dateRange').daterangepicker({
+                    locale: {
+                        format: 'YYYY/MM/DD'
+                    },
+                    startDate: moment(),
+                    endDate: moment(),
+                    ranges: {
+                        'Today': [moment(), moment()],
+                        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                        'This Month': [moment().startOf('month'), moment().endOf('month')],
+                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month')
+                            .endOf('month')
+                        ]
+                    }
+                });
+                clearTourdt();
+                var dataColumns = [{
+                    data: "_id",
+                    sTitle: "Id",
+                    visible: false
+                },
+                {
+                    data: "tranNo",
+                    sTitle: "SR#",
+                    visible: true,
+                    className: "column-5 fs15--design text-right text-info",
+                    render: function (data, type, row) {
+                        var html = "";
+                        if (row.tranNo) {
+                            html = '<span onclick="updateAdDetails(' + row.tranNo + ')">' + row.tranNo + '</span>';
+                        }
+                        return html;
+                    }
+                },
+
+
+                {
+                    data: "tourSeries",
+                    sTitle: "tourSeries",
+                    visible: true,
+                    className: "column-20 fs15--design",
+                },
+                {
+                    data: "adMedia",
+                    sTitle: "Type Of Supplier",
+                    visible: true,
+                    className: "column-20 fs15--design",
+                },
+                {
+                    data: "fromDate",
+                    sTitle: "From Date",
+                    visible: true,
+                    className: "column-20 fs15--design",
+                    render: function (data, type, row) {
+                        var html = "";
+                        if (row.publishDate) {
+                            html = dateFormat(row.publishDate);
+                        }
+                        return html;
+                    }
+                },
+                {
+                    data: "toDate",
+                    sTitle: "To Date",
+                    visible: true,
+                    className: "column-20 fs15--design text-danger",
+                    render: function (data, type, row) {
+                        var html = "";
+                        if (row.artWorkReadyOn) {
+                            html = dateFormat(row.artWorkReadyOn);
+                        }
+                        return html;
+                    }
+                },
+
+                {
+                    data: "file",
+                    sTitle: "File",
+                    visible: true,
+                    className: "column-20 fs15--design text-danger",
+                    render: function (data, type, row) {
+                        var html = "";
+                        if (row.file) {
+                            html = '<a href="' + row.file + '" target="_blank">View File</a>';
+                        }
+                        return html;
+                    }
+                },
+
+                {
+                    data: "file",
+                    sTitle: "History",
+                    visible: true,
+                    className: "column-20 fs15--design text-danger",
+                    render: function (data, type, row) {
+                        var html = "";
+                        if (row.file) {
+                            html = '<a href="' + row.file + '" target="_blank">View File</a>';
+                        }
+                        return html;
+                    }
+                },
+                ];
+
+
+                DrawTableInquiry = DrawCustomDataTable("admaster", 550, "/route/loadContractSupplier/grid-data", dataColumns, [
+                    [0, "desc"]
+                ], "frm_grid_search", null, true, true);
+
+                $("#frm_grid_search").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        DrawTableInquiry.ajax.reload();
+                    }
+                });
+
+                $(document).on("change", ".upload_img", function () {
+                    document.querySelector('.adsavebtn').setAttribute('disable', 'disable');
+                    var $this = $(this);
+                    var file_data = $(this).prop("files")[0];
+                    var form_data = new FormData();
+                    form_data.append("path", "advertise");
+                    form_data.append("file", file_data); form_data
+                    $.ajax({
+                        url: "/route/upload/upload",
+                        type: 'post',
+                        data: form_data,
+                        cache: false,
+                        enctype: 'multipart/form-data',
+                        processData: false,
+                        contentType: false,
+                        success: function (result) {
+                            // console.log(result);
+                            var data = JSON.stringify(result);
+                            data = JSON.parse(data);
+                            if (data.url) {
+                                $('.artFile').val(data.url);
+                                notification({ type: "success", "message": "File Uploaded Successfully" });
+                                document.querySelector('.adsavebtn').removeAttribute('disable');
+                            }
+                        }, error: function (jqXHR, textStatus, errorThrown) {
+                            var result = jQuery.parseJSON(jqXHR.responseText);
+                            $(".custom_error").html(result.message);
+                        }
+                    });
+                });
+            });
+        </script>
+        <% include ../partials/footer %>

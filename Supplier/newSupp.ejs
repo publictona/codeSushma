@@ -1,0 +1,616 @@
+<% include ../partials/head %>
+<% include ../partials/header %>
+<style>
+    .contentRow{
+        white-space: break-spaces!important;
+    }
+    .tourcode,
+    .formno {
+        text-transform: uppercase;
+        font-size: 16px;
+        font-weight: 800;
+    }
+
+    .tourname {
+        font-size: 12px;
+    }
+
+    .tour-detials {
+        font-size: 15px;
+        white-space: nowrap;
+    }
+
+    .background-box {
+        background: #dadada;
+        padding: 1px 5px;
+        border-radius: 4px;
+    }
+
+    .col-150 {
+        min-width: 150px;
+        max-width: 150px;
+        width: 150px;
+    }
+
+    .col-50 {
+        min-width: 50px;
+        max-width: 50px;
+        width: 50px;
+    }
+
+    .alert {
+        width: auto;
+        padding: 20px;
+        font-size: 15px;
+        top: 63px !important;
+        right: 20px !important;
+        z-index: 999999 !important;
+    }
+
+    .ibTable tr td {
+        padding: 3px;
+    }
+
+    .calIpBox {
+        border-bottom: 1px solid #fff;
+    }
+
+    label.error {
+        display: block !important;
+    }
+</style>
+
+<div id="mySidenav" class="hamburger-menu">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <div class="hamburger-content">
+        <!-- <form id="frm-grid-search" name="frm-grid-search">
+            <div class="box bgff">
+                <label for="mice_branch">TOURCODE</label>
+                <select class="form-control select2" name="TOURCODE" id="TOURCODE"></select>
+            </div>
+            <div class="box bgff">
+                <label for="TOURNAME">TOURNAME</label>
+                <select class="form-control select2 " name="TOURNAME" id="TOURNAME"></select>
+            </div>
+            
+            <div class="bgff">
+                <button type="submit" class="btn btn-primary btn-guest height-30 btn-block" onclick="closeNav()">SEARCH</button>
+            </div>
+       </form> -->
+    </div>
+</div>
+
+
+<div class="box">
+    <div class="box-header with-border with-hamburger">
+        <a href="javascript:void(0);" class="box-header-hamburger-menu" onclick="openNav()">
+            <i class="fa fa-bars" aria-hidden="true"></i>
+        </a>
+        <h3 class="box-title">Load Contract Supplier</h3>
+    </div>
+    <div class="box-body">
+        <div class="row gutter--3px">
+            <div class="col-md-12">
+                <span class="btn btn-primary" onclick="addNewUser()"><i class="fa fa-plus"></i> Add Load Contract Supplier</span>
+            </div>
+            <div class="col-md-12 r-col">
+                <table id="uspList" class="table table-bordered table-striped display nowrap order-column" style="width:100%;">
+                    <tbody class="appar">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="newUserBox" tabindex="-1" role="dialog" aria-labelledby="newUserBox" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">Add Load Contract Supplier Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="regForm">
+                    <div class="row gutter--3px">
+                        <div class="col-md-12">
+                            <div class="row gutter--3px">
+
+
+                                 <div class="form-group row col-sm-12">
+                                  <input type="hidden" class="form-control id" name="id" value="0">
+                                    <label for="" class="col-sm-3 col-form-label fs15--design">Tour Series:
+                                       </label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="tourSeries"
+                                            name="tourSeries" oninput="this.value = this.value.toUpperCase();" maxlength="2" minlength="2" autocomplete="off" />
+                                    </div>
+                                </div>
+
+                                <!-- <div class="form-group row col-sm-12">
+                                    <label for="" class="col-sm-4 col-form-label fs15--design">Ship Branch
+                                        No:</label>
+                                    <div class="col-sm-8">
+                                        <select name="ship_brn" id="" class="form-control branchCodeGlobal"
+                                            onchange="setBranchCity(this)" required>
+                                            <option value="">Please select branch</option>
+                                        </select>
+                                    </div>
+                                </div> -->
+
+                                <!-- <div class="box bgff">
+                                    <label for="F_CATCODE_LIST">CATEGORY</label>
+                                    <select class="form-control" id="F_CATCODE_LIST" name="F_CATCODE">
+                                        <option></option>
+                                    </select>
+                                </div> -->
+
+                                <div class="form-group row col-sm-12">
+                                    <label for="F_CATCODE_LIST" class="col-sm-3 col-form-label fs15--design">Supplier Category:</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control" id="F_CATCODE_LIST" name="supplier_category">
+                                            <option></option>
+                                        </select>
+                                        <!-- <input type="text"  name="supplier_category" class="form-control" id=""/> -->
+                                           
+                                    </div>
+                                </div>
+
+                               
+
+                                <!-- <div class="form-group row col-sm-12">
+                                    <label for="" class="col-sm-3 col-form-label fs15--design">Supplier Category:</label>
+                                    <div class="col-sm-9">
+                                        <select name="supplier_category" id="" class="form-control supplier_category"
+                                            onchange="setSupplierCategory(this)" required>
+                                            <option value="">Select Supplier Category</option>
+                                        </select>
+                                       
+                                    </div>
+                                </div> -->
+
+                                <div class="form-group row col-sm-12">
+                                    <label for="" class="col-sm-3 col-form-label fs15--design">Supplier No:</label>
+                                    <div class="col-sm-9">
+                                        <input type="number" class="form-control supplier_no" name="supplier_no" id=""
+                                             required/>
+                                    </div>
+                                </div>
+
+
+
+                                <!-- <div class="form-group row col-sm-12">
+                                    <label for="" class="col-sm-4 col-form-label fs15--design">Ship To City:
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input type="text" name="ship_tocity" class="form-control" id="shipCity">
+                                    </div>
+
+                                </div> -->
+
+
+
+
+
+
+                                 <div class="form-group row col-sm-12">
+                                    <label for="" class="col-sm-3 col-form-label fs15--design">Contract Content:</label>
+                                    <div class="col-sm-9">
+                                        <textarea type="text" class="form-control" id="contract_content"
+                                            name="contract_content"></textarea> 
+                                    </div>
+                                </div>
+
+                               
+
+                                <div class="form-group row col-sm-12">
+                                    <label for="" class="col-sm-3 col-form-label fs15--design"> From Date:
+                                        </label>
+                                    <div class="col-sm-9">
+                                        <input type="date" class="form-control" id="validFrom"
+                                            name="validFrom" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row col-sm-12">
+                                    <label for="" class="col-sm-3 col-form-label fs15--design"> To Date:
+                                        </label>
+                                    <div class="col-sm-9">
+                                        <input type="date" class="form-control" id="validTo"
+                                            name="validTo" />
+                                    </div>
+                                </div>
+                               
+                              <div class="form-group row col-sm-12">
+                                    <label for="" class="col-sm-3 col-form-label fs15--design">
+                                        Upload File:
+                                    </label>
+                                   
+                               
+                                <div class="col-md-9 mt-10">
+                                    <input type="hidden" class="artFile"  name="file">
+                                    <input type="file" class="form-control upload_img">
+                                </div>
+                            </div>
+
+                           </div>
+                        </div>
+                        <div class="col-md-12 mt-10">
+
+                            <button type="submit" class="btn btn-primary btn-block" ">SAVE</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+           </div>
+</div>
+
+<script>
+    var DrawTableInquiry;
+    $(document).ready(function () {
+        // $('.TOUR_TYPE').select2();
+        // $('.TOUR_FOR').select2();
+                getTourcode();
+                category_list()
+
+        var dataColumns = [{
+                data: "_id",
+                sTitle: "Id",
+                visible: false
+            },
+            // {
+            //     data: "tranNo",
+            //     sTitle: "Sr No#",
+            //     visible: true,
+            //     className: "fs14--design",
+               
+            // },
+            
+            {
+                data: "tourSeries",
+                sTitle: "Tour Series#",
+                visible: true,
+                className: "fs14--design",
+                
+            },
+
+            {
+                data: "supplier_category",
+                sTitle: "Supplier Category#",
+                visible: true,
+                className: "fs14--design",
+                
+            },
+
+            {
+                data: "contract_content",
+                sTitle: "Contract Content#",
+                visible: true,
+                className: "fs14--design",
+               
+            },
+
+            {
+                data: "validFrom",
+                sTitle: "validFrom#",
+                visible: true,
+                className: "fs14--design",
+                render: function (data, type, row) {
+                    var html = "";
+                    return dateFormat(row.validFrom);
+                 }
+            },
+
+            
+                    
+
+            {
+                data: "validTo",
+                sTitle: "validTo#",
+                visible: true,
+                className: "fs14--design",
+                render: function (data, type, row) {
+                    
+                    var html = "";
+                    return dateFormat(row.validTo);
+                 }
+            },
+
+            {
+                data: "TourName",
+                sTitle: "Action",
+                visible: true,
+                render: function (data, type, row) {
+                    //console.log(row);
+                    var html =
+                        ' <span class="btn btn-primary btn-block" data-id="' + row
+                        ._id +
+                        '" onclick="getUser(this) "> Edit</span>';
+                    return html;
+                }
+            },
+
+            {
+        data: "file",
+        sTitle: "File",
+        visible: true ,
+        className:"fs14--design text-danger",
+        render: function (data, type, row) {
+            var html = "";
+            if(row.file){
+                html ='<a href="'+row.file+'" target="_blank">View File</a>';
+            }
+            return html;
+        }
+    },
+
+    
+
+    {
+        data: "TR_FILEREM",
+        sTitle: "History",
+        visible: true,
+        className: "fs15--design column-50",
+        render: function (data, type, row) {
+          var html='';
+          html='<span class="btn btn-primary btn-block" data-type="unlock" data-tcd="'+row.TM_TCD+'" onclick="getHistory(this)"><i class="fa fa-history" aria-hidden="true"></i></span>';
+          
+          return html;
+        }
+      }    
+
+        ];
+
+
+        DrawTableInquiry = DrawCustomDataTable("uspList", 350,
+            "/route/loadContractSupplier/grid-data", dataColumns, [
+                [0, "asc"]
+            ], "frm_grid_search", null, true, true);
+
+        $("#frm_grid_search").validate({
+            errorPlacement: function (error, element) {},
+            submitHandler: function (form) {
+                DrawTableInquiry.ajax.reload();
+            }
+        });
+        $('.textUpper').on('keyup', function (e) {
+            $(this).val($(this).val().toUpperCase());
+        });
+
+       $("form#regForm").submit(function (e) {
+            $('#newUserBox').modal('hide');
+            e.preventDefault();
+        });
+
+        $("#regForm").validate({
+            
+            errorPlacement: function (error, element) {
+                offset = element.offset();
+                error.insertAfter(element)
+                error.addClass('message');
+                error.css('display', 'block!important');
+            },
+            submitHandler: function (form) {
+                var $form = $(form);
+                var formData = $form.serializeObject();
+                var method = "post";
+                var url = "/route/loadContractSupplier/create";
+                console.log(formData.id);
+                if (formData.id != 0) {
+                    url =
+                        '/route/loadContractSupplier/update/' +
+                        formData.id;
+                    method = "put";
+                }
+                $.ajax({
+                    url: url,
+                    type: method,
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(formData),
+                    //data: formData,
+                    dataType: "json",
+                    success: function (result) {
+
+                        if (result.status) {
+                            notification({
+                                type: "success",
+                                message: result
+                                    .msg
+                            });
+                            DrawTableInquiry.ajax
+                                .reload();
+                                getTourcode();
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    function addNewUser() {
+        $('#newUserBox').modal('show');
+    }
+
+    function populate(frm, data) {
+        $.each(data, function (key, value) {
+            $('[name=' + key + ']', frm).val(value);
+        });
+        $('.sector').select2();
+    }
+
+    function getUser(id) {
+        //console.log(id.getAttribute('data-id'));
+        var id = id.getAttribute('data-id');
+
+        $.ajax({
+            url: "/route/loadContractSupplier/getData",
+            type: "get",
+            data: {
+                id: id
+            },
+            success: function (result) {
+                console.log("hi");
+                console.log(result);
+                console.log(result.data.firstName);
+                var iddata = {
+                    id: result.data._id
+                }
+                populate('#regForm', result.data);
+                populate('#regForm', iddata);
+                $('#newUserBox').modal('show');
+
+            }
+        })
+    }
+
+    function getTourcode() {
+                $.ajax({
+                    url: "/route/TOURNAME/getTourSeries",
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (result) {
+                        result = JSON.parse(JSON.stringify(result));
+                        var options = '<option value="ALL">- SELECT -</option>';
+                        var tourmaneOptions = '<option value="ALL">- SELECT -</option>';
+                        var zoneOptions = '<option value="ALL">- SELECT -</option>';
+                        for (var i = 0; i < result.length; i++) {
+                            options += '<option value=' + result[i].TOURCODE + ' data-TOURCODE="' + result[i].TOURCODE + '">' + result[i].TOURCODE + '</option>';
+                            tourmaneOptions += '<option value="' + result[i].TOURNAME + '" data-TOURCODE="' + result[i].TOURCODE + '">' + result[i].TOURNAME + '</option>';
+                            zoneOptions+= '<option value="' + result[i].TM_ZONE + '" data-TOURCODE="' + result[i].TM_ZONE + '">' + result[i].TM_ZONE + '</option>';
+                        }
+                        $("#TOURCODE").html(options);
+                        $("#TOURCODE").select2();
+                        $("#TOURNAME").html(tourmaneOptions);
+                        $("#TOURNAME").select2();
+                        $("#TOURZONE").html(zoneOptions);
+                        $("#TOURZONE").select2();
+                        
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("Error in loading branch data.Please refresh page");
+                    }
+                });
+            }
+
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+    }
+
+    $(document).on("change", ".upload_img", function() {
+        document.querySelector('.adsavebtn').setAttribute('disable','disable');
+        var $this=$(this);
+        var file_data = $(this).prop("files")[0];
+        var form_data = new FormData();
+        form_data.append("path", "advertise");
+        form_data.append("file", file_data); form_data
+        $.ajax({
+            url: "/route/upload/upload",
+            type: 'post',
+            data: form_data,
+            cache: false,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            success: function(result) {
+                // console.log(result);
+                var data=JSON.stringify(result);
+                data = JSON.parse(data);
+                if(data.url){
+                  $('.artFile').val(data.url);
+                  notification({type:"success","message":"File Uploaded Successfully"});
+                  document.querySelector('.adsavebtn').removeAttribute('disable');
+                }
+            },error: function (jqXHR, textStatus, errorThrown) {
+                var result=jQuery.parseJSON(jqXHR.responseText);
+                $(".custom_error").html(result.message);
+            }  
+        });
+    });
+    // -------------------------s----------------
+
+    // function setBranchCity(e) {
+    //             // console.log(e.value)
+    //             $.ajax({
+    //                 method: "POST",
+    //                 url: "/route/loadContractSupplier/getShipmentBranchDetails",
+    //                 data: JSON.stringify({ F_SUPPNO: e.value }),
+    //                 contentType: "application/json; charset=utf-8",
+    //                 dataType: "json",
+    //                 success: function (result) {
+    //                     console.log(result.Data);
+    //                   //  $('#shipCity').val(result.Data.F_SUPPNO);
+    //                     $('#supplier').val(result.Data.F_CATCODE);
+                        
+    //                 }
+    //             });
+    //         }
+    
+
+    function setSupplierCategory(e) {
+                // console.log(e.value)
+                $.ajax({
+                    method: "get",
+                    url: "/route/loadContractSupplier/category",
+                    data: JSON.stringify({ F_SUPMST: e.value }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result.Data);
+                      //  $('#shipCity').val(result.Data.F_SUPPNO);
+                       // $('#supplier_no').val(result.Data.F_SUPPNO);
+                        
+                    }
+                });
+            }
+
+
+     function category_list(){
+        $.get("/route/loadContractSupplier/category" , function(result) {
+            var category_json = "";
+            if (result.length > 0) {
+                category_json = '<option value="">Select Supplier Category</option>'
+                for (var i = 0; i < result.length; i++) {
+                    if(result[i] && result[i] != "" && result[i] != "XXXXXXXXXXXX"){
+                        if(result[i]){
+                            category_json += '<option value=' + result[i].toUpperCase() + '>' + result[i].toUpperCase() + '</option>'
+                        }
+                    }
+                }
+            } else {
+                category_json = "";
+            }
+            $("#F_CATCODE_LIST").html(category_json);
+        });
+    }
+
+
+
+
+
+
+
+
+            // function setSupplierCategory(e) {
+            //     // console.log(e.value)
+            //     $.ajax({
+            //         method: "POST",
+            //         url: "/route/loadContractSupplier/getShipmentBranchDetails",
+            //         data: JSON.stringify({ F_CATCODE: e.value }),
+            //         contentType: "application/json; charset=utf-8",
+            //         dataType: "json",
+            //         success: function (result) {
+            //             console.log(result.Data);
+            //           //  $('#shipCity').val(result.Data.F_SUPPNO);
+            //             $('#supplier_no').val(result.Data.F_SUPPNO);
+                        
+            //         }
+            //     });
+            // }
+</script>
+<% include ../partials/footer %>

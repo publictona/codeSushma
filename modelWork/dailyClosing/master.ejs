@@ -1,0 +1,819 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+        <style>
+            .flex-container {
+                display: flex;
+                flex-wrap: wrap;
+                background-color: transparent;
+            }
+
+            .flex-container>div {
+                width: calc((100% - 30px) / 4);
+                background-color: #f1f1f1;
+                text-align: center;
+                line-height: 75px;
+                font-size: 30px;
+                margin-bottom: 10px;
+                margin-right: 10px;
+            }
+
+            .flex-container>div:nth-child(4n) {
+                margin-right: 0;
+            }
+
+            @media screen and (max-width: 575px) {
+                .flex-container>div {
+                    width: calc((100% - 10px) / 2);
+                }
+
+                .flex-container>div:nth-child(2n) {
+                    margin-right: 0;
+                }
+            }
+        </style>
+
+        <link rel="stylesheet" href="/assets/css/pages/daily-closing.css">
+
+        <div class="content__inner">
+            <h2 class="page-title">Daily Closing Master</h2>
+          
+
+            <div class="row">
+                <div class="col-lg-3 col-md-4 col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Daily Closing</h4>
+                            <div data-app="formApp" data-controller="formController">
+                                <div class="form-group mb-0">
+                                    <input type="text" name="date" id="datePicker" placeholder="Select Date"
+                                        class="form-control date-picker" required="true" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <input type="button" class="btn btn-primary btn-block push_mob" value="Search">
+                        </div>
+                    </div>
+                    <div class="overlay d-none">
+                        <i class="fa fa-refresh fa-spin"></i>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-8 col-12">
+                    <form method="post" action="/route/dailyClosing/save" id="erpForm" autocomplete="off">
+                        
+                        <div class="table-responsive">
+                            <table class="table table-bordered closing-master-table">
+                                <thead>
+                                    <tr>
+                                        <th id="toDaysDate">Date</th>
+                                        <th >Nos.</th>
+                                        <th>Cash</th>
+                                        <th>Credit Cards</th>
+                                        <th>Debit Card</th>
+                                        <th>NEFT</th>
+                                        <th>UPI</th>
+                                        <th>Cheque</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Hotel --> 
+                                    
+                                    
+                                    <tr>
+                                        <td>Hotel</td> 
+                                        <td><input type="hidden" name="closingData[0][head]" class="form-control"  value="Hotel" readonly></td>
+                                        <td><input type="text" name="closingData[0][cash]"  class="form-control" id="cashCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[0][creditCard]" class="form-control" id="creditCardCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[0][debitCard]" class="form-control" id="debitCardCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[0][NEFT]" class="form-control" id="NEFTCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[0][UPI]" class="form-control" id="UPICollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[0][cheque]" class="form-control" id="ChequeCollection" value="0" readonly></td>
+                                        <td><input type="text"  class="form-control" id="totalCollection" value="0" readonly></td>
+                                    </tr>
+                        
+                                    <!-- Restaurant -->
+                                    <tr>
+                                        <td>Restaurant</td>
+                                        <td><input type="hidden"name="closingData[1][head]" class="form-control"  value="Restaurant" readonly></td>
+                                        <td><input type="text" name="closingData[1][cash]" class="form-control" id="restaurantCashCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[1][creditCard]" class="form-control" id="restaurantCreditCardCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[1][debitCard]" class="form-control" id="restaurantDebitCardCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[1][NEFT]" class="form-control" id="restaurantNEFTCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[1][UPI]" class="form-control" id="restaurantUPICollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[1][cheque]" class="form-control" id="restaurantChequeCollection" value="0" readonly></td>
+                                        <td><input type="text" class="form-control" id="restaurantTotalCollection" value="0" readonly></td>
+                                    </tr>
+                        
+                                    <!-- SPA -->
+                                    <tr>
+                                        <td>SPA</td>
+                                        <td><input type="hidden" name="closingData[2][head]" class="form-control"  value="SPA" readonly></td>
+                                        <td><input type="text" name="closingData[2][cash]" class="form-control" id="spaCashCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[2][creditCard]" class="form-control" id="spaCreditCardCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[2][debitCard]" class="form-control" id="spaDebitCardCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[2][NEFT]" class="form-control" id="spaNEFTCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[2][UPI]" class="form-control" id="spaUPICollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[2][cheque]" class="form-control" id="spaChequeCollection" value="0" readonly></td>
+                                        <td><input type="text" class="form-control" id="spaTotalCollection" value="0" readonly></td>
+                                    </tr>
+                        
+                                    <!-- MINI BAR -->
+                                    <tr>
+                                        <td>MINI BAR</td>
+                                        <td><input type="hidden" name="closingData[3][head]" class="form-control"  value="MINI BAR" readonly></td>
+                                        <td><input type="text" name="closingData[3][cash]" class="form-control" id="minibarCashCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[3][creditCard]" class="form-control" id="minibarCreditCardCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[3][debitCard]" class="form-control" id="minibarDebitCardCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[3][NEFT]" class="form-control" id="minibarNEFTCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[3][UPI]" class="form-control" id="minibarUPICollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[3][cheque]" class="form-control" id="minibarChequeCollection" value="0" readonly></td>
+                                        <td><input type="text" class="form-control" id="minibarTotalCollection" value="0" readonly></td>
+                                    </tr>
+                        
+                                    <!-- Taxi Service -->
+                                    <tr>
+                                        <td>Taxi Service</td>
+                                        <td><input type="hidden" name="closingData[4][head]" class="form-control"  value="Taxi Service" readonly></td>
+                                        <td><input type="text" name="closingData[4][cash]" class="form-control" id="taxiServiceCashCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[4][creditCard]" class="form-control" id="taxiServiceCreditCardCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[4][debitCard]" class="form-control" id="taxiServiceDebitCardCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[4][NEFT]" class="form-control" id="taxiServiceNEFTCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[4][UPI]" class="form-control" id="taxiServiceUPICollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[4][cheque]" class="form-control" id="taxiServiceChequeCollection" value="0" readonly></td>
+                                        <td><input type="text" class="form-control" id="taxiServiceTotalCollection" value="0" readonly></td>
+                                    </tr>
+                        
+                                    <!-- MMT -->
+                                    <tr>
+                                        <td>MMT</td>
+                                        <td><input type="hidden" name="closingData[5][head]" class="form-control"  value="MMT" readonly></td>
+                                        <td><input type="text" name="closingData[5][cash]" class="form-control" id="mmtCashCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[5][creditCard]" class="form-control" id="mmtCreditCardCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[5][debitCard]" class="form-control" id="mmtDebitCardCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[5][NEFT]" class="form-control" id="mmtNEFTCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[5][UPI]" class="form-control" id="mmtUPICollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[5][cheque]" class="form-control" id="mmtChequeCollection" value="0" readonly></td>
+                                        <td><input type="text" class="form-control" id="mmtTotalCollection" value="0" readonly></td>
+                                    </tr>
+                        
+                                    <!-- Agoda Other -->
+                                    <tr>
+                                        <td>Agoda</td>
+                                        <td><input type="hidden" name="closingData[6][head]" class="form-control"  value="Agoda" readonly></td>
+                                        <td><input type="text" name="closingData[6][cash]" class="form-control" id="agodaCashCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[6][creditCard]" class="form-control" id="agodaCreditCardCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[6][debitCard]" class="form-control" id="agodaDebitCardCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[6][NEFT]" class="form-control" id="agodaNEFTCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[6][UPI]" class="form-control" id="agodaUPICollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[6][cheque]" class="form-control" id="agodaChequeCollection" value="0" readonly></td>
+                                        <td><input type="text" class="form-control" id="agodaTotalCollection" value="0" readonly></td>
+                                    </tr>
+                        
+                                    <!-- Other -->
+                                    <tr>
+                                        <td>Other</td>
+                                        <td><input type="hidden" name="closingData[7][head]" class="form-control" value="Other" readonly></td>
+                                        <td><input type="text" name="closingData[7][cash]" class="form-control" id="otherCashCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[7][creditCard]" class="form-control" id="otherCreditCardCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[7][debitCard]" class="form-control" id="otherDebitCardCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[7][NEFT]" class="form-control" id="otherNEFTCollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[7][UPI]" class="form-control" id="otherUPICollection" value="0" readonly></td>
+                                        <td><input type="text" name="closingData[7][cheque]" class="form-control" id="otherChequeCollection" value="0" readonly></td>
+                                        <td><input type="text" class="form-control" id="otherTotalCollection" value="0" readonly></td>
+                                    </tr>
+
+                                  
+                                    <tr>
+                                        <td><strong style="color: rgb(27, 141, 27); font-size: large;">Total</strong></td>
+                                        <td></td>
+                                        <td><input type="text" name="totalCollection[cash]" class="form-control" id="totalCash" value="0" ></td>
+                                        <td><input type="text" name="totalCollection[creditCard]" class="form-control" id="totalCreditCard" value="0" ></td>
+                                        <td><input type="text" name="totalCollection[debitCard]" class="form-control" id="totalDebitCard" value="0" ></td>
+                                        <td><input type="text" name="totalCollection[NEFT]" class="form-control" id="totalNEFT" value="0" ></td>
+                                        <td><input type="text" name="totalCollection[UPI]" class="form-control" id="totalUPI" value="0" ></td>
+                                        <td><input type="text" name="totalCollection[cheque]" class="form-control" id="totalCheque" value="0" ></td>
+                                        <td><div type="text" class="form-control" id="grandTotalCollection" value="0" ></div></td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        
+
+
+                        <div class="card">
+                            <div class="card-body">
+                          
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="flex-container">
+                                            <!-- Cash -->
+                                            <div>
+                                                <div class="credit-box_li">
+                                                    <div>
+                                                        <div class="credit-title-dl">Cash</div>
+                                                        <div class="credit-amnt"   id="totalCash1">0</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Credit Card -->
+                                            <div>
+                                                <div class="credit-box_li">
+                                                    <div>
+                                                        <div class="credit-title-dl">Credit Card</div>
+                                                        <div class="utilize-amnt"  id="totalCreditCard1">0</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Debit Card -->
+                                            <div>
+                                                <div class="credit-box_li">
+                                                    <div>
+                                                        <div class="credit-title-dl">Debit Card</div>
+                                                        <div class="balance-amnt"  id="totalDebitCard1">0</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- NEFT -->
+                                            <div>
+                                                <div class="credit-box_li">
+                                                    <div>
+                                                        <div class="credit-title-dl">NEFT</div>
+                                                        <div class="balance-amnt" id="totalNEFT1">0</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- UPI -->
+                                            <div>
+                                                <div class="credit-box_li">
+                                                    <div>
+                                                        <div class="credit-title-dl">UPI AMT</div>
+                                                        <div class="balance-amnt"  id="totalUPI1">0</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Cheque -->
+                                            <div>
+                                                <div class="credit-box_li">
+                                                    <div>
+                                                        <div class="credit-title-dl">Cheque Amt</div>
+                                                        <div class="balance-amnt"  id="totalCheque1">0</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                
+                                            <!-- Petty Cash Spent -->
+                                            <div>
+                                                <div class="credit-box_li">
+                                                    <div>
+                                                        
+                                                        <div class="credit-title-dl">Petty Cash Spent</div>
+                                                        <div class="balance-amnt"  id="totalPettyCash1">0</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            
+                                
+                                            <!-- Cash Envelope -->
+                                            <div>
+                                                <div class="credit-box_li">
+                                                    <div>
+                                                        <div class="credit-title-dl">Cash Envelope</div>
+                                                        <div class="balance-amnt"  id="totalCashEnvelope" >0</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+
+                                <div class="totalamt">
+                                    <ol>
+                                  
+                                        <li>
+                                            <div class="form-group row">
+                                                <label for="" class="col-sm-3">Feed Closing
+                                                    Remarks <span style="color: red;">*</span></label>
+                                                <div class="col-sm-5">
+                                                    <input type="hidden" name="cashSpent" id="cashSpentId" class="form-control">
+                                                                    
+
+                                                    <input type="hidden" name="cashEnvelope" id="cashEnvelopeId" class="form-control">
+                                                    <input name="F_CLOSEREM" id="F_CLOSEREM" class="form-control" placeholder="Add Remark"
+                                                        cols="30" rows="3" style="margin-left:-25px" required></input>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit"
+                                    class="btn btn-primary btn-guest btn-block button-submit-form">Close</button>
+                            </div>
+
+                            <div class="alert alert-success alert-dismissible fade show alert-hidden"
+                                id="success-alert-add">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Success! </strong> Record added successfully.
+                            </div>
+                            <div class="alert alert-info alert-dismissible fade show alert-hidden"
+                                id="success-sumOfCashForPriorityalert-update">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <strong>Success! </strong> Record Update successfully.
+                            </div>
+                            <div class="alert alert-danger alert-dismissible fade show d-none" id="success-alert-error">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Error! </strong> <span class="custom_error"></span>
+                            </div>
+
+                        </div>
+
+
+                      </div>
+                   </div>
+            </form>
+        </div>
+        </div>
+
+        <script>
+
+
+
+
+function getDailyClosingDtl(date) {
+    $.ajax({
+        url: "/route/dailyClosing/getDailyClosingDtl/" + date,
+        success: function (apiData) {
+            if (apiData.data && apiData.data.length > 0 || apiData.pettyCashData &&  apiData.pettyCashData.length) {
+                    var pettyCashArray =[];
+                // Initialize objects to store totals
+                var categoryTotals = {};
+                var overallColumnTotals = {
+                    cash: 0,
+                    creditCard: 0,
+                    debitCard: 0,
+                    UPI: 0,
+                    NEFT: 0,
+                    cheque: 0
+                };
+
+                // Initialize categories
+                var categories = ["Hotel", "Restaurant", "SPA", "MINI BAR", "Taxi Service", "MMT", "Agoda", "Other"];
+
+                // Initialize category totals structure
+                categories.forEach(category => {
+                    console.log("categorycategory" , category)
+                    categoryTotals[category] = {
+                        cash: 0,
+                        creditCard: 0,
+                        debitCard: 0,
+                        UPI: 0,
+                        NEFT: 0,
+                        cheque: 0,
+                        total: 0
+                    };
+                });
+
+                // Iterate through the data and categorize the payments
+                for (var i = 0; i < apiData.data.length; i++) {
+                    var advsettl = apiData.data[i].advsettl; // The category (e.g., "Hotel", "SPA", etc.)
+                    var paymentMethod = apiData.data[i].paymentMethod;
+                    var paymentAmount = apiData.data[i].payment_amount;
+
+                    // Skip if the category is not recognized
+                    if (!categories.includes(advsettl)) {
+                        continue;
+                    }
+
+                    // Assign amounts to their respective categories and update column totals
+                    if (paymentMethod === "Cash") {
+                        categoryTotals[advsettl].cash += paymentAmount;
+                        overallColumnTotals.cash += paymentAmount;
+                    } else if (paymentMethod === "Credit Card") {
+                        categoryTotals[advsettl].creditCard += paymentAmount;
+                        overallColumnTotals.creditCard += paymentAmount;
+                    } else if (paymentMethod === "Debit Card") {
+                        categoryTotals[advsettl].debitCard += paymentAmount;
+                        overallColumnTotals.debitCard += paymentAmount;
+                    } else if (paymentMethod === "UPI") {
+                        categoryTotals[advsettl].UPI += paymentAmount;
+                        overallColumnTotals.UPI += paymentAmount;
+                    } else if (paymentMethod === "NEFT") {
+                        categoryTotals[advsettl].NEFT += paymentAmount;
+                        overallColumnTotals.NEFT += paymentAmount;
+                    } else if (paymentMethod === "Cheque") {
+                        categoryTotals[advsettl].cheque += paymentAmount;
+                        overallColumnTotals.cheque += paymentAmount;
+                    }
+
+                    // Calculate row total for each category
+                    categoryTotals[advsettl].total =
+                        categoryTotals[advsettl].cash +
+                        categoryTotals[advsettl].creditCard +
+                        categoryTotals[advsettl].debitCard +
+                        categoryTotals[advsettl].UPI +
+                        categoryTotals[advsettl].NEFT +
+                        categoryTotals[advsettl].cheque;
+                }
+
+
+                   //================================<PETTY CASH s>====================================================
+                         for (var p = 0; p < apiData.pettyCashData.length; p++) {
+                                pettyCashArray.push(apiData.pettyCashData[p].F_TOTAL);
+                            }
+
+                            
+                            var totalPettyCashAmmount = pettyCashArray.reduce(function (acc, score) {
+                                return acc + score;
+                            }, 0);
+                            
+                            $("#totalPettyCash1").html(totalPettyCashAmmount);
+                            $("#cashSpentId").val(totalPettyCashAmmount);
+                        //================================<PETTY CASH e>====================================================
+
+                // Now, update the HTML with the row totals and column totals
+                updateTable(categoryTotals, overallColumnTotals);
+                updateTableCategoryTotal(categoryTotals);
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error fetching daily closing data:", errorThrown);
+        }
+    });
+}
+
+// Function to update the HTML table with totals
+function updateTable(categoryTotals, overallColumnTotals) {
+    // Update rows (for each category)
+    var categories = ["Hotel", "Restaurant", "SPA", "MINI BAR", "Taxi Service", "MMT", "Agoda", "Other"];
+    categories.forEach(category => {
+        $("#" + category.toLowerCase().replace(" ", "") + "CashCollection").val(categoryTotals[category].cash);
+        $("#" + category.toLowerCase().replace(" ", "") + "CreditCardCollection").val(categoryTotals[category].creditCard);
+        $("#" + category.toLowerCase().replace(" ", "") + "DebitCardCollection").val(categoryTotals[category].debitCard);
+        $("#" + category.toLowerCase().replace(" ", "") + "UPICollection").val(categoryTotals[category].UPI);
+        $("#" + category.toLowerCase().replace(" ", "") + "NEFTCollection").val(categoryTotals[category].NEFT);
+        $("#" + category.toLowerCase().replace(" ", "") + "ChequeCollection").val(categoryTotals[category].cheque);
+        $("#" + category.toLowerCase().replace(" ", "") + "TotalCollection").val(categoryTotals[category].total);
+    });
+    
+
+    // categories.forEach(category => {
+    //     $("#" + category.toLowerCase().replace(" ", "") + "restaurantCashCollection").val(categoryTotals[category].cash);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "restaurantCreditCardCollection").val(categoryTotals[category].creditCard);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "restaurantDebitCardCollection").val(categoryTotals[category].debitCard);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "restaurantUPICollection").val(categoryTotals[category].UPI);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "restaurantNEFTCollection").val(categoryTotals[category].NEFT);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "restaurantChequeCollection").val(categoryTotals[category].cheque);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "restaurantTotalCollection").val(categoryTotals[category].total);
+    // });
+
+
+
+    // categories.forEach(category => {
+    //     $("#" + category.toLowerCase().replace(" ", "") + "spaCashCollection").val(categoryTotals[category].cash);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "spaCreditCardCollection").val(categoryTotals[category].creditCard);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "spaDebitCardCollection").val(categoryTotals[category].debitCard);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "spaUPICollection").val(categoryTotals[category].UPI);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "spaNEFTCollection").val(categoryTotals[category].NEFT);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "spaChequeCollection").val(categoryTotals[category].cheque);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "spaTotalCollection").val(categoryTotals[category].total);
+    // });
+
+    // categories.forEach(category => {
+    //     $("#" + category.toLowerCase().replace(" ", "") + "minibarCashCollection").val(categoryTotals[category].cash);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "minibarCreditCardCollection").val(categoryTotals[category].creditCard);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "minibarDebitCardCollection").val(categoryTotals[category].debitCard);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "minibarUPICollection").val(categoryTotals[category].UPI);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "minibarNEFTCollection").val(categoryTotals[category].NEFT);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "minibarChequeCollection").val(categoryTotals[category].cheque);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "minibarTotalCollection").val(categoryTotals[category].total);
+    // });
+
+    // categories.forEach(category => {
+    //     $("#" + category.toLowerCase().replace(" ", "") + "taxiServiceCashCollection").val(categoryTotals[category].cash);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "taxiServiceCreditCardCollection").val(categoryTotals[category].creditCard);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "taxiServiceDebitCardCollection").val(categoryTotals[category].debitCard);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "taxiServiceUPICollection").val(categoryTotals[category].UPI);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "taxiServiceNEFTCollection").val(categoryTotals[category].NEFT);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "taxiServiceChequeCollection").val(categoryTotals[category].cheque);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "taxiServiceTotalCollection").val(categoryTotals[category].total);
+    // });
+
+    // categories.forEach(category => {
+    //     $("#" + category.toLowerCase().replace(" ", "") + "mmtCashCollection").val(categoryTotals[category].cash);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "mmtCreditCardCollection").val(categoryTotals[category].creditCard);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "mmtDebitCardCollection").val(categoryTotals[category].debitCard);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "mmtUPICollection").val(categoryTotals[category].UPI);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "mmtNEFTCollection").val(categoryTotals[category].NEFT);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "mmtChequeCollection").val(categoryTotals[category].cheque);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "mmtTotalCollection").val(categoryTotals[category].total);
+    // });
+
+    // categories.forEach(category => {
+    //     $("#" + category.toLowerCase().replace(" ", "") + "agodaCashCollection").val(categoryTotals[category].cash);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "agodaCreditCardCollection").val(categoryTotals[category].creditCard);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "agodaDebitCardCollection").val(categoryTotals[category].debitCard);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "agodaUPICollection").val(categoryTotals[category].UPI);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "agodaNEFTCollection").val(categoryTotals[category].NEFT);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "agodaChequeCollection").val(categoryTotals[category].cheque);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "agodaTotalCollection").val(categoryTotals[category].total);
+    // });
+
+    // categories.forEach(category => {
+    //     $("#" + category.toLowerCase().replace(" ", "") + "otherCashCollection").val(categoryTotals[category].cash);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "otherCreditCardCollection").val(categoryTotals[category].creditCard);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "otherDebitCardCollection").val(categoryTotals[category].debitCard);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "otherUPICollection").val(categoryTotals[category].UPI);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "otherNEFTCollection").val(categoryTotals[category].NEFT);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "otherChequeCollection").val(categoryTotals[category].cheque);
+    //     $("#" + category.toLowerCase().replace(" ", "") + "otherTotalCollection").val(categoryTotals[category].total);
+    // });
+//restaurant spa minibar taxiService mmt agodaOther other
+  
+
+    // Update column totals
+    $("#totalCash").html(overallColumnTotals.cash);
+    $("#totalCreditCard").html(overallColumnTotals.creditCard);
+    $("#totalDebitCard").html(overallColumnTotals.debitCard);
+    $("#totalUPI").html(overallColumnTotals.UPI);
+    $("#totalNEFT").html(overallColumnTotals.NEFT);
+    $("#totalCheque").html(overallColumnTotals.cheque);
+
+   
+
+    //for Summary of Total
+    $("#totalCash1").html(overallColumnTotals.cash);
+    $("#totalCreditCard1").html(overallColumnTotals.creditCard);
+    $("#totalDebitCard1").html(overallColumnTotals.debitCard);
+    $("#totalUPI1").html(overallColumnTotals.UPI);
+    $("#totalNEFT1").html(overallColumnTotals.NEFT);
+    $("#totalCheque1").html(overallColumnTotals.cheque);
+
+    // Update the grand total (sum of all column totals)
+    var grandTotal =
+        overallColumnTotals.cash +
+        overallColumnTotals.creditCard +
+        overallColumnTotals.debitCard +
+        overallColumnTotals.UPI +
+        overallColumnTotals.NEFT +
+        overallColumnTotals.cheque;
+
+    $("#grandTotalCollection").html(grandTotal);
+}
+
+
+           
+            function loadTodaysDataForDailyClosingDtl() {
+                var currDate = new Date();
+                var year = currDate.getFullYear()
+                var month = (currDate.getMonth() + 1);
+                var cdate = currDate.getDate()
+                $('#datePicker').val(year + '-' + month + '-' + cdate);
+
+                var dailyClosingDtl = year + '-' + month + '-' + cdate
+                // $("#F_DATE1").val(year + '/' + month + '/' + cdate);
+                getDailyClosingDtl(dailyClosingDtl);
+            }
+
+
+            function getTodaysClosingData() {
+                $.ajax({
+                    url: "/route/dailyClosing/getTodaysClosingData",
+                    success: function (data) {
+                        console.log("datadatagetTodaysClosingData",data)
+                        data = data.result;
+                        // $("#CC_STLNO").val(data.CC_STLNO);
+                        // $("#CC_HDFC").val(data.CC_HDFC);
+                        // $("#CC_AMEX").val(data.CC_AMEX);
+                        // $("#CC_STLTIP").val(data.CC_STLTIP);
+                        // $("#NXT_APPTSH").val(data.NXT_APPTSH);
+                        $("#F_CLOSEREM").val(data.F_CLOSEREM);
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        //alert("No Data Available For Selected Date, Please Select Another Date.");
+                    }
+                });
+            }
+            //-------------------------TOTAL---------------------------
+
+            // Function to update the HTML table with totals and dynamically calculate column totals
+function updateTableCategoryTotal(categoryTotals) {
+    // Initialize overall column totals
+    var overallColumnTotals = {
+        cash: 0,
+        creditCard: 0,
+        debitCard: 0,
+        UPI: 0,
+        NEFT: 0,
+        cheque: 0
+    };
+
+    // List of categories
+    var categories = ["Hotel", "Restaurant", "SPA", "MINI BAR", "Taxi Service", "MMT", "Agoda", "Other"];
+
+    // Loop through categories and update category totals
+    categories.forEach(category => {
+        var categoryKey = category.toLowerCase().replace(" ", "");
+
+        // Access the category totals
+        var categoryData = categoryTotals[category];
+
+        //restaurant spa minibar taxiService mmt agodaOther other
+        // Update individual category rows
+        $("#" + categoryKey + "CashCollection").val(categoryData.cash);
+        $("#" + categoryKey + "CreditCardCollection").val(categoryData.creditCard);
+        $("#" + categoryKey + "DebitCardCollection").val(categoryData.debitCard);
+        $("#" + categoryKey + "UPICollection").val(categoryData.UPI);
+        $("#" + categoryKey + "NEFTCollection").val(categoryData.NEFT);
+        $("#" + categoryKey + "ChequeCollection").val(categoryData.cheque);
+        $("#" + categoryKey + "TotalCollection").val(categoryData.total);
+
+        // $("#" + categoryKey + "restaurantCashCollection").val(categoryData.cash);
+        // $("#" + categoryKey + "restaurantCreditCardCollection").val(categoryData.creditCard);
+        // $("#" + categoryKey + "restaurantDebitCardCollection").val(categoryData.debitCard);
+        // $("#" + categoryKey + "restaurantUPICollection").val(categoryData.UPI);
+        // $("#" + categoryKey + "restaurantNEFTCollection").val(categoryData.NEFT);
+        // $("#" + categoryKey + "restaurantChequeCollection").val(categoryData.cheque);
+        // $("#" + categoryKey + "restaurantTotalCollection").val(categoryData.total);
+
+        // $("#" + categoryKey + "spaCashCollection").val(categoryData.cash);
+        // $("#" + categoryKey + "spaCreditCardCollection").val(categoryData.creditCard);
+        // $("#" + categoryKey + "spaDebitCardCollection").val(categoryData.debitCard);
+        // $("#" + categoryKey + "spaUPICollection").val(categoryData.UPI);
+        // $("#" + categoryKey + "spaNEFTCollection").val(categoryData.NEFT);
+        // $("#" + categoryKey + "spaChequeCollection").val(categoryData.cheque);
+        // $("#" + categoryKey + "spaTotalCollection").val(categoryData.total);
+
+        // $("#" + categoryKey + "minibarCashCollection").val(categoryData.cash);
+        // $("#" + categoryKey + "minibarCreditCardCollection").val(categoryData.creditCard);
+        // $("#" + categoryKey + "minibarDebitCardCollection").val(categoryData.debitCard);
+        // $("#" + categoryKey + "minibarUPICollection").val(categoryData.UPI);
+        // $("#" + categoryKey + "minibarNEFTCollection").val(categoryData.NEFT);
+        // $("#" + categoryKey + "minibarChequeCollection").val(categoryData.cheque);
+        // $("#" + categoryKey + "minibarTotalCollection").val(categoryData.total);
+
+        // $("#" + categoryKey + "taxiServiceCashCollection").val(categoryData.cash);
+        // $("#" + categoryKey + "taxiServiceCreditCardCollection").val(categoryData.creditCard);
+        // $("#" + categoryKey + "taxiServiceDebitCardCollection").val(categoryData.debitCard);
+        // $("#" + categoryKey + "taxiServiceUPICollection").val(categoryData.UPI);
+        // $("#" + categoryKey + "taxiServiceNEFTCollection").val(categoryData.NEFT);
+        // $("#" + categoryKey + "taxiServiceChequeCollection").val(categoryData.cheque);
+        // $("#" + categoryKey + "taxiServiceTotalCollection").val(categoryData.total);
+
+        // $("#" + categoryKey + "mmtCashCollection").val(categoryData.cash);
+        // $("#" + categoryKey + "mmtCreditCardCollection").val(categoryData.creditCard);
+        // $("#" + categoryKey + "mmtDebitCardCollection").val(categoryData.debitCard);
+        // $("#" + categoryKey + "mmtUPICollection").val(categoryData.UPI);
+        // $("#" + categoryKey + "mmtNEFTCollection").val(categoryData.NEFT);
+        // $("#" + categoryKey + "mmtChequeCollection").val(categoryData.cheque);
+        // $("#" + categoryKey + "mmtTotalCollection").val(categoryData.total);
+
+        // $("#" + categoryKey + "agodaCashCollection").val(categoryData.cash);
+        // $("#" + categoryKey + "agodaCreditCardCollection").val(categoryData.creditCard);
+        // $("#" + categoryKey + "agodaDebitCardCollection").val(categoryData.debitCard);
+        // $("#" + categoryKey + "agodaUPICollection").val(categoryData.UPI);
+        // $("#" + categoryKey + "agodaNEFTCollection").val(categoryData.NEFT);
+        // $("#" + categoryKey + "agodaChequeCollection").val(categoryData.cheque);
+        // $("#" + categoryKey + "agodaTotalCollection").val(categoryData.total);
+
+        // $("#" + categoryKey + "otherCashCollection").val(categoryData.cash);
+        // $("#" + categoryKey + "otherCreditCardCollection").val(categoryData.creditCard);
+        // $("#" + categoryKey + "otherDebitCardCollection").val(categoryData.debitCard);
+        // $("#" + categoryKey + "otherUPICollection").val(categoryData.UPI);
+        // $("#" + categoryKey + "otherNEFTCollection").val(categoryData.NEFT);
+        // $("#" + categoryKey + "otherChequeCollection").val(categoryData.cheque);
+        // $("#" + categoryKey + "otherTotalCollection").val(categoryData.total);
+
+        // Accumulate overall totals
+        overallColumnTotals.cash += categoryData.cash || 0;
+        overallColumnTotals.creditCard += categoryData.creditCard || 0;
+        overallColumnTotals.debitCard += categoryData.debitCard || 0;
+        overallColumnTotals.UPI += categoryData.UPI || 0;
+        overallColumnTotals.NEFT += categoryData.NEFT || 0;
+        overallColumnTotals.cheque += categoryData.cheque || 0;
+    });
+
+    // After calculating, update the overall column totals in the table
+    $("#totalCash").val(overallColumnTotals.cash);
+    $("#totalCreditCard").val(overallColumnTotals.creditCard);
+    $("#totalDebitCard").val(overallColumnTotals.debitCard);
+    $("#totalUPI").val(overallColumnTotals.UPI);
+    $("#totalNEFT").val(overallColumnTotals.NEFT);
+    $("#totalCheque").val(overallColumnTotals.cheque);
+}
+
+
+
+            
+
+            $(document).ready(function () {
+                loadTodaysDataForDailyClosingDtl(); // Added By Siddhesh
+                getTodaysClosingData();
+               
+                $("#F_DATE1").val($('#datePicker').val());
+               
+                var action_type;
+                var NewObject;
+                $("form#erpForm").submit(function (e) {
+                    e.preventDefault();
+                })
+
+
+                $(document).on('click', '.push_mob', function () {
+                    var date = $('#datePicker').val();
+                  
+                    $("#F_DATE1").val(date);
+                    getDailyClosingDtl(date);
+                });
+
+
+                $("#erpForm").validate({
+                    rules: {
+                        title: {
+                            required: true
+                        },
+                    },
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        $(".overlay").show();
+                        var $form = $(form);
+                        var url = $form.attr('action');
+                        var formData = $form.serializeObject();
+                        console.log("formData" , formData)
+                        $.ajax({
+                            url: "/route/dailyClosing/checkTodayPettyLeaveLaundry",
+                            success: function (data) {
+                               if (data) {
+                                    $.ajax({
+                                        url: url,
+                                        type: action_type || "POST",
+                                        data: JSON.stringify(formData),
+                                        contentType: "application/json; charset=utf-8",
+                                        dataType: "json",
+                                        success: function (result) {
+                                          //  console.log("result........",result);
+                                            if (result.message == "Duplicate Data") {
+                                                alert("Closing Data Exists For This Branch")
+                                                return;
+                                            } else {
+                                                alert("success fully closed");
+                                                 getTodaysClosingData();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    if (!data.CheckPettyCash) {
+                                     
+                                        var checkPettyCash = "";
+                                        if (!data.CheckPettyCash) {
+                                            checkPettyCash = " Enter Today Petty Cash Entry,";
+                                        }
+                                        
+                                        var r = confirm("FIRST" + checkPettyCash + " THEN LATER Enter Today Daily Closing Entry.");
+                                        return;
+                                    } else {
+                                        $.ajax({
+                                            url: url,
+                                            type: action_type || "POST",
+                                            data: JSON.stringify(formData),
+                                            contentType: "application/json; charset=utf-8",
+                                            dataType: "json",
+                                            success: function (result) {
+                                                //console.log("result........",result);
+                                                if (result.message == "Duplicate Data") {
+                                                    alert("Closing Data Exists For This Branch")
+                                                    return;
+                                                } else {
+                                                    alert("success fully closed");
+                                                    getTodaysClosingData();
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+                        });
+                   }
+                });
+
+            });
+        </script>
+
+
+        <% include ../partials/footer%>

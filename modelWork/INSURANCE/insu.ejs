@@ -1,0 +1,370 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+        <style>
+            @media print {
+                table {
+                    width: 100%;
+                    border: 1px solid #000000;
+                    border-collapse: collapse;
+                    font-size: 11pt;
+                }
+            }
+
+            table {
+                font-family: monospace;
+                font-size: 12px;
+            }
+
+            .table>tbody>tr>td,
+            .table>thead>tr>td,
+            .table>thead>tr>th {
+                font-size: 12px;
+            }
+
+            .tourcode,
+            .formno {
+                text-transform: uppercase;
+                font-size: 16px;
+                font-weight: 800;
+            }
+
+            .tourname {
+                font-size: 12px;
+            }
+
+            .tour-detials {
+                font-size: 15px;
+                white-space: nowrap;
+            }
+
+            .background-box {
+                background: #dadada;
+                padding: 1px 5px;
+                border-radius: 4px;
+            }
+
+            .col-150 {
+                min-width: 150px;
+                max-width: 150px;
+                width: 150px;
+            }
+
+            .col-50 {
+                min-width: 50px;
+                max-width: 50px;
+                width: 50px;
+            }
+
+            .alert {
+                width: auto;
+                padding: 20px;
+                font-size: 15px;
+                top: 63px !important;
+                right: 20px !important;
+                z-index: 999999 !important;
+            }
+
+            .ibTable tr td {
+                padding: 3px;
+            }
+
+            .calIpBox {
+                border-bottom: 1px solid #fff;
+            }
+
+            label.error {
+                display: block !important;
+            }
+
+            .txtalign {
+                text-align: right;
+            }
+
+            .table-cell-style {
+                font-family: monospace;
+                font-size: 12px;
+                margin-left: 10px;
+                margin-right: 10px;
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
+
+            .table-header-style {
+                font-family: monospace;
+                font-size: 12px;
+                margin-left: 10px;
+                margin-right: 10px;
+                padding-top: 10px;
+            }
+
+     
+  
+</style>
+
+        <div id="mySidenav" class="hamburger-menu">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <div class="hamburger-content">
+                <form id="frm_grid_search" name="frm_grid_search">
+
+                </form>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="box-header with-border with-hamburger">
+                <a href="javascript:void(0);" class="box-header-hamburger-menu" onclick="openNav()">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </a>
+                <h3 class="box-title">Insurance Policy Report</h3>
+            </div>
+            <div class="box-body">
+                <div class="row gutter--3px">
+                    <div class="row">
+                        <div class="col-md-12">
+                            
+                               <div class="col-md-3 text-left">
+                                <span class="btn btn-success" onclick="xlsReport()"> 
+                                    <i class="fa-file-excel" aria-hidden="true" style="color: white;"></i>
+                                    XLS Report</span>       <span class="btn btn-warning" onclick="printData4()">
+                                        <i class="fa fa-print" aria-hidden="true" style="color: white;"></i>
+                                    </span>
+                               </div>
+                                <!-- <div class="col-md-1 text-left">
+                                    <span class="btn btn-warning" onclick="printData4()">
+                                        <i class="fa fa-print" aria-hidden="true" style="color: white;"></i>
+                                    </span>
+                                <div class="col-md-9 text-right" type="hidden"> </div> -->
+                        </div>
+                    </div>
+                        <div class="col-md-12">
+                            <table id="marketingList"
+                                class="table table-bordered table-striped display nowrap order-column"
+                                style="width:100%;margin-top:10px;">
+                                <thead>
+                                    <tr>
+                                        <th>SR#</th>
+                                        <th>Tourcode</th>
+                                        <th>Guest Name</th>
+                                        <th>Guest No</th>
+                                        <th>Tran#</th>
+                                        <th>Policy#</th>
+                                        <th>Policy Amount</th>
+                                        <th>Issue Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                                <tfoot>
+
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+        <script>
+            var DrawTableInquiry;
+            psaSummary()
+            $(document).ready(function () { });
+
+
+            function psaSummary() {
+             //   document.getElementById('spinner').style.display = 'block';
+                $.ajax({
+                    url: '/route/insurance/getValidInsurancePolicies',
+                    method: 'post',
+                    success: function (response) {
+                        console.log("responseresponse", response)
+                        var html = ``;
+                        var html1 = `<h4 style="margin-left: 20px; margin-right: 20px; padding-top: 10px;">Insurance Policy Report</h4>`;
+                        //var res = response.data;
+                        var res = response.data ? response.data : [];
+                        console.log("res", res);
+
+                        html += `<thead>
+            <tr> 
+                <th style="font-family: monospace; font-size: 12px; margin-left: 10px; margin-right: 10px;">Tourcode</th>
+                <th style="font-family: monospace; font-size: 12px; margin-left: 10px; margin-right: 10px;">Form</th>
+                <th style="font-family: monospace; font-size: 12px; margin-left: 10px; margin-right: 10px;">Policy No</th>
+                <th style="font-family: monospace; font-size: 12px; margin-left: 10px; margin-right: 10px;">Guest Name</th>
+                <th style="font-family: monospace; font-size: 12px; margin-left: 10px; margin-right: 10px;">Guest No</th>
+                <th style="font-family: monospace; font-size: 12px; margin-left: 10px; margin-right: 10px;">Tran</th>
+                <th style="font-family: monospace; font-size: 12px; margin-left: 10px; margin-right: 10px;">Policy Start</th>
+                <th style="font-family: monospace; font-size: 12px; margin-left: 10px; margin-right: 10px;">Policy End </th>
+                <th style="font-family: monospace; font-size: 12px; margin-left: 10px; margin-right: 10px;">Policy Amt</th>
+
+            </tr>
+        </thead>
+        <tbody>`;
+
+                        if (res.length > 0) {
+                            // Loop through data if available
+                            for (var i = 0; i < res.length; i++) {
+                                html += `<tr>
+                                    <td style="font-family: monospace; font-size: 12px; padding-top: 5px; padding-bottom: 5px; margin-left: 10px; margin-right: 10px;">${res[i].tourcode}</td>
+                    <td style="font-family: monospace; font-size: 12px; padding-top: 5px; padding-bottom: 5px; margin-left: 10px; margin-right: 10px;">${res[i].tourform}</td>
+                    <td style="font-family: monospace; font-size: 12px; padding-top: 5px; padding-bottom: 5px; margin-left: 10px; margin-right: 10px;">${res[i].policyNo ? res[i].policyNo : ""}</td>
+                    <td style="font-family: monospace; font-size: 12px; padding-top: 5px; padding-bottom: 5px; margin-left: 10px; margin-right: 10px;">${res[i].guestName}</td>
+                    <td style="font-family: monospace; font-size: 12px; padding-top: 5px; padding-bottom: 5px; margin-left: 10px; margin-right: 10px;">${res[i].guestNo}</td>
+                    <td style="font-family: monospace; font-size: 12px; padding-top: 5px; padding-bottom: 5px; margin-left: 10px; margin-right: 10px;">${res[i].tranNo}</td>
+                    <td style="font-family: monospace; font-size: 12px; padding-top: 5px; padding-bottom: 5px; margin-left: 10px; margin-right: 10px;">${dateFormat(res[i].insuranceStartDt)}</td>
+                    <td style="font-family: monospace; font-size: 12px; padding-top: 5px; padding-bottom: 5px; margin-left: 10px; margin-right: 10px;">${dateFormat(res[i].insuranceEndDt)}</td>
+                    <td style="font-family: monospace; font-size: 12px; padding-top: 5px; padding-bottom: 5px; margin-left: 10px; margin-right: 10px;">${res[i].policyAmount ? res[i].policyAmount : ""}</td>
+                </tr>`;
+                            }
+                        } else {
+                            // Show message if no data found
+                            html += `<tr>
+                <td colspan="7" style="font-family: monospace; font-size: 12px; padding-top: 10px; text-align: center; color: red;">
+                    Data not available
+                </td>
+            </tr>`;
+                        }
+                        html += `</tbody>`;
+                        $('#marketingList').html(html);
+
+                      //  document.getElementById('spinner').style.display = 'none';
+                    },
+
+                    error: function () {
+                        // Handle error and display message
+                        var html1 = `<h4 style="margin-left: 20px; margin-right: 20px; padding-top: 10px;">Insurance Policy Report</h4>`;
+                        var html = `<thead>
+            <tr> 
+                  <th style="font-family: monospace; font-size: 12px; margin-left: 10px; margin-right: 10px;">Tourcode</th>
+                <th style="font-family: monospace; font-size: 12px; margin-left: 10px; margin-right: 10px;">Form</th>
+                <th style="font-family: monospace; font-size: 12px; margin-left: 10px; margin-right: 10px;">Policy No</th>
+                <th style="font-family: monospace; font-size: 12px; margin-left: 10px; margin-right: 10px;">Guest Name</th>
+                <th style="font-family: monospace; font-size: 12px; margin-left: 10px; margin-right: 10px;">Guest No</th>
+                <th style="font-family: monospace; font-size: 12px; margin-left: 10px; margin-right: 10px;">Tran No</th>
+                <th style="font-family: monospace; font-size: 12px; margin-left: 10px; margin-right: 10px;">Policy Start</th>
+                <th style="font-family: monospace; font-size: 12px; margin-left: 10px; margin-right: 10px;">Policy End</th>
+                <th style="font-family: monospace; font-size: 12px; margin-left: 10px; margin-right: 10px;">Policy Amt</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="7" style="font-family: monospace; font-size: 12px; padding-top: 10px; text-align: center; color: black;">
+                    Data not available
+                </td>
+            </tr>
+        </tbody>`;
+                        $('#marketingList').html(html);
+
+                    }
+                
+                });
+            }
+
+        //      function complete() {
+        //     // Hide the spinner after the request completes
+        //     document.getElementById('spinner').style.display = 'none';
+        // }
+
+
+            function xlsReport() {
+                $("#marketingList").table2excel({
+                    // filename: "courtCase"+$('.dateRange2').val()+".xls"
+                });
+            }
+
+            function printData4() {
+        const printContent = document.querySelector('#marketingList').outerHTML;
+
+        if (!printContent.trim()) {
+            alert("No content to print.");
+            return;
+        }
+
+        const newWin = window.open("", "_blank");
+
+        newWin.document.write(`
+            <html>
+                <head>
+                    <title>Print Insurance Policy Report</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            margin: 20px;
+                        }
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin: 20px 0;
+                        }
+                        th, td {
+                            border: 1px solid black;
+                            padding: 8px;
+                            text-align: left;
+                        }
+                        th {
+                            background-color: #f2f2f2;
+                        }
+                        h4 {
+                            text-align: center;
+                            margin-bottom: 20px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h4>Insurance Policy Report</h4>
+                    ${printContent}
+                </body>
+            </html>
+        `);
+
+        newWin.document.close();
+
+        setTimeout(() => {
+            newWin.print();
+            newWin.close();
+        }, 500);
+    }
+
+
+
+            // function printData4() {
+            //     // Check if .printdata has content to avoid empty print output
+            //     const printContent = document.querySelector('#marketingList').innerHTML;
+            //     if (!printContent.trim()) {
+            //         console.warn("No content to print in .printdata element.");
+            //         return;
+            //     }
+
+            // }
+
+
+            $("#tourcode").autocomplete({
+                source: function (request, response) {
+                    var formData = {};
+                    formData.q = request.term;
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/route/rsData/searchTourcode",
+                        dataType: "json",
+                        data: JSON.stringify(formData),
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                var AC = new Object();
+                                //autocomplete default values REQUIRED
+                                AC.label = item._id;
+                                AC.value = item._id;
+
+                                return AC
+                            }));
+                        }
+                    });
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    var tour_code = ui.item.value;
+                }
+            });
+        </script>
+        <% include ../partials/footer %>

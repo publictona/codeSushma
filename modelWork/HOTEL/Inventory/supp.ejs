@@ -1,0 +1,832 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+
+        <style>
+            .refresh-table {
+                position: absolute
+            }
+
+            .bgff {
+                margin-left: 30px;
+                margin-right: 30px;
+                margin-bottom: 15px;
+                font-size: 15px;
+
+            }
+
+            .form-control {
+                padding: 12px 19px;
+                box-sizing: border-box;
+                border: 1px solid rgb(211, 221, 225);
+                border-radius: 4px;
+                background-color: rgb(255, 255, 255);
+                color: rgb(69, 85, 96);
+                font-family: inherit;
+                font-size: 12px;
+                font-weight: 500;
+                transition: background-color 300ms ease-in-out 0s, color 300ms ease-in-out 0s;
+            }
+
+            .form-control:focus {
+                box-shadow: rgb(175 224 235) 0px 0px 3px 0px;
+                border-color: rgb(188 238 249);
+                outline: none;
+                transition: box-shadow 300ms ease-in-out 0s, border-color 300ms ease-in-out 0s;
+            }
+
+            /* .select2-container--open .select2-dropdown--above {
+                z-index: 99999 !important;
+            } */
+
+            .select2-container {
+                display: inline;
+                z-index: 9999;
+            }
+
+            .hamburger-menu {
+                height: 100%;
+                max-height: 92%;
+                width: 0;
+                position: fixed;
+                z-index: 1;
+                top: 55px;
+                left: 0px;
+                background-color: #fff;
+                overflow-x: hidden;
+                transition: .5s;
+                padding-top: 50px;
+                box-shadow: 0 1px 6px 0 rgb(32 33 36 / 28%);
+            }
+
+            .hamburger-menu .closebtn {
+                position: absolute;
+                top: 0;
+                right: 10px;
+                margin-left: 50px;
+                padding: 8px 8px 8px 32px;
+                text-decoration: none;
+                font-size: 25px;
+                color: #818181;
+                display: block;
+                transition: .3s;
+            }
+
+
+
+            label.error {
+                position: relative !important;
+                left: 0px !important;
+                top: 4px !important;
+                font-size: 11px !important;
+                display: block !important;
+            }
+
+            .fs15--design:not(th) {
+                font-size: 13px;
+                font-weight: 450;
+
+            }
+        </style>
+
+        <div class="content__inner" style="margin-top: 2%;">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="card">
+
+                        <div class="card-body card-body--without-title">
+                            <div id="mySidenav" class="hamburger-menu">
+                                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                                <div class="hamburger-content">
+                                    <form id="frm_grid_search" name="frm_grid_search">
+                                        <div class="bgff">
+                                            <label>Item Code</label>
+                                            <input type="hidden" class="form-control uniqueID" name="id" value="0">
+                                            <!-- <input type="text" class="form-control F_ITEMCD"  name="F_ITEMCD" /> -->
+                                        </div>
+
+
+                                        <div class="bgff">
+                                            <button type="submit"
+                                                class="btn btn-primary btn-guest height-30 width-50 btn-block">SEARCH
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="box-header with-border with-hamburger">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <a href="javascript:void(0);" class="box-header-hamburger-menu"
+                                            onclick="openNav()">
+                                            <i class="fa fa-bars fa-2x" aria-hidden="true"></i>
+                                        </a>
+
+                                    </div>
+                                    <div class="col-md-5">
+                                        <h3 class="box-title">Item Supplier Details</h3>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <span class="btn btn-primary" style="float: right;" id="AddData"><i
+                                                class="fa fa-plus"></i> Add New Supplier</span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 r-col">
+                                <table id="uspList"
+                                    class="table table-bordered table-striped display nowrap order-column"
+                                    style="width:100%;">
+                                    <tbody class="appar">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="newUserBox" tabindex="-1" role="dialog" aria-labelledby="newUserBox"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">Inventory Supplier Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="regForm">
+                            <div class="row gutter--3px">
+                                <div class="col-md-12" style="font-size: 14px; color: #363434;">
+                                    <div class="row gutter--3px ">
+
+                                        <div class="form-group row col-sm-12">
+                                            <input type="hidden" class="form-control uniqueID" name="id" value="0">
+                                            <input type="hidden" class="form-control F_SUPPNO" name="F_SUPPNO"
+                                                value="0">
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Supplier Code
+                                                <span style="color: rgb(158, 6, 6);">*</span></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control F_ACCTCD" name="F_ACCTCD"
+                                                    autocomplete="off" required>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Cheque Name
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control F_ACCTNM" name="F_ACCTNM"
+                                                    autocomplete="off">
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">First Name
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control F_FNAME" name="F_FNAME"
+                                                    autocomplete="off">
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Last Name
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control F_SNAME" name="F_SNAME"
+                                                    autocomplete="off">
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Email
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="email" class="form-control F_EMAIL" name="F_EMAIL"
+                                                    autocomplete="off">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Mobile No.
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control F_MOBILE1" name="F_MOBILE1"
+                                                    autocomplete="off" minlength="10" , maxlength="10">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Building
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control F_ADD1" name="F_ADD1"
+                                                    autocomplete="off">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">City
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control F_ADD4" name="F_ADD4"
+                                                    autocomplete="off">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Street
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control F_ADD2" name="F_ADD2"
+                                                    autocomplete="off">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Pincode
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="number" class="form-control F_PIN" name="F_PIN"
+                                                    autocomplete="off">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Suburb
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control F_ADD3" name="F_ADD3"
+                                                    autocomplete="off">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Telephone No.
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="number" class="form-control F_TEL1" name="F_TEL1"
+                                                    autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <hr />
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Link Item
+                                            </label>
+                                            <div class="col-sm-8">
+
+                                                <select class="form-control select2" name="F_ITEMCD[]" multiple
+                                                    id="F_ITEMCD" aria-placeholder="SELECT LINK ITEM">
+
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Supp Cat.
+                                            </label>
+                                            <div class="col-sm-8">
+
+                                                <select class="form-control F_CATGCD" name="F_CATGCD" id="F_CATGCD">
+                                                    <option value="" selected>SELECT SUPPLIER CAT </option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-2 col-form-label fs15--design">Location</label>
+                                            <div class="col-sm-9">
+                                                <div class="form-group">
+                                                    <div class="checkbox checkbox--inline">
+                                                        <input type="checkbox" id="DEPO_M" name="DEPO_M">
+                                                        <label class="checkbox__label" for="DEPO_M">Mumbai</label>
+                                                    </div>
+                                                    <div class="checkbox checkbox--inline">
+                                                        <input type="checkbox" id="DEPO_G" name="DEPO_G">
+                                                        <label class="checkbox__label" for="DEPO_G">Goa</label>
+                                                    </div>
+                                                    <div class="checkbox checkbox--inline">
+                                                        <input type="checkbox" id="DEPO_B" name="DEPO_B">
+                                                        <label class="checkbox__label" for="DEPO_B">Bangalore</label>
+                                                    </div>
+                                                    <div class="checkbox checkbox--inline">
+                                                        <input type="checkbox" id="DEPO_K" name="DEPO_K">
+                                                        <label class="checkbox__label" for="DEPO_K">Kashmir</label>
+                                                    </div>
+                                                    <div class="checkbox checkbox--inline">
+                                                        <input type="checkbox" id="DEPO_W" name="DEPO_W">
+                                                        <label class="checkbox__label" for="DEPO_W">Warehouse</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> -->
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-2 col-form-label fs15--design">Location</label>
+                                            <div class="col-sm-9">
+                                                <div class="form-group">
+                                                    <div class="checkbox checkbox--inline">
+                                                        <input type="checkbox" id="DEPO_M" name="DEPO_M">
+                                                        <label class="checkbox__label" for="DEPO_M">Mumbai</label>
+                                                    </div>
+                                                    <div class="checkbox checkbox--inline">
+                                                        <input type="checkbox" id="DEPO_G" name="DEPO_G">
+                                                        <label class="checkbox__label" for="DEPO_G">Goa</label>
+                                                    </div>
+                                                    <div class="checkbox checkbox--inline">
+                                                        <input type="checkbox" id="DEPO_B" name="DEPO_B">
+                                                        <label class="checkbox__label" for="DEPO_B">Bangalore</label>
+                                                    </div>
+                                                    <div class="checkbox checkbox--inline">
+                                                        <input type="checkbox" id="DEPO_K" name="DEPO_K">
+                                                        <label class="checkbox__label" for="DEPO_K">Kashmir</label>
+                                                    </div>
+                                                    <div class="checkbox checkbox--inline">
+                                                        <input type="checkbox" id="DEPO_W" name="DEPO_W">
+                                                        <label class="checkbox__label" for="DEPO_W">Warehouse</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">TDS
+                                            </label>
+                                            <div class="col-sm-8">
+
+                                                <select class="form-control" id="F_TDSYN" name="F_TDSYN">
+                                                    <option value="" selected>Select</option>
+                                                    <option value="Y">YES</option>
+                                                    <option value="N">NO</option>
+                                                </select>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">VAT
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control" id="F_VATYN" name="F_VATYN">
+                                                    <option value="" selected>Select</option>
+                                                    <option value="Y">YES</option>
+                                                    <option value="N">NO</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">VAT No.
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="number" class="form-control F_VATNO" name="F_VATNO"
+                                                    autocomplete="off">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">VAT %
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="number" class="form-control F_VATPER" name="F_VATPER"
+                                                    autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <!-- /<h4>Bank Details</h4> -->
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Bank Name.
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control F_BNKNAME" name="F_BNKNAME">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Bank Account No.
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="number" class="form-control F_BNKACNO" name="F_BNKACNO">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Bank IFSC
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control F_BNKIFSC" name="F_BNKIFSC">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">GST NO
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control F_GSTNO" name="F_GSTNO">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Enter Address
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control F_BNKADDR" name="F_BNKADDR">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Enter Remark
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control F_NOTE1" name="F_NOTE1">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-10">
+
+                                    <button type="submit" class="btn btn-primary btn-block">SAVE</button>
+                                </div>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <script>
+            var DrawTableInquiry;
+
+            $(document).ready(function () {
+                getLinkItemList();
+                getSupplierCategoryList();
+
+                var dataColumns = [{
+                    data: "_id",
+                    visible: false,
+                    sortable: true,
+                }, {
+                    data: "F_SUPPNO",
+                    sTitle: "SUP NO",
+                    className: "column-100",
+
+                    render: function (data, type, row) {
+                        var dataRender = "-";
+                        if (row && row.F_SUPPNO) {
+                            dataRender = row.F_SUPPNO;
+                        }
+                        return dataRender;
+                    }
+
+
+                },
+                {
+                    data: "F_TRANDT",
+                    sTitle: "Date",
+                    visible: true,
+                    sortable: true,
+                    className: "column-100",
+                    render: function (data, type, row) {
+                        var dataRender = "-";
+                        if (row && row.F_TRANDT) {
+                            dataRender = dateFormat(row.F_TRANDT);
+                        }
+                        return dataRender;
+                    }
+
+                },
+                {
+                    data: "F_ACCTNM",
+                    sTitle: "Cheque Name",
+                    visible: true,
+                    sortable: true,
+                    className: "column-180",
+                    render: function (data, type, row) {
+                        var dataRender = "-";
+                        if (row && row.F_ACCTNM) {
+                            dataRender = row.F_ACCTNM;
+                        }
+                        return dataRender;
+                    }
+
+                }, {
+                    data: "F_FNAME",
+                    sTitle: "Name",
+                    visible: true,
+                    sortable: true,
+                    className: "column-150",
+                    render: function (data, type, row) {
+                        var dataRender = "-";
+                        if (row && row.F_FNAME) {
+                            dataRender = row.F_FNAME;
+                        }
+                        return dataRender;
+                    }
+                }, {
+                    data: "F_MOBILE1",
+                    sTitle: "Mobile",
+                    visible: true,
+                    sortable: true,
+                    className: "column-100",
+                    render: function (data, type, row) {
+                        var dataRender = "-";
+                        if (row && row.F_MOBILE1) {
+                            dataRender = row.F_MOBILE1;
+                        }
+                        return dataRender;
+                    }
+                }, {
+                    data: "F_EMAIL",
+                    sTitle: "Email",
+                    visible: true,
+                    sortable: true,
+                    className: "column-200",
+                    render: function (data, type, row) {
+                        var dataRender = "-";
+                        if (row && row.F_EMAIL) {
+                            dataRender = row.F_EMAIL;
+                        }
+                        return dataRender;
+                    }
+                }, {
+                    data: "F_CATGCD",
+                    sTitle: "CAT. CODE",
+                    visible: true,
+                    sortable: true,
+                    className: "column-100",
+                    render: function (data, type, row) {
+                        var dataRender = "-";
+                        if (row && row.F_CATGCD) {
+                            dataRender = row.F_CATGCD;
+                        }
+                        return dataRender;
+                    }
+                }, {
+                    data: "F_NOTE1",
+                    sTitle: "Note",
+                    visible: true,
+                    sortable: true,
+                    className: "column-200",
+                    render: function (data, type, row) {
+                        var dataRender = "-";
+                        if (row && row.F_NOTE1) {
+                            dataRender = row.F_NOTE1;
+                        }
+                        return dataRender;
+                    }
+                },
+
+                {
+                    data: "action",
+                    sTitle: "Action",
+                    visible: true,
+                    className: "fs15--design column-50",
+                    render: function (data, type, row) {
+                        //console.log(row);
+                        var html =
+                            ' <span class="btn btn-primary btn-block" data-id="' + row
+                                ._id +
+                            '" onclick="getUser(this) "><i class="fa fa-pencil"></i> </span>';
+                        return html;
+                    }
+                }
+                ];
+
+                DrawTableInquiry = DrawCustomDataTable("uspList", 350,
+                    "/route/itemSupplierNew/grid-data", dataColumns, [
+                    [0, "asc"]
+                ], "frm_grid_search", null, true, true);
+
+                $("#frm_grid_search").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        DrawTableInquiry.ajax.reload();
+                    }
+                });
+
+                $('.textUpper').on('keyup', function (e) {
+                    $(this).val($(this).val().toUpperCase());
+                });
+
+                $("form#regForm").submit(function (e) {
+                    e.preventDefault();
+                });
+
+                $("#regForm").validate({
+                    rules: {},
+                    messages: {},
+                    errorPlacement: function (error, element) {
+                        error.insertAfter(element).addClass('message').css({
+                            display: 'block!important',
+                            color: 'red!important'
+                        });
+                    },
+                    submitHandler: function (form) {
+                        var $form = $(form);
+                        var formData = $form.serializeObject();
+                        var method = formData.id != 0 ? "put" : "post";
+                        var url = formData.id != 0 ? '/route/itemSupplierNew/updateData/' + formData.id : '/route/itemSupplierNew/create';
+                        console.log("formDataformData", formData)
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(formData),
+                            dataType: "json",
+                            success: function (result) {
+                                if (result.status) {
+
+                                    $.ajax({
+                                        url: "/route/itemSupplierNew/getdata",
+                                        type: "get",
+                                        data: { id: formData.id },
+
+                                    });
+                                    DrawTableInquiry.ajax.reload();
+                                    $('#newUserBox').modal('hide');
+                                    if (method == "post") {
+                                        alert("Data successfully submitted");
+                                    } else {
+                                        alert("Data successfully updated");
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+            // function populate(frm, data) {
+            //     $.each(data, function (key, value) {
+            //         $('[name=' + key + ']', frm).val(value).trigger('change');
+            //         $("#F_ITEMCD").select2();
+            //         $("#F_CATGCD").select2();
+            //     });
+            // }
+
+            // function populate(frm, data) {
+            //     $.each(data, function (key, value) {
+            //         var field = $('[name=' + key + ']', frm);
+            //         if (field.is(':checkbox')) {
+            //             field.prop('checked', value);
+            //         } else if (field.is(':radio')) {
+            //             field.filter('[value="' + value + '"]').prop('checked', true);
+            //         } else {
+            //             field.val(value).trigger('change');
+            //         }
+            //         $("#F_ITEMCD").select2();
+            //         $("#F_CATGCD").select2();
+            //     });
+            // }
+
+
+            //     $.fn.serializeObject = function() {
+            //     var obj = {};
+            //     var arr = this.serializeArray();
+            //     $.each(arr, function() {
+            //         if (obj[this.name]) {
+            //             if (!obj[this.name].push) {
+            //                 obj[this.name] = [obj[this.name]];
+            //             }
+            //             obj[this.name].push(this.value || '');
+            //         } else {
+            //             obj[this.name] = this.value || '';
+            //         }
+            //     });
+            //     // Capture checkbox values
+            //     this.find('input[type=checkbox]').each(function() {
+            //         obj[this.name] = this.checked;
+            //     });
+            //     return obj;
+            // };
+
+            function populate(frm, data) {
+                $.each(data, function (key, value) {
+                    var field = $('[name=' + key + ']', frm);
+                    if (field.is(':checkbox')) {
+                        field.prop('checked', value);
+                    } else if (field.is(':radio')) {
+                        field.filter('[value="' + value + '"]').prop('checked', true);
+                    } else {
+                        field.filter('[value="' + value + '"]').prop('checked', false);
+                        field.val(value).trigger('change');
+                    }
+                });
+            }
+
+
+
+
+            function getUser(element) {
+                var id = element.getAttribute('data-id');
+                $('.uniqueID').val(id);
+                $.ajax({
+                    url: "/route/itemSupplierNew/getdata",
+                    type: "get",
+                    data: { id: id },
+                    success: function (result) {
+                        var iddata = {
+                            id: result.data._id
+                        };
+
+                        populate('#regForm', result.data);
+                        populate('#regForm', iddata);
+
+                        $('#newUserBox').modal('show');
+                        $.when($('#regForm').populate(result.data)).done(function (x) {
+                            $("#F_ITEMCD").select2();
+                            $("#F_CATGCD").select2();
+                            console.log("result.data", result.data)
+                        });
+                    }
+                });
+            }
+
+            $(document).on("click", "#AddData", function () {
+                $('.uniqueID').val("0");
+                $("#newUserBox").modal("show");
+                DrawTableInquiry.ajax.reload();
+                $("#regForm")[0].reset();
+                $("#F_CATGCD").select2;
+                $("#F_ITEMCD").select2();
+
+            });
+
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+
+            function getLinkItemList() {
+                $.ajax({
+                    url: "/route/itemSupplierNew/getLinkItemList",
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+
+                        var html = `<option value="">SELECT ITEM CAT</option>`;
+                        for (var i = 0; i < response.data.length; i++) {
+
+                            html += `<option value="${response.data[i].F_ITEMCD}">${response.data[i].F_ITEMCD}</option>`;
+                        }
+                        $("#F_ITEMCD").html(html);
+
+                        $("#F_ITEMCD").select2();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("An error occurred: ", status, error);
+                    }
+                });
+            }
+
+            function getSupplierCategoryList() {
+                $.ajax({
+                    url: "/route/itemSupplierNew/Data/SUP_CATG",
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        //   console.log("response", response);
+                        var html = `<option value="">SELECT SUPPLIER CAT</option>`;
+                        for (var i = 0; i < response.data.length; i++) {
+                            // console.log("response", response.data[i].F_CATGCD);
+                            html += `<option value="${response.data[i].F_CATGCD}">${response.data[i].F_CATGCD}</option>`;
+                        }
+                        $("#F_CATGCD").html(html);
+                        $("#F_CATGCD").select2;
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("An error occurred: ", status, error);
+                    }
+                });
+            }
+
+        </script>
+
+        <% include ../partials/footer %>

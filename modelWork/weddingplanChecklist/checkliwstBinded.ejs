@@ -1,0 +1,289 @@
+<style>
+    @media print {
+        .page-break {
+            display: block;
+            page-break-before: always;
+        }
+
+        tfoot img {
+            position: fixed;
+            bottom: 0;
+        }
+    }
+</style>
+
+<div class="row">
+    
+
+
+    <div class="col-md-12 text-right"><i class="fa fa-print btn btn-primary" onclick="printWeddingCheckList()"
+            style="margin-bottom:5px; "></i></div>
+    <div class="col-md-12 table-responsive" id="weddingcheckListPrint" style="font-family: monospace;">
+
+        <table style="width:100%;">
+            <tr>
+                <td>
+                    <h2>Checklist Print</h2>
+                </td>
+                <!-- for kesari logo -->
+                <td><img src="https://image.kesari.in/upload/assets/kesari-tours.png" style="float:right;width:50px;">
+                </td>
+            </tr>
+        </table>
+        
+        <hr>
+
+        <table style="width:100%; font-size:10px;margin-top:10px; ">
+
+             <tr>
+                <td style="width:20%">Guest Name</td>
+                <td colspan="1">: <%= guest_Name %></td>
+                <td>Date: <%= c_Date %></td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td style="width:20%">Guest Email</td>
+                <td colspan="1">: <%= g_Mail %></td>
+                <td></td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td style="width:20%">Guest Mobile</td>
+                <td colspan="1">: <%= g_Mobile %></td>
+                <td></td>
+                <td></td>
+            </tr>
+            
+            <tr>
+                <td style="width:20%">Wedding Planner Name</td>
+                <td colspan="1">: <%= created_by %></td>
+                <td></td>
+                <td></td>
+            </tr>
+            
+            <td colspan="6">
+                --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            </td>
+            
+            <!-- EJS tags to display the dynamic checklist data -->
+            
+            
+
+                    <!-- --------checklist table-------- -->
+                    <table border="1" cellpadding="0" cellspacing="0"
+                    style="width:100%;font-size:12px;border-spacing: 0.5rem;border-collapse: collapse;">
+                    
+
+                        <tbody>
+                            <tr colspan="8">
+                                <td colspan="2" style="width:5%;padding-left: 10px;">Sr.</td>
+                                <td colspan="3" style="width:45%;padding-left: 10px;">Requirement</td>
+                                <td colspan="3" style="width:45%;padding-left: 10px;">Remarks</td>
+                                <td></td>
+                            </tr>
+                    
+                            <%checkList.forEach((task, index) => { %>
+                               
+
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 1 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">gather_guest_list</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.gather_guest_list %></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 2 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Narrow down dates</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.Narrow_down_dates %></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 3 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Settle A Budget</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.settle_a_budget %></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 4 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Create Wedding Website</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.create_wedding_website %></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 5 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Reserve Venue</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.reserve_venue %></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 6 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Book Vendors</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.book_vendors %></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 7 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Final Number of Events</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.final_number_of_events %></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 8 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Book Entertainment</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.book_entertainment %></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 9 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Wedding Trousou</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.wedding_trousou %></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 10 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Wedding Outfits</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.wedding_outfits %></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 11 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Invitation Selection</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.invitation_selection %></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 12 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Book Car Tranportation</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.book_car_tranportation %></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 13 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Make Up Artist</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.make_up_artist %></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 14 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Acessory Shopping</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.acessory_shopping %></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 15 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">RSVP</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.RSVP %></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 16 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">E-Invites</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.E_invites %></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 17 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Book Music</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.book_music %></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 18 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Licences</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.licences %></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 19 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">F And B Finalization</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.F_and_B_finalization %></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 20 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Choreographer</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.choreographer %></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 21 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Pre Wedding Shoot</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.pre_wedding_shoot %></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 22 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Honeymoon Booking</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.honeymoon_booking %></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 23 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Payment Mode</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.payment_mode %></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 24 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Goodie Bags</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.goodie_bags %></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 25 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Thank You Goods</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.thank_you_goods %></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 26 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Room Hampers</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.room_hampers %></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 27 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Souviners</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.souviners %></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= index + 28 %></td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">Whether Prection Prevention</td>
+                                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"><%= task.whether_prection_prevention %></td>
+                                </tr>
+                                
+                               
+                            <% }); %>
+                        </tbody>
+                </table>
+
+                <tr>
+                    <td>
+                        Received the above mentioned Checklist Requirement form Kesari Tour Pvt. Ltd.
+
+                    </td>
+                </tr>
+                <br>
+                <br>
+                <tr>
+                    <td>
+                        Guest Sign :
+                    </td>
+                </tr>
+
+                <hr>
+
+                <tr>
+                <tr></tr>
+                <td colspan="4">
+                    ********************Your Wedding, Our Planning, Promise By Kesari********************* </td>
+                </tr>
+
+ </div>
+</div>
+
+<script>
+</script>

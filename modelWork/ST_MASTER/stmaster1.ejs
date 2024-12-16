@@ -1,0 +1,647 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+
+        <style>
+            .form-group {
+                margin-bottom: 25px;
+            }
+
+            .uppercase {
+                text-transform: uppercase;
+            }
+
+            /* ------tab s------ */
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                background-color: #eaeeed;
+                font-family: 'sans-serif', sans-serif;
+            }
+
+            .tab-container {
+                margin: 5% 10%;
+                background-color: #b7bbba;
+                padding: 3%;
+                border-radius: 4px;
+            }
+
+            .tab-menu {}
+
+            .tab-menu ul {
+                margin: 0;
+                padding: 0;
+            }
+
+            .tab-menu ul li {
+                list-style-type: none;
+                display: inline-block;
+            }
+
+            .tab-menu ul li a {
+                text-decoration: none;
+                color: #333;
+                background-color: #e0e6e4;
+                padding: 7px 25px;
+                border-radius: 4px;
+                margin-left: 10px;
+            }
+
+            .tab-menu ul li a.active-a {
+                background-color: #777;
+                color: #ffffff;
+                font-weight: bold;
+            }
+
+            .tab {
+                display: none;
+            }
+
+            .tab h2 {
+                color: rgba(0, 0, 0, .7);
+            }
+
+            .tab p {
+                color: rgba(0, 0, 0, 0.6);
+                text-align: justify;
+            }
+
+            .tab-active {
+                display: block;
+            }
+
+            .tab .badge {
+                margin-right: 5px;
+            }
+
+            #uspList_wrapper table,
+            #uspList_wrapper .dataTables_scrollHeadInner {
+                width: 64% !important;
+            }
+            .table.table-bordered.table-striped.display.nowrap.order-column.dataTable.no-footer{
+                width: 64% !important;
+            }
+            
+
+            .spa-loc .checkbox>input[type=checkbox] {
+                left: 10px !important;
+                top: 10px !important;
+                opacity: 1 !important;
+            }
+
+            .btn-group,
+            .btn-group-vertical {
+                display: block;
+            }
+
+            label.error {
+                bottom: 22px !important;
+                left: 14px !important;
+            }
+
+            .row.gutter--3px {
+                margin-bottom: 10px;
+            }
+
+            .fs15--design:not(th) {
+                font-size: 15px;
+                font-weight: 600;
+                width: 27%;
+            }
+
+            span.btn.btn-primary.btn-block {
+                width: 50%;
+            }
+
+            /* .dataTables_scroll {
+                margin-top: -65px;
+            } */
+
+            /* .btn-primary {
+                z-index: 11;
+                position: relative;
+            } 
+
+            .column-90 {
+                max-width: 90px !important;
+            } */
+
+            /* -----e----- */
+        </style>
+
+
+        <div class="tab-menu">
+            <ul>
+                <li><a href="#" class="tab-a active-a" data-id="tab1" onclick="test1()">Department</a></li>
+                <li><a href="#" class="tab-a" data-id="tab2" onclick="test2()">Designation</a></li>
+
+            </ul>
+        </div><!--end of tab-menu-->
+        <br>
+
+        <div class="tab tab-active" data-id="tab1">
+            <div class="box-body">
+                <div class="row gutter--3px">
+                    <div class="col-md-6">
+                        <span class="btn btn-primary" onclick="addNewUser()"><i class="fa fa-plus"></i> Add New
+                            Department</span>
+                    </div>
+
+
+
+                    <form id="frm_grid_search1">
+                        <input type="hidden" name="F_TYPE" id="F_TYPE" value="Department">
+                    </form>
+
+
+                    <div class="col-md-7 r-col">
+                        <table id="uspList" class="table table-bordered table-striped display nowrap order-column"
+                            style="width:100%;">
+                            <tbody class="appar">
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+            <!-- MODAL START -->
+            <div class="modal fade" id="newUserBox" tabindex="-1" role="dialog" aria-labelledby="newUserBox"
+                aria-hidden="true">
+                <div class="modal-dialog modal-md" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">Add Department Details</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="regForm">
+                                <div class="row gutter--3px">
+                                    <div class="col-md-12">
+                                        <div class="row gutter--3px ">
+                                            <div class="col-md-12">
+
+                                                <input type="hidden" class="form-control id" name="id" value="0">
+                                                <label class="fs15--design">
+                                                    Department
+                                                </label>
+                                                <input type="text" class="form-control F_CODE10" name="F_CODE10"
+                                                    oninput="this.value = this.value.toUpperCase();" required>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mt-10">
+
+                                        <button type="submit" class="btn btn-primary btn-block">SAVE</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- MODAL END -->
+        </div>
+
+
+        <div class="tab " data-id="tab2">
+            <div class="box-body">
+                <div class="row gutter--3px">
+                    <div class="col-md-6">
+                        <span class="btn btn-primary" onclick="addNewUser1()"><i class="fa fa-plus"></i> Add New
+                            Designation</span>
+                    </div>
+                    <br>
+
+                    <form id="frm_grid_search">
+                        <input type="hidden" name="F_TYPE" id="F_TYPE1" value="Designation">
+                    </form>
+
+
+                    <div class="col-md-7 r-col">
+                        <table id="uspList1" class="table table-bordered table-striped display nowrap order-column"
+                            style="width:100%;">
+                            <tbody class="appar">
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+            <!-- MODAL START -->
+            <div class="modal fade" id="newUserBox1" tabindex="-1" role="dialog" aria-labelledby="newUserBox1"
+                aria-hidden="true">
+                <div class="modal-dialog modal-md" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">Add Designation Details</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="regForm1">
+                                <div class="row gutter--3px">
+                                    <div class="col-md-12">
+                                        <div class="row gutter--3px ">
+                                            <div class="col-md-12">
+                                                <input type="hidden" class="form-control id" name="id" value="0">
+                                                <label class="fs15--design">
+                                                    Designation
+                                                </label>
+                                                <input type="text" class="form-control F_CODE" name="F_CODE" required>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mt-10">
+
+                                        <button type="submit" class="btn btn-primary btn-block">SAVE</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- MODAL END -->
+        </div>
+
+
+        <script>
+            var DrawTableInquiry;
+
+            $(document).ready(function () {
+
+                var dataColumns = [{
+                    data: "_id",
+                    sTitle: "Id",
+                    visible: false
+                },
+
+                {
+                    data: "F_TYPE",
+                    visible: false,
+
+                },
+
+                {
+                    data: "F_CODE10",
+                    sTitle: "Department",
+                    visible: true,
+                    className: "fs15--design column-50",
+                },
+
+                {
+                    data: "action",
+                    sTitle: "Action",
+                    visible: true,
+                    className: "column-60",
+                    render: function (data, type, row) {
+                        //console.log(row);
+                        var html =
+                            ' <span class="btn btn-primary btn-block" data-id="' + row
+                                ._id +
+                            '" onclick="getUser(this) "><i class="fa fa-pencil"></i> Edit</span>';
+                        return html;
+                    }
+                }
+
+                ];
+
+
+                DrawTableInquiry = DrawCustomDataTable("uspList", 350,
+                    "/route/STMaster/grid-data", dataColumns, [
+                    [0, "asc"]
+                ], "frm_grid_search1", null, true, true);
+
+                $("#frm_grid_search1").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        DrawTableInquiry.ajax.reload();
+                    }
+                });
+                $('.textUpper').on('keyup', function (e) {
+                    $(this).val($(this).val().toUpperCase());
+                });
+
+                $('.tab-a').click(function () {
+                    $(".tab").removeClass('tab-active');
+                    $(".tab[data-id='" + $(this).attr('data-id') + "']").addClass("tab-active");
+                    $(".tab-a").removeClass('active-a');
+                    $(this).parent().find(".tab-a").addClass('active-a');
+                });
+
+
+
+                $("form#regForm").submit(function (e) {
+                    //  $('#newUserBox').modal('hide');
+                    e.preventDefault();
+                });
+
+                $("#regForm").validate({
+                    rules: {
+                        // title: "required",
+                        // subTitle: "required",
+
+
+                    },
+                    messages: {
+                        // title: "Title is required",
+                        // subTitle: "Sub Title  is required",
+
+                    },
+                    errorPlacement: function (error, element) {
+                        offset = element.offset();
+                        error.insertAfter(element)
+                        // error.addClass('message');
+                        // error.css('display', 'block!important');
+                    },
+
+                    submitHandler: function (form) {
+                        $('#newUserBox').modal('hide');
+                        var obj = {};
+                        var $form = $(form);
+                        var formData = $form.serializeObject();
+                        //  console.log(formData.F_TYPE)
+                        formData.F_TYPE = $('#F_TYPE').val();
+                        var method = "post";
+                        var url = "/route/STMaster/create";
+                        console.log("formDataformData", formData);
+                        if (formData.id != 0) {
+                            url =
+                                '/route/STMaster/updateData/' +
+                                formData.id;
+                            method = "put";
+                        }
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(formData),
+                            //data: formData,
+                            dataType: "json",
+                            success: function (result) {
+
+                                if (result.status) {
+                                    notification({
+                                        type: "success",
+                                        message: result.msg
+
+                                    });
+                                    DrawTableInquiry.ajax.reload();
+                                    //getUser()
+                                    
+                                    $("#regForm")[0].reset();
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+            function addNewUser() {
+                $('#newUserBox').modal('show');
+            }
+
+            function populate(frm, data) {
+                $.each(data, function (key, value) {
+                    $('[name=' + key + ']', frm).val(value);
+                });
+                $('.sector').select2();
+            }
+
+
+
+            function getUser(id) {
+
+                var id = id.getAttribute('data-id');
+
+                $.ajax({
+                    url: "/route/STMaster/getdata",
+                    type: "get",
+                    data: {
+                        id: id
+                    },
+                    success: function (result) {
+                        console.log("hi");
+                        console.log(result);
+
+                        var iddata = {
+                            id: result.data._id
+                        }
+
+                        populate('#regForm', result.data);
+                        populate('#regForm', iddata);
+                        $('#newUserBox').modal('show');
+
+                    }
+                })
+            }
+
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+
+            function test1() {
+                DrawTableInquiry.ajax.reload();
+            }
+
+        </script>
+
+        <script>
+            var DrawTableInquiry1;
+
+
+            $(document).ready(function () {
+
+                var dataColumns = [{
+                    data: "_id",
+                    sTitle: "Id",
+                    visible: false
+                },
+
+                // {
+                //     data: "F_TYPE",
+                //     sTitle: "Type",
+                //     visible: true,
+                //     className: "fs15--design",
+                // },
+
+                {
+                    data: "F_CODE",
+                    sTitle: "Designation",
+                    visible: true,
+                    className: "fs15--design  column-100",
+                },
+
+                {
+                    data: "action",
+                    sTitle: "Action",
+                    visible: true,
+                    className: "column-110",
+                    render: function (data, type, row) {
+                        //console.log(row);
+                        var html =
+                            ' <span class="btn btn-primary btn-block" data-id="' + row
+                                ._id +
+                            '" onclick="getUser1(this) "><i class="fa fa-pencil"></i> Edit</span>';
+                        return html;
+                    }
+                }
+
+                ];
+
+
+                DrawTableInquiry1 = DrawCustomDataTable("uspList1", 350,
+                    "/route/STMaster/grid-data", dataColumns, [
+                    [0, "asc"]
+                ], "frm_grid_search", null, true, true);
+
+                $("#frm_grid_search").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        DrawTableInquiry1.ajax.reload();
+                    }
+                });
+                $('.textUpper').on('keyup', function (e) {
+                    $(this).val($(this).val().toUpperCase());
+                });
+
+                $('.tab-a').click(function () {
+                    $(".tab").removeClass('tab-active');
+                    $(".tab[data-id='" + $(this).attr('data-id') + "']").addClass("tab-active");
+                    $(".tab-a").removeClass('active-a');
+                    $(this).parent().find(".tab-a").addClass('active-a');
+                });
+
+
+
+                $("form#regForm1").submit(function (e) {
+                    //$('#newUserBox1').modal('hide');
+                    e.preventDefault();
+                });
+
+                $("#regForm1").validate({
+                    rules: {
+                        // title: "required",
+                        // subTitle: "required",
+
+
+                    },
+                    messages: {
+                        // title: "Title is required",
+                        // subTitle: "Sub Title  is required",
+
+                    },
+                    errorPlacement: function (error, element) {
+                        offset = element.offset();
+                        error.insertAfter(element)
+                        error.addClass('message');
+                        error.css('display', 'block!important');
+                    },
+
+                    submitHandler: function (form) {
+                        $('#newUserBox1').modal('hide');
+                        var obj = {};
+                        var $form = $(form);
+                        var formData = $form.serializeObject();
+                        formData.F_TYPE = $('#F_TYPE1').val();
+                        var method = "post";
+                        var url = "/route/STMaster/create";
+                        console.log("formDataformData", formData);
+                        if (formData.id != 0) {
+                            url =
+                                '/route/STMaster/updateData/' +
+                                formData.id;
+                            method = "put";
+                        }
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(formData),
+                            //data: formData,
+                            dataType: "json",
+                            success: function (result) {
+
+                                if (result.status) {
+                                    notification({
+                                        type: "success",
+                                        message: result.msg
+
+                                    });
+                                    DrawTableInquiry1.ajax.reload();
+
+                                    $("#regForm1")[0].reset();
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+            function addNewUser1() {
+                $('#newUserBox1').modal('show');
+            }
+
+            function populate(frm, data) {
+                $.each(data, function (key, value) {
+                    $('[name=' + key + ']', frm).val(value);
+                });
+                $('.sector').select2();
+            }
+
+            function getUser1(id) {
+
+                var id = id.getAttribute('data-id');
+
+                $.ajax({
+                    url: "/route/STMaster/getdata",
+                    type: "get",
+                    data: {
+                        id: id
+                    },
+                    success: function (result) {
+
+                        console.log("hi", result);
+
+                        var iddata = {
+                            id: result.data._id
+                        }
+
+                        populate('#regForm1', result.data);
+                        populate('#regForm1', iddata);
+                        $('#newUserBox1').modal('show');
+                    }
+                })
+            }
+
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+
+
+            function test2() {
+                DrawTableInquiry1.ajax.reload();
+            }
+
+        </script>
+
+        <% include ../partials/footer %>

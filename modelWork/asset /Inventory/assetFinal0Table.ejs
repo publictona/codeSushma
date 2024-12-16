@@ -1,0 +1,1725 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+
+        <style>
+            .pd-0 {
+                padding: 0px;
+            }
+
+            .pd-3 {
+                padding-left: 10px;
+            }
+
+            .ui-autocomplete {
+                z-index: 2147483647;
+            }
+
+            .contentRow {
+                white-space: break-spaces !important;
+            }
+
+            .tourcode,
+            .formno {
+                text-transform: uppercase;
+                font-size: 16px;
+                font-weight: 800;
+            }
+
+            .tourname {
+                font-size: 12px;
+            }
+
+            .tour-detials {
+                font-size: 15px;
+                white-space: nowrap;
+            }
+
+            .background-box {
+                background: #dadada;
+                padding: 1px 5px;
+                border-radius: 4px;
+            }
+
+            .col-150 {
+                min-width: 150px;
+                max-width: 150px;
+                width: 150px;
+            }
+
+            .col-50 {
+                min-width: 50px;
+                max-width: 50px;
+                width: 50px;
+            }
+
+            .alert {
+                width: auto;
+                padding: 20px;
+                font-size: 15px;
+                top: 63px !important;
+                right: 20px !important;
+                z-index: 999999 !important;
+            }
+
+            .ibTable tr td {
+                padding: 3px;
+            }
+
+            .calIpBox {
+                border-bottom: 1px solid #fff;
+            }
+
+            label.error {
+                display: block !important;
+            }
+
+            /* ------tab s------ */
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                background-color: #eaeeed;
+                font-family: 'sans-serif', sans-serif;
+            }
+
+            .tab-container {
+                margin: 5% 10%;
+                background-color: #b7bbba;
+                padding: 3%;
+                border-radius: 4px;
+            }
+
+            .tab-menu {}
+
+            .tab-menu ul {
+                margin: 0;
+                padding: 0;
+            }
+
+            .tab-menu ul li {
+                list-style-type: none;
+                display: inline-block;
+            }
+
+            .tab-menu ul li a {
+                text-decoration: none;
+                color: #333;
+                background-color: #e0e6e4;
+                padding: 7px 25px;
+                border-radius: 4px;
+                margin-left: 10px;
+            }
+
+            .tab-menu ul li a.active-a {
+                background-color: #777;
+                color: #ffffff;
+                font-weight: bold;
+            }
+
+            .tab {
+                display: none;
+            }
+
+            .tab h2 {
+                color: rgba(0, 0, 0, .7);
+            }
+
+            .tab p {
+                color: rgba(0, 0, 0, 0.6);
+                text-align: justify;
+            }
+
+            .tab-active {
+                display: block;
+            }
+
+            .tab .badge {
+                margin-right: 5px;
+            }
+
+            #uspList_wrapper table,
+            #uspList_wrapper .dataTables_scrollHeadInner {
+                width: 100% !important;
+            }
+
+            .spa-loc .checkbox>input[type=checkbox] {
+                left: 10px !important;
+                top: 10px !important;
+                opacity: 1 !important;
+            }
+
+            .btn-group,
+            .btn-group-vertical {
+                display: block;
+            }
+
+            .custom-table {
+                margin-left: 12px;
+            }
+
+            /* -----e----- */
+        </style>
+
+        <div class="box">
+            <div class="box-header with-border with-hamburger">
+                <a href="javascript:void(0);" class="box-header-hamburger-menu" onclick="openNav()">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </a>
+                <h3 class="box-title">Asset Management </h3>
+            </div>
+
+        </div>
+        <br>
+        <br>
+
+        <!-------------------- Start--------------------- -->
+
+        <div class="tab-menu">
+            <ul>
+                <li><a href="#" class="tab-a active-a" data-id="tab1" onclick="test1()">Item Master</a></li>
+                <li><a href="#" class="tab-a" data-id="tab2" onclick="test2()">Asset Transaction</a></li>
+                <li><a href="#" class="tab-a" data-id="tab3" onclick="test3()">Asset Branch/Godown</a></li>
+
+            </ul>
+        </div>
+
+        <br>
+        <!-- -=========================tab1====================================== -->
+        <div class="tab tab-active" data-id="tab1">
+            <div class="box-body">
+                <div class="row gutter--3px">
+                    <div class="col-md-12">
+                        <span class="btn btn-primary" onclick="addNewUser()"><i class="fa fa-plus"></i> Add Asset
+                            Master
+                        </span>
+                    </div>
+                    <div class="col-md-12 r-col">
+                        <table id="uspList" class="table table-bordered table-striped display nowrap order-column"
+                            style="width:100%;">
+                            <tbody class="appar">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="newUserBox" tabindex="-1" role="dialog" aria-labelledby="newUserBox"
+                aria-hidden="true">
+                <div class="modal-dialog modal-md" role="document">
+
+                    <div class="modal-content">
+                        <div class="modal-header">Add Asset Master Details <span id="topTranNo" class="fs15--design">
+                            </span></h5>
+
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="regForm">
+                                <div class="row gutter--3px">
+                                    <div class="col-md-12">
+                                        <div class="row gutter--3px pd-3">
+
+
+
+                                            <div class="form-group row col-sm-12">
+                                                <input type="hidden" class="form-control id" name="id" value="0">
+                                                <label for="" class="col-sm-3 col-form-label fs15--design">Item Code
+                                                    <span style="color: rgb(124, 13, 13);">*</span>
+                                                </label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" name="itemCode" class="form-control itemCode"
+                                                        oninput="this.value = this.value.toUpperCase();" required
+                                                        autocomplete="off">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row col-sm-12">
+                                                <label for="" class="col-sm-3 col-form-label fs15--design">Asset Type
+                                                </label>
+
+                                                <div class="col-sm-9">
+                                                    <select name="assetType" class="form-control assetType">
+                                                        <option value="">Select Type</option>
+                                                        <option value="FIXED ASSET">FIXED ASSET</option>
+                                                        <option value="NON-FIXED ASSET">NON-FIXED ASSET</option>
+
+                                                    </select>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row col-sm-12">
+                                                <label for="" class="col-sm-3 col-form-label fs15--design">Item Name
+
+
+                                                </label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" name="itemName" class="form-control itemName"
+                                                        autocomplete="off"></input>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-12 mt-10">
+
+                                        <button type="submit" class="btn btn-primary btn-block">SAVE</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- -=========================tab2====================================== -->
+        <div class="tab" data-id="tab2">
+
+            <form id="frm_grid_search1">
+                <input type="hidden" name="assetType" id="F_TYPE1" value="NON-FIXED ASSET">
+            </form>
+
+            <div class="box-body">
+                <div class="row gutter--3px">
+                    <div class="col-md-12">
+                        <span class="btn btn-primary" onclick="addNewUser1()"><i class="fa fa-plus"></i> Add Asset
+                            Transaction
+                        </span>
+                    </div>
+                    <br>
+                    <br>
+
+                    <div class="col-md-12 r-col">
+                        <table id="assetTran" class="table table-bordered" style="width:100%;">
+                            <tbody class="appar">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="modal fade" id="newUserBox1" tabindex="-1" role="dialog" aria-labelledby="newUserBox1"
+            aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+
+                <div class="modal-content">
+                    <div class="modal-header">Add Asset Transaction Details
+                        </h5>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="regForm1">
+                            <div class="row gutter--3px">
+                                <div class="col-md-12">
+                                    <div class="row gutter--3px pd-3">
+
+
+
+                                        <div class="form-group row col-sm-12">
+                                            <input type="hidden" class="form-control assetType" name="assetType"
+                                                value="NON-FIXED ASSET">
+                                            <input type="hidden" class="form-control idtransaction" name="id" value="0">
+                                            <label for="" class="col-sm-3 col-form-label fs15--design">Staff ID <span
+                                                    style="color: rgb(167, 14, 14);">*</span>
+                                            </label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control F21_SRNO" id="F21_SRNO" name="F21_SRNO"
+                                                    onchange="getDataF21_SRNO(this)" required> </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-3 col-form-label fs15--design"> First
+                                                Name
+                                            </label>
+                                            <div class="col-sm-9">
+                                                <input type="text" name="F21_FNAME" class="form-control" id="FNAME"
+                                                    readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-3 col-form-label fs15--design"> Middle
+                                                Name
+                                            </label>
+                                            <div class="col-sm-9">
+                                                <input type="text" name="F21_MNAME" class="form-control" id="MNAME"
+                                                    readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-3 col-form-label fs15--design">Last Name
+                                            </label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" id="SNAME" name="F21_SNAME"
+                                                    readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-3 col-form-label fs15--design">Department
+                                            </label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" id="DEPT" name="F21_DEPT"
+                                                    readonly>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-3 col-form-label fs15--design">Branch
+                                            </label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" id="BRANCH" name="F21_BRANCH"
+                                                    readonly>
+                                            </div>
+                                        </div>
+
+                                        <h4><strong>Item Details</strong></h4>
+
+
+
+                                        <!-- item  list start -->
+                                        <div class="form-group row col-sm-12">
+                                            <div class="form-group row col-sm-12 ">
+                                                <table class="table table-bordered custom-table">
+                                                    <thead class="form-group row table-success">
+                                                        <tr data-cnt="0">
+                                                            <th scope="col">No</th>
+                                                            <th style="width: 150px;" scope="col">Item Code</th>
+                                                            <!-- <th style="width: 100px;" scope="col">Name</th> -->
+                                                            <th style="width: 100px;" scope="col" class="text-end">
+                                                                Brand</th>
+                                                            <th style="width: 100px;" scope="col" class="text-end">
+                                                                Model</th>
+                                                            <th style="width: 100px;" scope="col" class="text-end">
+                                                                Sr No</th>
+                                                            <th scope="col">
+                                                                <button type="button" class="btn btn-sm btn-success"
+                                                                    onclick="BtnAdd()">Add </button>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody id="TBody">
+                                                        <tr id="TRow0" data-count="0" class="d-none" required>
+
+                                                            <th scope="row">1</th>
+
+
+                                                            <td>
+                                                                <select class="form-control itemCodeN"
+                                                                    name="Asset_Trans[0][itemCode]" required>
+                                                                    <option value="Select">Select</option>
+                                                                </select>
+                                                            </td>
+
+                                                            <!-- <td><input type="text" class="form-control itemName"
+                                                                        name="Asset_Trans[0][itemName]"></td> -->
+
+                                                            <td><input type="text"
+                                                                    class="form-control text-end itemBrand"
+                                                                    name="Asset_Trans[0][itemBrand]"
+                                                                    oninput="this.value = this.value.toUpperCase();"
+                                                                    autocomplete="off" required>
+                                                            </td>
+                                                            <td><input type="text" class="form-control text-end modelNo"
+                                                                    name="Asset_Trans[0][modelNo]"
+                                                                    oninput="this.value = this.value.toUpperCase();"
+                                                                    autocomplete="off" required>
+                                                            </td>
+                                                            <td><input type="text"
+                                                                    class="form-control text-end serialNo"
+                                                                    name="Asset_Trans[0][serialNo]"
+                                                                    oninput="this.value = this.value.toUpperCase();"
+                                                                    autocomplete="off" required>
+                                                            </td>
+
+                                                            <td><button type="button" class="btn btn-sm btn-danger"
+                                                                    onclick="BtnDel(this)">Delete</button></td>
+
+                                                        </tr>
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 mt-10">
+                                            <button type="submit" class="btn btn-primary btn-block">SAVE</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- -=========================tab3====================================== -->
+        <div class="tab" data-id="tab3">
+
+            <form id="frm_grid_search">
+                <input type="hidden" name="assetType" id="F_TYPE2" value="FIXED ASSET">
+            </form>
+
+            <div class="box-body">
+                <div class="row gutter--3px">
+                    <div class="col-md-12">
+                        <span class="btn btn-primary" onclick="addNewUser2()"><i class="fa fa-plus"></i> Add Asset
+                            Branch
+                        </span>
+                    </div>
+                    <br>
+                    <br>
+
+                    <div class="col-md-6 r-col">
+                        <table id="uspList2" class="table table-bordered table-striped display nowrap order-column"
+                            style="width:100%;">
+                            <tbody class="appar">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="modal fade" id="newUserBox2" tabindex="-1" role="dialog" aria-labelledby="newUserBox2"
+            aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+
+                <div class="modal-content">
+                    <div class="modal-header">Add Asset Branch Details
+                        </h5>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="regForm2">
+                            <div class="row gutter--3px">
+                                <div class="col-md-12">
+                                    <div class="row gutter--3px pd-3">
+
+                                        <div class="form-group row col-sm-12">
+                                            <input type="hidden" class="form-control assetType" name="assetType"
+                                                value="FIXED ASSET">
+                                            <input type="hidden" class="form-control idBranch" name="id" value="0">
+                                            <label for="" class="col-sm-3 col-form-label fs15--design">Branch
+                                            </label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" id="BRANCH" name="F21_BRANCH"
+                                                    oninput="this.value = this.value.toUpperCase();" required
+                                                    autocomplete="off">
+                                            </div>
+                                        </div>
+
+                                        <h4><strong>Item Details</strong></h4>
+
+
+
+                                        <!-- item  list start -->
+                                        <div class="form-group row col-sm-12">
+                                            <div class="form-group row col-sm-12 ">
+                                                <table class="table table-bordered custom-table">
+                                                    <thead class="form-group row table-success">
+                                                        <tr data-cnt="0">
+                                                            <th scope="col">No</th>
+                                                            <th style="width: 150px;" scope="col">Item Code</th>
+                                                            <!-- <th style="width: 100px;" scope="col">Name</th> -->
+                                                            <th style="width: 100px;" scope="col" class="text-end">
+                                                                Brand</th>
+                                                            <th style="width: 100px;" scope="col" class="text-end">
+                                                                Model</th>
+                                                            <th style="width: 100px;" scope="col" class="text-end">
+                                                                Sr No</th>
+                                                            <th style="width: 100px;" scope="col" class="text-end">
+                                                                Quantity</th>
+                                                            <th scope="col">
+                                                                <button type="button" class="btn btn-sm btn-success"
+                                                                    onclick="BtnAdd1()">Add </button>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody id="TBody1">
+                                                        <tr id="TRow1" data-count="0" class="d-none" required>
+
+                                                            <th scope="row">1</th>
+
+
+                                                            <td>
+                                                                <select class="form-control itemCode"
+                                                                    name="Asset_Trans[0][itemCode]" required>
+                                                                    <option value="Select">Select</option>
+                                                                </select>
+                                                            </td>
+
+
+
+                                                            <td><input type="text"
+                                                                    class="form-control text-end itemBrand"
+                                                                    name="Asset_Trans[0][itemBrand]"
+                                                                    oninput="this.value = this.value.toUpperCase();"
+                                                                    autocomplete="off">
+                                                            </td>
+                                                            <td><input type="text" class="form-control text-end modelNo"
+                                                                    name="Asset_Trans[0][modelNo]"
+                                                                    oninput="this.value = this.value.toUpperCase();"
+                                                                    autocomplete="off">
+                                                            </td>
+                                                            <td><input type="text"
+                                                                    class="form-control text-end serialNo"
+                                                                    name="Asset_Trans[0][serialNo]"
+                                                                    oninput="this.value = this.value.toUpperCase();"
+                                                                    autocomplete="off">
+                                                            </td>
+
+                                                            <td><input type="number"
+                                                                    class="form-control text-end fixedQuantity"
+                                                                    name="Asset_Trans[0][fixedQuantity]"
+                                                                    oninput="this.value = this.value.toUpperCase();"
+                                                                    autocomplete="off">
+                                                            </td>
+
+                                                            <td><button type="button" class="btn btn-sm btn-danger"
+                                                                    onclick="BtnDel1(this)">Delete</button></td>
+
+                                                        </tr>
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 mt-10">
+                                            <button type="submit" class="btn btn-primary btn-block">SAVE</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ==========================master Script1============================ -->
+        <script>
+
+            var DrawTableInquiry;
+            $(document).ready(function () {
+
+
+                var dataColumns = [{
+                    data: "_id",
+                    sTitle: "Id",
+                    visible: false
+                },
+
+                {
+                    data: "tranNo",
+                    sTitle: "Tran#",
+                    visible: true,
+                    className: "fs14--design column-20",
+
+                },
+
+                {
+                    data: "tranDt",
+                    sTitle: "Date",
+                    visible: true,
+                    className: "fs15--design column-60",
+                    render: function (data, type, row) {
+
+                        return dateFormat(row.tranDt);
+
+                    }
+                },
+
+                {
+                    data: "tranID",
+                    sTitle: "Tran ID#",
+                    visible: true,
+                    className: "fs14--design column-35",
+
+                },
+
+                {
+                    data: "itemCode",
+                    sTitle: "Item Cd#",
+                    visible: true,
+                    className: "fs14--design column-200",
+
+                },
+
+                {
+                    data: "assetType",
+                    sTitle: "Type#",
+                    visible: true,
+                    className: "fs14--design column-12",
+
+                },
+
+                {
+                    data: "itemName",
+                    sTitle: "Item Name#",
+                    visible: true,
+                    className: "fs14--design column-12",
+
+                },
+
+                {
+                    data: "A",
+                    sTitle: "Action",
+                    visible: true,
+                    className: "fs14--design column-35",
+                    render: function (data, type, row) {
+                        //console.log(row);
+                        var html =
+                            ' <span class="btn btn-primary btn-block" data-id="' + row
+                                ._id +
+                            '" onclick="getAssetTransaction(this) "> Edit</span>';
+                        return html;
+                    }
+                },
+
+
+                ];
+
+                DrawTableInquiry = DrawCustomDataTable("uspList", 350,
+                    "/route/assetMaster/grid-data", dataColumns, [
+                    [0, "asc"]
+                ], "frm_grid_search", null, true, true);
+
+                $("#frm_grid_search").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        DrawTableInquiry.ajax.reload();
+                    }
+                });
+                $('.textUpper').on('keyup', function (e) {
+                    $(this).val($(this).val().toUpperCase());
+                });
+
+                $("form#regForm").submit(function (e) {
+                    //$('#newUserBox').modal('hide');
+                    e.preventDefault();
+                });
+
+                $("#regForm").validate({
+                    rules: {
+                        itemCode: "required",
+                    },
+                    messages: {
+                        itemCode: "Item Code is required",
+                    },
+
+                    errorPlacement: function (error, element) {
+                        offset = element.offset();
+                        error.insertAfter(element)
+                        error.addClass('message');
+                        error.css('display', 'block!important');
+                        error.css('color', 'red');
+                    },
+
+
+
+                    submitHandler: function (form) {
+                        $('#newUserBox').modal('hide');
+                        var $form = $(form);
+                        var formData = $form.serializeObject();
+
+                        var method = "post";
+                        var url = "/route/assetMaster/create";
+                        //  console.log(formData);
+                        if (formData.id != 0) {
+                            url = '/route/assetMaster/update/' + formData.id;
+                            method = "put";
+                        }
+
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(formData),
+                            dataType: "json",
+
+                            success: function (result) {
+                                if (result.status) {
+                                    notification({
+                                        type: "success",
+                                        message: result.msg
+                                    });
+                                    // getItemCode($('.itemCode'));
+                                    DrawTableInquiry.ajax.reload();
+                                    $("#regForm")[0].reset();
+                                } else {
+                                    // Handle error case
+                                    notification({
+                                        type: "error",
+                                        message: result.msg // You may customize the error message here
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                // Handle AJAX error
+                                console.error("AJAX Error:", status, error);
+                                notification({
+                                    type: "error",
+                                    message: "Item Code Already Exist" // You may customize the error message here
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            function test1() {
+                DrawTableInquiry.ajax.reload();
+            }
+
+
+            function addNewUser() {
+                $('#newUserBox').modal('show');
+                $("#regForm")[0].reset();
+                DrawTableInquiry.ajax.reload();
+            }
+
+            function populate(frm, data) {
+                $.each(data, function (key, value) {
+                    $('[name=' + key + ']', frm).val(value);
+                });
+                $('.sector').select2();
+            }
+
+
+
+            function getUser(id) {
+                var id = id.getAttribute('data-id');
+                $.ajax({
+                    url: "/route/assetMaster/getData",
+                    type: "get",
+                    data: {
+                        id: id
+                    },
+                    success: function (result) {
+
+                        var tranNO = '&nbsp;&nbsp;&nbsp;&nbsp;Tran No :- ' + result.data.tranNo;
+                        $("#topTranNo").html(tranNO);
+
+                        var iddata = {
+                            id: result.data._id
+                        }
+                        $.when($('#regForm').populate(result.data)).done(function (x) {
+
+                            $('.itemCode').attr('disabled', true);
+                        });
+
+
+
+                        // ------
+                        populate('#regForm', result.data);
+                        populate('#regForm', iddata);
+
+                        $('#newUserBox').modal('show');
+
+                    }
+                })
+            }
+
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+
+
+            var type = "Add";
+            var codeArr = [];
+            var itemCodeStr = "";
+            var itemCodeStr2 = "";
+            var tabStr = `
+            <tr id="TRow0" data-count="0" class="d-none">
+        
+        <th scope="row">1</th>
+        <td>
+        <select class="form-control itemCode"
+        name="Asset_Trans[0][itemCode]" 
+        required>
+        <option value=""></option>
+        </select>
+        </td>
+        
+        <!-- <td><input type="text" class="form-control itemName"
+            name="Asset_Trans[0][itemName]" oninput="this.value = this.value.toUpperCase();" autocomplete="off" required></td> -->
+        
+        <td><input type="text"
+        class="form-control text-end itemBrand"
+        name="Asset_Trans[0][itemBrand]" oninput="this.value = this.value.toUpperCase();" autocomplete="off" required>
+        </td>
+        <td><input type="text" class="form-control text-end modelNo"
+        name="Asset_Trans[0][modelNo]" oninput="this.value = this.value.toUpperCase();" autocomplete="off" required>
+        </td>
+        <td><input type="text"
+        class="form-control text-end serialNo"
+        name="Asset_Trans[0][serialNo]" oninput="this.value = this.value.toUpperCase();" autocomplete="off" required>
+        </td>
+        
+        <td><button type="button" class="btn btn-sm btn-danger"
+        onclick="BtnDel(this)">Delete</button></td>
+        
+        </tr>            
+            `;
+            var DrawTableInquiry1;
+            $(document).ready(function () {
+                getItemCodeNonFixed($('.itemCodeN'));
+                // getItemCodeFixed($('.itemCode'))
+                getKesarianNameData();
+
+
+                var dataColumns1 = [{
+                    data: "_id",
+                    sTitle: "Id",
+                    visible: false
+                },
+
+                {
+                    data: "tranNo",
+                    sTitle: "Tran#",
+                    visible: false,
+                    className: "fs14--design column-20",
+
+                },
+
+                {
+                    data: "F21_BRANCH",
+                    sTitle: "Branch#",
+                    visible: true,
+                    className: "fs14--design column-20",
+
+                },
+
+                {
+                    data: "F21_DEPT",
+                    sTitle: "Department#",
+                    visible: true,
+                    className: "fs14--design column-80",
+
+                },
+
+                {
+                    data: "tranID",
+                    sTitle: "RSID#",
+                    visible: true,
+                    className: "fs14--design column-15",
+
+                },
+
+                {
+                    data: "F21_FNAME",
+                    visible: false,
+
+                },
+
+                {
+                    data: "F21_SNAME",
+                    sTitle: "Name#",
+                    visible: true,
+                    className: "fs14--design column-50",
+                    render: function (data, type, row) {
+                        return row.F21_FNAME + '  ' + row.F21_SNAME;
+                    }
+
+                },
+
+                {
+                    data: "F21_SRNO",
+                    visible: false,
+
+                },
+
+                {
+                    data: "F21_SNAME",
+                    sTitle: "Staff ID#",
+                    visible: true,
+                    className: "fs14--design column-15",
+                    render: function (data, type, row) {
+                        return row.F21_SRNO;
+                    }
+
+                },
+
+
+                {
+                    data: "Asset_Trans",
+                    sTitle: "Asset Details#",
+                    visible: true,
+                    className: "fs14--design column-100",
+                    render: function (data, type, row) {
+                        var html = "";
+                        if (row.Asset_Trans) {
+                            var itemCod = "";
+                            console.log("itemCoditemCod", itemCod)
+                            var prefix = "";
+                            for (var i = 0; i < row.Asset_Trans.length; i++) {
+
+                                if (row.Asset_Trans[i]) {
+
+                                    itemCod += (row.Asset_Trans[i].itemCode) ? (prefix + row.Asset_Trans[i].itemCode) : '';
+                                    prefix = ", ";
+                                }
+                            }
+                            html += itemCod;
+                        }
+                        return html;
+                    }
+
+                },
+
+
+
+                {
+                    data: "A",
+                    sTitle: "Action",
+                    visible: true,
+                    className: "fs14--design column-10",
+                    render: function (data, type, row) {
+                        //console.log(row);
+                        var html =
+                            ' <span class="btn btn-primary btn-block" data-id="' + row
+                                ._id +
+                            '" onclick="getAssetTransaction1(this) "> Edit</span>';
+                        return html;
+                    }
+                },
+
+
+
+
+
+                ];
+
+                DrawTableInquiry1 = DrawCustomDataTable("assetTran", 350,
+                    "/route/assetTransaction/grid-data", dataColumns1, [
+                    [0, "asc"]
+                ], "frm_grid_search1", null, true, true);
+
+                $("#frm_grid_search1").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        DrawTableInquiry1.ajax.reload();
+                    }
+                });
+                $('.textUpper').on('keyup', function (e) {
+                    $(this).val($(this).val().toUpperCase());
+                });
+
+                $("form#regForm1").submit(function (e) {
+                    //$('#newUserBox').modal('hide');
+                    e.preventDefault();
+                });
+
+                $('.tab-a').click(function () {
+                    $(".tab").removeClass('tab-active');
+                    $(".tab[data-id='" + $(this).attr('data-id') + "']").addClass("tab-active");
+                    $(".tab-a").removeClass('active-a');
+                    $(this).parent().find(".tab-a").addClass('active-a');
+                });
+
+                $("#regForm1").validate({
+                    rules: {
+                        //suppliercat: "required",
+                    },
+                    messages: {
+                        // suppliercat: "Supplier Category is required",
+                    },
+
+                    errorPlacement: function (error, element) {
+                        offset = element.offset();
+                        error.insertAfter(element)
+                        error.addClass('message');
+                        error.css('display', 'block!important');
+                        error.css('color', 'red');
+                    },
+
+                    submitHandler: function (form) {
+
+                        $('#newUserBox1').modal('hide');
+                        var $form = $(form);
+                        var formData = $form.serializeObject();
+                        formData.assetType = $('#F_TYPE1').val();
+
+                        var method = "post";
+                        var url = "/route/assetTransaction/create";
+                        console.log(formData);
+                        if (formData.id != 0) {
+                            url =
+                                '/route/assetTransaction/update/' +
+                                formData.id;
+                            method = "put";
+                        }
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(formData),
+                            dataType: "json",
+
+                            success: function (result) {
+                                if (result.status) {
+                                    notification({
+                                        type: "success",
+                                        message: result
+                                            .msg
+                                    });
+
+                                    DrawTableInquiry1.ajax.reload();
+                                    $("#regForm1")[0].reset();
+
+
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+            function addNewUser1() {
+                type = "Add";
+                $('#F21_SRNO').val('');
+                $('#F21_SRNO').select2();
+                $("#TBody").html(tabStr);
+                $('.idtransaction').val('0');
+                $("#regForm1")[0].reset();
+                $('#newUserBox1').modal('show');
+            }
+
+            function populate(frm, data) {
+                $.each(data, function (key, value) {
+                    $('[name=' + key + ']', frm).val(value);
+                });
+                $('.sector').select2();
+            }
+
+
+            function getAssetTransaction(id) {
+                var id = id.getAttribute('data-id');
+                $.ajax({
+                    url: "/route/assetTransaction/getData1",
+                    type: "get",
+                    data: {
+                        id: id
+                    },
+                    success: function (result) {
+
+                        var iddata = {
+                            id: result.data._id
+                        }
+                        populate("#regForm", result.data);
+                        populate("#regForm", iddata);
+                        $('#newUserBox').modal('show');
+                    }
+                })
+
+            }
+            function getAssetTransaction1(id) {
+                type = "Upd";
+                var id = id.getAttribute('data-id');
+                $('.idtransaction').val(id);
+
+                $.ajax({
+                    url: "/route/assetTransaction/getData",
+                    type: "get",
+                    data: {
+                        id: id
+                    },
+                    success: function (result) {
+
+                        var tranNO = '&nbsp;&nbsp;&nbsp;&nbsp;Tran No :- ' + result.data.tranNo;
+                        $("#topTranNo1").html(tranNO);
+
+                        var iddata = {
+                            id: result.data._id
+                        }
+                        var str = ``;
+                        str += tabStr;
+                        for (var i = 0; i < result.data.Asset_Trans.length; i++) {
+                            str += `
+                            
+                            <tr data-count="${i}">
+        
+        <th scope="row">${i}</th>
+        
+        
+        <td>
+        <select class="form-control itemCode"
+        name="Asset_Trans[${i}][itemCode]" 
+        required>`;
+                            codeArr.forEach(function (item) {
+                                str += `<option ${(item == result.data.Asset_Trans[i].itemCode) ? 'selected' : ''}  value="${item}">${item}</option>`
+                            })
+                            str += `</select>
+        </td>
+        
+        
+        <td><input type="text"
+        class="form-control text-end itemBrand"
+        name="Asset_Trans[${i}][itemBrand]" value="${result.data.Asset_Trans[i].itemBrand}" oninput="this.value = this.value.toUpperCase();" autocomplete="off" required>
+        </td>
+        <td><input type="text" class="form-control text-end modelNo"
+        name="Asset_Trans[${i}][modelNo]" value="${result.data.Asset_Trans[i].modelNo}" oninput="this.value = this.value.toUpperCase();" autocomplete="off" required>
+        </td>
+        <td><input type="text"
+        class="form-control text-end serialNo"
+        name="Asset_Trans[${i}][serialNo]" value="${result.data.Asset_Trans[i].serialNo}" oninput="this.value = this.value.toUpperCase();" autocomplete="off" required>
+        </td>
+        
+        <td><button type="button" class="btn btn-sm btn-danger"
+        onclick="BtnDel(this)">Delete</button></td>
+        
+        </tr> `;
+                        }
+
+                        $('#TBody').html(str);
+                        $.when($('#regForm1').populate(result.data)).done(function (x) {
+
+                        });
+                        $('.F21_SRNO').select2();
+                        $('#newUserBox1').modal('show');
+                    }
+                })
+            }
+
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+
+
+            function getKesarianNameData() {
+                var tray_url = "/route/rsData/getKesarianNameData/";
+                $.getJSON(tray_url, function (data) {
+                    var optionList1 = '<option value=""></option>';
+
+                    for (var i = 0; i < data.length; i++) {
+                        // Concatenate each option to the optionList1 string
+                        optionList1 += '<option value="' + data[i].F21_SRNO + '">' +
+                            data[i].F21_SRNO + ' - ' + data[i].F21_FNAME + ' ' + data[i].F21_SNAME + '</option>';
+                    }
+                    $('.F21_SRNO').html(optionList1);
+                    $('.F21_SRNO').select2;
+                });
+            }
+
+            function getItemCodeNonFixed(e) {
+
+                var tray_url = "/route/assetTransaction/getItemCodeNonFixed";
+                $.getJSON(tray_url, function (result) {
+                    codeArr = result;
+                    var optionList1 = '<option value="">Select</option>';
+                    for (var i = 0; i < result.length; i++) {
+                        optionList1 += '<option value="' + result[i] + '">' +
+                            result[i] + '</option>';
+                    }
+                    itemCodeStr = optionList1;
+                    e.html(optionList1);
+                });
+            }
+
+            function getItemCodeFixed(e) {
+
+                var tray_url = "/route/assetTransaction/getItemCodeFixed";
+                $.getJSON(tray_url, function (result) {
+                    codeArr = result;
+                    var optionList2 = '<option value="">Select</option>';
+                    for (var i = 0; i < result.length; i++) {
+                        optionList2 += '<option value="' + result[i] + '">' +
+                            result[i] + '</option>';
+                    }
+                    itemCodeStr2 = optionList2
+                    e.html(optionList2);
+                });
+            }
+
+
+            function getDataF21_SRNO(id) {
+                // console.log(e.value)
+
+                id = $('.F21_SRNO').val(),
+
+                    $.ajax({
+                        method: "get",
+                        url: "/route/assetTransaction/getF21Details/" + id,
+                        data: JSON.stringify(),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (result) {
+
+                            $('#FNAME').val(result.data.F21_FNAME);
+                            $('#SNAME').val(result.data.F21_SNAME);
+                            $('#MNAME').val(result.data.F21_MNAME);
+                            $('#DEPT').val(result.data.F21_DEPT);
+                            $('#SECT').val(result.data.F21_SECT);
+                            $('#BRANCH').val(result.data.F21_BRANCH);
+
+
+                        }
+                    });
+            }
+
+            function test2() {
+                DrawTableInquiry1.ajax.reload();
+            }
+
+            // Item List 
+
+            function BtnAdd() {
+                var x = document.querySelectorAll('#TBody tr');
+                var attrNo = 0;
+                if (x.length > 1) {
+                    console.log("test");
+                    attrNo = x.length - 1;
+
+                }
+                if (x.length == 1 && type == "Upd") {
+                    attrNo = 1;
+                }
+                /*Add Button*/
+                var v = $("#TRow0").clone().appendTo("#TBody");
+                $(v).find("input").val('');
+                $(v).removeClass("d-none");
+                $(v).find("th").first().html(attrNo);
+                $(v).removeAttr('id');
+                $(v).find('.itemCode').html('');
+                $(v).find('.itemCode').attr('name', "Asset_Trans[" + attrNo + "][itemCode]");
+                $(v).find('.itemName').attr('name', "Asset_Trans[" + attrNo + "][itemName]");
+                $(v).find('.itemBrand').attr('name', "Asset_Trans[" + attrNo + "][itemBrand]");
+                $(v).find('.modelNo').attr('name', "Asset_Trans[" + attrNo + "][modelNo]");
+                $(v).find('.serialNo').attr('name', "Asset_Trans[" + attrNo + "][serialNo]");
+                $(v).find('.itemCode').html(itemCodeStr);
+            }
+
+            function BtnDel(v) {
+                $(v).parent().parent().remove();
+                $("#TBody").find("tr").each(
+                    function (index) {
+                        $(this).find("th").first().html(index);
+                    }
+
+                );
+            }
+
+        </script>
+
+
+
+        <!-- ==========================Branch Script2============================ -->
+
+        <script>
+
+            var type = "Add";
+            var codeArr1 = [];
+            var itemCodeStr = "";
+            var itemCodeStr2 = "";
+            var tabStr1 = `
+            <tr id="TRow1" data-count="0" class="d-none">
+
+<th scope="row">1</th>
+<td>
+    <select class="form-control itemCode"
+        name="Asset_Trans[0][itemCode]" 
+        required>
+        <option value=""></option>
+    </select>
+</td>
+
+<!-- <td><input type="text" class="form-control itemName"
+            name="Asset_Trans[0][itemName]" oninput="this.value = this.value.toUpperCase();" autocomplete="off" ></td> -->
+
+<td><input type="text"
+        class="form-control text-end itemBrand"
+        name="Asset_Trans[0][itemBrand]" oninput="this.value = this.value.toUpperCase();" autocomplete="off" >
+</td>
+<td><input type="text" class="form-control text-end modelNo"
+        name="Asset_Trans[0][modelNo]" oninput="this.value = this.value.toUpperCase();" autocomplete="off" >
+</td>
+<td><input type="text"
+        class="form-control text-end serialNo"
+        name="Asset_Trans[0][serialNo]" oninput="this.value = this.value.toUpperCase();" autocomplete="off" >
+</td>
+
+<td><input type="number"
+        class="form-control text-end fixedQuantity"
+        name="Asset_Trans[0][fixedQuantity]" oninput="this.value = this.value.toUpperCase();" autocomplete="off" >
+</td>
+
+<td><button type="button" class="btn btn-sm btn-danger"
+        onclick="BtnDel1(this)">Delete</button></td>
+
+</tr>            
+            `;
+            var DrawTableInquiry2;
+            $(document).ready(function () {
+
+                getItemCodeFixed($('.itemCode'))
+
+                var dataColumns2 = [{
+                    data: "_id",
+                    sTitle: "Id",
+                    visible: false
+                },
+
+                {
+                    data: "tranNo",
+                    sTitle: "Tran#",
+                    visible: false,
+                    className: "fs14--design column-100",
+
+                },
+
+                {
+                    data: "F21_BRANCH",
+                    sTitle: "Branch#",
+                    visible: true,
+                    className: "fs14--design column-100",
+
+                },
+
+                {
+                    data: "Asset_Trans",
+                    sTitle: "Asset Details#",
+                    visible: true,
+                    className: "fs14--design column-200",
+
+                    render: function (data, type, row) {
+                        var html = "";
+                        if (row.Asset_Trans) {
+                            var itemCod = "";
+                            //console.log("itemCoditemCod", itemCod)
+                            var prefix = "";
+                            for (var i = 0; i < row.Asset_Trans.length; i++) {
+
+                                if (row.Asset_Trans[i]) {
+
+                                    itemCod += (row.Asset_Trans[i].itemCode) ? (prefix + row.Asset_Trans[i].itemCode) : '';
+                                    prefix = ", ";
+                                }
+                            }
+                            html += itemCod;
+                        }
+                        return html;
+                    }
+                },
+
+                {
+                    data: "Asset_Trans",
+                    sTitle: "Quantity#",
+                    visible: true,
+                    className: "fs14--design column-100",
+
+                    render: function (data, type, row) {
+                        var html = "";
+                        if (row.Asset_Trans) {
+                            var itemCod = "";
+                            console.log("itemCoditemCod", itemCod)
+                            var prefix = "";
+                            for (var i = 0; i < row.Asset_Trans.length; i++) {
+
+                                if (row.Asset_Trans[i]) {
+
+                                    itemCod += (row.Asset_Trans[i].fixedQuantity) ? (prefix + row.Asset_Trans[i].fixedQuantity) : '';
+                                    prefix = ", ";
+                                }
+                            }
+                            html += itemCod;
+                        }
+                        return html;
+                    }
+                },
+
+                {
+                    data: "A",
+                    sTitle: "Action",
+                    visible: true,
+                    className: "fs14--design column-100",
+                    render: function (data, type, row) {
+                        //console.log(row);
+                        var html =
+                            ' <span class="btn btn-primary btn-block" data-id="' + row
+                                ._id +
+                            '" onclick="getAssetTransaction2(this) "> Edit</span>';
+                        return html;
+                    }
+                },
+
+                ];
+
+                DrawTableInquiry2 = DrawCustomDataTable("uspList2", 350,
+                    "/route/assetTransaction/grid-data", dataColumns2, [
+                    [0, "asc"]
+                ], "frm_grid_search", null, true, true);
+
+                $("#frm_grid_search").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        DrawTableInquiry2.ajax.reload();
+                    }
+                });
+                $('.textUpper').on('keyup', function (e) {
+                    $(this).val($(this).val().toUpperCase());
+                });
+
+                $("form#regForm2").submit(function (e) {
+                    //$('#newUserBox').modal('hide');
+                    e.preventDefault();
+                });
+
+                $('.tab-a').click(function () {
+                    $(".tab").removeClass('tab-active');
+                    $(".tab[data-id='" + $(this).attr('data-id') + "']").addClass("tab-active");
+                    $(".tab-a").removeClass('active-a');
+                    $(this).parent().find(".tab-a").addClass('active-a');
+                });
+
+                $("#regForm2").validate({
+                    rules: {
+                        //suppliercat: "required",
+                    },
+                    messages: {
+                        // suppliercat: "Supplier Category is required",
+                    },
+
+                    errorPlacement: function (error, element) {
+                        offset = element.offset();
+                        error.insertAfter(element)
+                        error.addClass('message');
+                        error.css('display', 'block!important');
+                        error.css('color', 'red');
+                    },
+
+                    submitHandler: function (form) {
+
+                        $('#newUserBox2').modal('hide');
+                        var $form = $(form);
+                        var formData = $form.serializeObject();
+                        formData.assetType = $('#F_TYPE2').val();
+
+                        var method = "post";
+                        var url = "/route/assetTransaction/create";
+                        console.log(formData);
+                        if (formData.id != 0) {
+                            url =
+                                '/route/assetTransaction/Update/' +
+                                formData.id;
+                            method = "put";
+                        }
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(formData),
+                            dataType: "json",
+
+                            success: function (result) {
+                                if (result.status) {
+                                    notification({
+                                        type: "success",
+                                        message: result
+                                            .msg
+                                    });
+
+                                    DrawTableInquiry2.ajax.reload();
+                                    $("#regForm2")[0].reset();
+
+
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+            function addNewUser2() {
+                type = "Add";
+                $('#F21_SRNO').val('');
+                $('#F21_SRNO').select2();
+                $("#TBody1").html(tabStr1);
+                $('.idBranch').val('0');
+                $("#regForm2")[0].reset();
+                $('#newUserBox2').modal('show');
+            }
+
+            function populate(frm, data) {
+                $.each(data, function (key, value) {
+                    $('[name=' + key + ']', frm).val(value);
+                });
+                $('.sector').select2();
+            }
+
+
+
+            function getAssetTransaction2(id) {
+                type = "Upd1";
+                var id = id.getAttribute('data-id');
+                $('.idBranch').val(id);
+
+                $.ajax({
+                    url: "/route/assetTransaction/getData",
+                    type: "get",
+                    data: {
+                        id: id
+                    },
+                    success: function (result) {
+
+                        var tranNO = '&nbsp;&nbsp;&nbsp;&nbsp;Tran No :- ' + result.data.tranNo;
+                        $("#topTranNo2").html(tranNO);
+
+                        var iddata = {
+                            id: result.data._id
+                        }
+                        var str1 = ``;
+                        str1 += tabStr1;
+                        for (var i = 0; i < result.data.Asset_Trans.length; i++) {
+                            str1 += `
+                            
+                            <tr data-count="${i}">
+
+<th scope="row">${i}</th>
+
+        
+<td>
+    <select class="form-control itemCode"
+        name="Asset_Trans[${i}][itemCode]" 
+        required>`;
+                            codeArr1.forEach(function (item) {
+                                str1 += `<option ${(item == result.data.Asset_Trans[i].itemCode) ? 'selected' : ''}  value="${item}">${item}</option>`
+                            })
+                            str1 += `</select>
+</td>
+
+
+<td><input type="text"
+        class="form-control text-end itemBrand"
+        name="Asset_Trans[${i}][itemBrand]" value="${result.data.Asset_Trans[i].itemBrand}" oninput="this.value = this.value.toUpperCase();" autocomplete="off" >
+</td>
+<td><input type="text" class="form-control text-end modelNo"
+        name="Asset_Trans[${i}][modelNo]" value="${result.data.Asset_Trans[i].modelNo}" oninput="this.value = this.value.toUpperCase();" autocomplete="off" >
+</td>
+<td><input type="text"
+        class="form-control text-end serialNo"
+        name="Asset_Trans[${i}][serialNo]" value="${result.data.Asset_Trans[i].serialNo}" oninput="this.value = this.value.toUpperCase();" autocomplete="off" >
+</td>
+
+<td><input type="number"
+        class="form-control text-end fixedQuantity"
+        name="Asset_Trans[${i}][fixedQuantity]" value="${result.data.Asset_Trans[i].fixedQuantity}" oninput="this.value = this.value.toUpperCase();" autocomplete="off" >
+</td>
+
+<td><button type="button" class="btn btn-sm btn-danger"
+        onclick="BtnDel1(this)">Delete</button></td>
+
+</tr> `;
+                        }
+
+                        $('#TBody1').html(str1);
+                        $.when($('#regForm2').populate(result.data)).done(function (x) {
+
+                        });
+                        $('.F21_SRNO').select2();
+                        $('#newUserBox2').modal('show');
+                    }
+                })
+            }
+
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+
+            function getItemCodeFixed(e) {
+
+                var tray_url = "/route/assetTransaction/getItemCodeFixed";
+                $.getJSON(tray_url, function (result) {
+                    codeArr1 = result;
+                    var optionList2 = '<option value="">Select</option>';
+                    for (var i = 0; i < result.length; i++) {
+                        optionList2 += '<option value="' + result[i] + '">' +
+                            result[i] + '</option>';
+                    }
+                    itemCodeStr2 = optionList2
+                    e.html(optionList2);
+                });
+            }
+
+            function test3() {
+                DrawTableInquiry2.ajax.reload();
+            }
+
+            // Item List 
+
+            function BtnAdd1() {
+                var x = document.querySelectorAll('#TBody1 tr');
+                var attrNo1 = 0;
+                if (x.length > 1) {
+                    console.log("test");
+                    attrNo1 = x.length - 1;
+
+                }
+                if (x.length == 1 && type == "Upd1") {
+                    attrNo1 = 1;
+                }
+                /*Add Button*/
+                var v = $("#TRow1").clone().appendTo("#TBody1");
+                $(v).find("input").val('');
+                $(v).removeClass("d-none");
+                $(v).find("th").first().html(attrNo1);
+                $(v).removeAttr('id');
+                $(v).find('.itemCode').html('');
+                $(v).find('.itemCode').attr('name', "Asset_Trans[" + attrNo1 + "][itemCode]");
+                $(v).find('.itemName').attr('name', "Asset_Trans[" + attrNo1 + "][itemName]");
+                $(v).find('.itemBrand').attr('name', "Asset_Trans[" + attrNo1 + "][itemBrand]");
+                $(v).find('.modelNo').attr('name', "Asset_Trans[" + attrNo1 + "][modelNo]");
+                $(v).find('.serialNo').attr('name', "Asset_Trans[" + attrNo1 + "][serialNo]");
+                $(v).find('.fixedQuantity').attr('name', "Asset_Trans[" + attrNo1 + "][fixedQuantity]");
+                $(v).find('.itemCode').html(itemCodeStr2);
+            }
+
+            function BtnDel1(v) {
+                $(v).parent().parent().remove();
+                $("#TBody1").find("tr").each(
+                    function (index) {
+                        $(this).find("th").first().html(index);
+                    }
+
+                );
+            }
+
+
+        </script>
+
+        <% include ../partials/footer %>

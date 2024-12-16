@@ -1,0 +1,183 @@
+<div style="position: relative;">
+    <table style="width:100%;font-weight: 600;">
+      <tr>
+        <td>
+          
+          <img src="https://lakeviewkashmir.com/assets/img/lakeview-logo.png" style="height: 80px;">
+        </td>
+        <td>
+          <h4 style="text-align: right;">PURCHASE ORDER</h4>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-size:8px;font-family: monospace;" colspan="2">#00-01 Anita Vihar, 253 CSM Road, Mahim W, Mumbai BHARAT 400016  Tel : 022 6171 8152
+        </td>
+      </tr>
+    </table>
+    <hr style="margin-bottom: 2px;margin-top: 2px;">
+    <table style="width:100%;font-size:10px;">
+      <tr>
+        <td style="width:20%;font-weight: 600;" colspan="2"></td>
+        <td rowspan="3" style="text-align:right;"> 
+          <img src="<%=src%>" height="30" width="50%">
+        </td>
+      </tr>
+      <tr>
+        <td style="width:20%;" colspan="2">M/s.<b><%=po.partyName%></b></td>
+      </tr>
+      <tr>
+        <td style="width:20%;">PO NO</td>
+        <td>:&nbsp;&nbsp;PO<%=po.F_PONO.split('/').join('')%></td>
+      </tr>
+      <tr>
+        <td style="width:20%;">Date</td>
+        <td>:&nbsp;&nbsp;<%=po.F_PODT%></td>
+      </tr>
+    </table>
+    <!-- <hr style="border-top:1px dashed !important;margin-bottom: 2px;margin-top: 2px;"> -->
+    <table style="width:100%;font-size:10px;border:1px solid #aaa;" cellpadding="0" cellspacing="0">
+      <thead style="border:1px solid#aaa;">
+        <tr style="background-color: #aaa;">
+          <th style="padding:2px;border-right:1px solid#aaa;border-bottom:1px solid#aaa;">Sr</th>
+          <th style="padding:2px;border-right:1px solid#aaa;border-bottom:1px solid#aaa;">Description of Goods</th>
+          <th style="padding:2px;border-right:1px solid#aaa;border-bottom:1px solid#aaa;text-align: center;">Unit</th>
+          <th style="padding:2px;border-right:1px solid#aaa;border-bottom:1px solid#aaa;text-align: center;">Quantity</th>
+          <th style="padding:2px;border-right:1px solid#aaa;border-bottom:1px solid#aaa;text-align: center;">Rate/Unit</th>
+          <th style="padding:2px;border-bottom:1px solid#aaa;text-align: center;">Amount (Rs.)</th>
+        </tr>
+      </thead>
+      <tbody style="border-right:1px solid#aaa;border-left:1px solid#aaa;">
+        <%for(var i=0;i<list.length;i++){%>
+          <%if(list[i].ITM_AMOUNT!==0){%>
+            <tr>
+              <td style="padding:2px;border-right:1px solid#aaa;"><%=i+1%></td>
+              <td style="padding:2px;border-right:1px solid#aaa;"><%=list[i].ITM_NM%></td>
+              <td style="padding:2px;border-right:1px solid#aaa;text-align: right;"><%=list[i].ITM_UNIT%></td>
+              <td style="padding:2px;border-right:1px solid#aaa;text-align: right;"><%=list[i].ITM_QTY.toFixed(2)%></td>
+              <td style="padding:2px;border-right:1px solid#aaa;text-align: right;"><%=list[i].ITM_RATE.toFixed(2)%></td>
+              <td style="padding:2px;text-align: right;"><%=list[i].ITM_AMOUNT.toFixed(2)%>/-</td>
+            </tr>
+        <%}%>
+        <%}%>
+        <%for(var i=0;i<(10-list.length);i++){%>
+          <tr style="height:15px;">
+            <td style="padding:2px;border-right:1px solid#aaa;"></td>
+            <td style="padding:2px;border-right:1px solid#aaa;"></td>
+            <td style="padding:2px;border-right:1px solid#aaa;text-align: right;"></td>
+            <td style="padding:2px;border-right:1px solid#aaa;text-align: right;"></td>
+            <td style="padding:2px;border-right:1px solid#aaa;text-align: right;"></td>
+            <td style="padding:2px;text-align: right;"></td>
+          </tr>
+      <%}%>
+      <%if((po.CGST_PER && po.SGST_PER) || po.IGST_PER){%>
+        <tr style="height:15px;">
+          <td style="padding:2px;border-right:1px solid#aaa;border-top:1px solid #aaa;"></td>
+          <td style="padding:2px;border-right:1px solid#aaa;border-top:1px solid #aaa;">Total</td>
+          <td style="padding:2px;border-right:1px solid#aaa;text-align: right;border-top:1px solid #aaa;"></td>
+          <td style="padding:2px;border-right:1px solid#aaa;text-align: right;border-top:1px solid #aaa;"></td>
+          <td style="padding:2px;border-right:1px solid#aaa;text-align: right;border-top:1px solid #aaa;"></td>
+          <td style="padding:2px;text-align: right;border-top:1px solid #aaa;"><%=po.F_POBASIC.toFixed(2)%>/-</td>
+        </tr>
+        <%}%>
+        <%if(po.CGST_PER){%>
+        <tr style="height:15px;">
+          <td style="padding:2px;border-right:1px solid#aaa;"></td>
+          <td style="padding:2px;border-right:1px solid#aaa;">C.G.S.T @ <%=po.CGST_PER%>%</td>
+          <td style="padding:2px;border-right:1px solid#aaa;text-align: right;"></td>
+          <td style="padding:2px;border-right:1px solid#aaa;text-align: right;"></td>
+          <td style="padding:2px;border-right:1px solid#aaa;text-align: right;"></td>
+          <td style="padding:2px;text-align: right;"><%=po.CGST_AMT.toFixed(2)%>/-</td>
+        </tr>
+        <%}%>
+        <%if(po.SGST_PER){%>
+        <tr style="height:15px;">
+          <td style="padding:2px;border-right:1px solid#aaa;"></td>
+          <td style="padding:2px;border-right:1px solid#aaa;">S.G.S.T @ <%=po.SGST_PER%>%</td>
+          <td style="padding:2px;border-right:1px solid#aaa;text-align: right;"></td>
+          <td style="padding:2px;border-right:1px solid#aaa;text-align: right;"></td>
+          <td style="padding:2px;border-right:1px solid#aaa;text-align: right;"></td>
+          <td style="padding:2px;text-align: right;"><%=po.SGST_AMT.toFixed(2)%>/-</td>
+        </tr>
+        <%}%>
+        <%if(po.IGST_PER){%>
+        <tr style="height:15px;">
+          <td style="padding:2px;border-right:1px solid#aaa;"></td>
+          <td style="padding:2px;border-right:1px solid#aaa;">I.G.S.T @ <%=po.IGST_PER%>%</td>
+          <td style="padding:2px;border-right:1px solid#aaa;text-align: right;"></td>
+          <td style="padding:2px;border-right:1px solid#aaa;text-align: right;"></td>
+          <td style="padding:2px;border-right:1px solid#aaa;text-align: right;"></td>
+          <td style="padding:2px;text-align: right;"><%=po.IGST_AMT.toFixed(2)%>/-</td>
+        </tr>
+        <%}%>
+        <tr>
+          <td style="padding:2px;border-right:1px solid#aaa;border-top:1px solid#aaa;"></td>
+          <td style="padding:2px;border-right:1px solid#aaa;border-top:1px solid#aaa;">Final Total</td>
+          <td style="padding:2px;border-right:1px solid#aaa;border-top:1px solid#aaa;"></td>
+          <td style="padding:2px;border-right:1px solid#aaa;border-top:1px solid#aaa;"></td>
+          <td style="padding:2px;border-right:1px solid#aaa;border-top:1px solid#aaa;"></td>
+          <td style="padding:2px;text-align: right;border-top:1px solid#aaa;"><%=po.F_POAMT.toFixed(2)%>/-</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:10px;font-family: monospace;font-weight: 600;margin-bottom: 15px;">
+      Rupees <%=po.totalStr%> Only
+    </div>
+    <table style="width:100%;font-size:10px;">
+      <tr>
+        <td style="width:20%;">Destination</td>
+        <td>:&nbsp;<%=po.F_DESTIN%></td>
+      </tr>
+      <tr>
+        <td style="width:20%;">Despatch Through</td>
+        <td>:&nbsp;<%=po.F_DESPATCH%></td>
+      </tr>
+      <tr>
+        <td style="width:20%;">Time of Delivery</td>
+        <td>:&nbsp;<%=po.F_DLVTERM%></td>
+      </tr>
+      <tr>
+        <td style="width:20%;">Terms of Payment</td>
+        <td>:&nbsp;PO/<%=po.F_PAYTERM%></td>
+      </tr>
+      <tr>
+        <td style="width:20%;">Remarks</td>
+        <td>:&nbsp;
+          <%if(po.F_REMARK1){%><%=po.F_REMARK1%><br><%}%>
+          <%if(po.F_REMARK2){%><%=po.F_REMARK2%><br><%}%>
+          <%if(po.F_REMARK3){%><%=po.F_REMARK3%><br><%}%></td>
+      </tr>
+      <tr>
+        <td style="width:20%;">GSTIN</td>
+        <td>:&nbsp;
+          <%if(po.GST_REGION==="M"){%>27AAOCS6239P2ZM<%}%>
+          <%if(po.GST_REGION==="G"){%>30AAOCS6230P1ZO<%}%>
+          <%if(po.GST_REGION==="B"){%>29AAOCS6230P1ZJ<%}%>
+          <%if(po.GST_REGION==="K"){%>01AAOCS6230P1Z1<%}%>
+        </td>
+      </tr>
+      
+    </table>
+    <hr style="margin-bottom: 2px;margin-top: 2px;">
+    <table style="width:100%;font-size:10px;">
+      <tr>
+        <td style="width:40%;">Print By <%=userName%> <%=today%></td>
+        <td style="text-align: right;">You are requested to quote our PO No. in every Bill</td>
+      </tr>
+    </table>
+    <p style="font-size:10px;"><b>Terms & Conditions :</b></p>
+    <ul style="font-size:8px;">
+      <li>The PRODUCTS shall be properly packed and protected to avoid any damage during transportation, storage and handling.</li>
+      <li>Charges towards packing,forwarding at seller / sub-seller (FOT basis) re included in basic order value.</li>
+      <li>Unless otherwise agreed specifically, the payment terms mentioned in purchase order shall apply for the order.</li>
+      <li>Acceptance copy of this purchase order must reach us within 2 days failing to which STIPL reserves the right to cancel the purchase order without any furthur intimation.</li>
+      <li>Shelf life of material should not less than 80% at the time of receipt of material and MFG date and EXP date should be mention on the product clearly.</li>
+    </ul>
+    <p style="font-size:10px;"><b>Documentation :</b></p>
+    <ul style="font-size:8px;">
+      <li>2 sets of following documents should bether with the product while dispatch.Tax Invoice,  Delivery Challan,   Test Certificate (if required),  Copy of Purchase Order</li>
+      <li>All material supplied will be subject to inspection and approval by the purchaser. The purchaser reserves the right to inspect the material at any stage during manufacture of supply and to reject such portion thereof as may be found defective or not in conformance with the specification,without invalidating the reminder to the order, is so desired by the purchaser.</li>
+      <li>The supplier shall be under no liability for failure to deliver and the purchaser for failure to accept deliveries of goods.</li>
+      <li>If such failure is due to an Act of God,state enemies,fire,earthquake,floods,strikes,lockouts,transportation etc.</li>
+    </ul>
+    <!-- <img src="https://s3.ap-southeast-1.amazonaws.com/sukhothai.in/upload/SukhoThai+watermark.png" style="position: absolute;left:25%;top:30%;transform:translate(-50%,-50%);max-width:50%;text-align: center;"> -->
+  </div>

@@ -1,0 +1,479 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+
+        <% include ../partials/accountingSideMenu %>
+
+            <style>
+                .masterTable_filter {
+                    display: none;
+                }
+
+                .masterTable #masterTable_wrapper {
+                    margin-top: 0px !important;
+                }
+
+                .select2-close-mask {
+                    z-index: 2099;
+                }
+
+                .select2-dropdown {
+                    z-index: 3051;
+                }
+
+                /* table {
+    border-collapse: collapse;
+    } */
+            </style>
+
+
+
+            <div class="content__inner">
+                <% include accountHead %>
+                    <div class="col-md-12 text-right"><i class="fa fa-print btn btn-primary"
+                            onclick="printGroupingDetails(this)" style="margin-bottom:5px; "></i></div>
+                    <div class="mb-3"></div>
+                    <div class="card">
+                        <div class="card-body">
+
+                            <h2 class="page-title">
+                                <%=title%>
+                            </h2>
+
+                            <form name="frm-grid-search" id="frm-grid-search">
+                                <input type="hidden" class="form-control" name="masterType" value="Group" />
+                            </form>
+                            <!-- table table-bordered table-striped  display nowrap -->
+                            <div class="masterTable">
+                                <table id="masterTable" style="border:1px solid #726c6c" cellspacing="0" cellpadding="0"
+                                    class="table table-bordered table-striped  display nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-md-2" style="padding:0 10px; border:0.5px solid #726c6c; ">Group</th>
+
+                                            <th class="col-md-2" style="padding:0 10px; border:0.5px solid #726c6c; "> Balance Sheet</th>
+
+                                            <th class="col-md-2" style="padding:0 10px; border:0.5px solid #726c6c; "> Balance No</th>
+
+                                            <th class="col-md-2" style="padding:0 10px; border:0.5px solid #726c6c;">Profit And Loss</th>
+
+                                            <th class="col-md-2" style="padding:0 10px; border:0.5px solid #726c6c;">P/L No </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+            <div class="modal fade" id="groupAUModel" role="dialog" aria-labelledby="companyAULabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add Group <span class="text-secondary">(Add/Update)</span></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form id="sukhoERP" action="/route/FS_MASTERS/saveGroup" method="POST" autocomplete="OFF">
+                            <div class="modal-body">
+                                <div class="formFieldBlog">
+                                    <div class="row">
+                                        <label class="col-xl-3 col-lg-4 col-md-6 col-form-label">Group Code</label>
+                                        <div class="col-xl-9 col-lg-8 col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="groupCode" id="groupCode"
+                                                    required />
+                                                <i class="form-group__bar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-xl-3 col-lg-4 col-md-6 col-form-label">Group Link <span
+                                                class="text-red">*</span></label>
+                                        <div class="col-xl-9 col-lg-8 col-md-6">
+                                            <div class="form-group">
+                                                <select class="form-control select2" name="groupLink" id="groupLink"
+                                                    style="width: 100%;">
+                                                    <option value="">--select--</option>
+                                                </select>
+                                                <i class="form-group__bar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label class="col-xl-3 col-lg-4 col-md-6 col-form-label">Balance Sheet</label>
+                                        <div class="col-xl-9 col-lg-8 col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="F_BLSHEET" id="F_BLSHEET"
+                                                    required />
+                                                <i class="form-group__bar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label class="col-xl-3 col-lg-4 col-md-6 col-form-label">Balance Sheet
+                                            No</label>
+                                        <div class="col-xl-9 col-lg-8 col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="F_BSNO" id="F_BSNO"
+                                                    required />
+                                                <i class="form-group__bar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label class="col-xl-3 col-lg-4 col-md-6 col-form-label">P/L Accounts</label>
+                                        <div class="col-xl-9 col-lg-8 col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="F_PLACCT" id="F_PLACCT"
+                                                    required />
+                                                <i class="form-group__bar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label class="col-xl-3 col-lg-4 col-md-6 col-form-label">P/L Number</label>
+                                        <div class="col-xl-9 col-lg-8 col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="F_PLNO" id="F_PLNO"
+                                                    required />
+                                                <i class="form-group__bar"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <input type="hidden" class="form-control" name="groupName" id="groupName"
+                                        value="" />
+                                    <input type="hidden" name="masterType" id="masterType" value="Group" required />
+                                    <input type="hidden" name="f_Level" id="f_Level" value="1" required />
+                                    <input type="hidden" name="f_Grplvl1" id="f_Grplvl1" value="0" required />
+                                    <input type="hidden" name="f_Grplvl2" id="f_Grplvl2" value="0" required />
+                                    <input type="hidden" name="f_Grplvl3" id="f_Grplvl3" value="0" required />
+                                    <input type="hidden" name="closingbalDr" id="closingbalDr" value="0" required />
+                                    <input type="hidden" name="closingbalCr" id="closingbalCr" value="0" required />
+                                    <input type="hidden" class="form-control" name="companyId" value="<%=companyId%>"
+                                        id="companyId" />
+                                    <input type="hidden" class="form-control" name="accountingFromDate"
+                                        value="<%=accountingFromDate%>" id="accountingFromDate" />
+                                    <input type="hidden" class="form-control" name="accountingToDate"
+                                        value="<%=accountingToDate%>" id="accountingToDate" />
+                                    <input type="hidden" class="form-control" name="accountingYear" id="accountingYear"
+                                        value="<%=accountingYear%>" />
+                                    <input type="hidden" class="form-control" name="currencyCode" id="currencyCode"
+                                        value="INR" readonly />
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <input type="hidden" class="form-control" name="AccessToken"
+                                            value="<%= AccessToken %>" />
+                                        <div class="alert alert-success alert-dismissible fade show alert-hidden"
+                                            id="success-alert-add">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                            <strong>Success! </strong> Record added successfully.
+                                        </div>
+                                        <div class="alert alert-info alert-dismissible fade show alert-hidden"
+                                            id="success-alert-update">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            <strong>Success! </strong> Record Update successfully.
+                                        </div>
+                                        <div class="alert alert-danger alert-dismissible fade show d-none"
+                                            id="success-alert-error">
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                            <strong>Error! </strong> <span class="custom_error"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary btn-block"
+                                    id="erp_formSubmit">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+            <script>
+
+                function getMenuData() {
+                    openNav();
+                }
+
+                // http://localhost:5002/route/FS_MASTERS/getData/Group/2021
+                function getGroupList(mType) {
+                    var accountingYear = $("#accountingYear").val();
+                    $.ajax({
+                        url: "/route/FS_MASTERS/getData/" + mType + "/" + accountingYear,
+                        type: "GET",
+                        success: function (data) {
+
+                            var obj = {};
+                            var obj2 = {};
+                            for (var i = 0; i < data.data.length; i++) {
+                                obj2[data.data[i].groupCode] = data.data[i];
+                                if (data.data[i].groupLink === "") {
+                                    obj[data.data[i].groupCode] = {};
+                                }
+                            }
+                            for (var key in obj) {
+                                for (var i = 0; i < data.data.length; i++) {
+                                    if (data.data[i].groupLink === key) {
+                                        obj[key][data.data[i].groupCode] = {};
+                                    }
+                                }
+                                for (var key2 in obj[key]) {
+                                    for (var i = 0; i < data.data.length; i++) {
+                                        if (data.data[i].groupLink === key2) {
+                                            obj[key][key2][data.data[i].groupCode] = {};
+                                        }
+                                    }
+                                }
+                                for (var key3 in obj[key][key2]) {
+                                    for (var i = 0; i < data.data.length; i++) {
+                                        if (data.data[i].groupLink === key3) {
+                                            obj[key][key2][key3][data.data[i].groupCode] = {};
+                                        }
+                                    }
+                                }
+                            }
+
+                            var groupCode = '<option value="">--select--</option>';
+                            if (data && data.data) {
+                                for (var index = 0; index < data.data.length; index++) {
+                                    const element = data.data[index];
+                                    groupCode += '<option value="' + element.groupCode + '">&nbsp;' + element.groupCode + '&nbsp;</option>';
+                                }
+                            }
+                            var str = '';
+                            for (var key in obj) {
+                                str += '<tr>';
+                                str += '<td style="padding: 1px 15px; border-top:0px solid #000; border-left:1px solid #000; border-right:0px; border-bottom:1px solid #000;"><a style="text-decoration: none; font-weight: bold" class="grid-edit-row text-st-purple" data-toggle="modal" data-target="#groupAUModel" data-id="' + obj2[key]._id + '" href="#">' + key + '</a>';
+                                if (Object.keys(obj[key]).length > 0) {
+                                    for (var key2 in obj[key]) {
+                                        str += '<br><a style="margin-left:25px; text-decoration: none;"  class="grid-edit-row text-gray" data-toggle="modal" data-target="#groupAUModel" data-id="' + obj2[key2]._id + '" href="#">' + key2 + '</a>';
+                                        if (Object.keys(obj[key][key2]).length > 0) {
+                                            for (var key3 in obj[key][key2]) {
+                                                str += '<br><a style="margin-left:50px;text-decoration: none;" class="grid-edit-row text-blue" data-toggle="modal" data-target="#groupAUModel" data-id="' + obj2[key3]._id + '" href="#">' + key3 + '</a>';
+                                                if (Object.keys(obj[key][key2][key3]).length > 0) {
+                                                    for (var key4 in obj[key][key2][key3]) {
+                                                        str += '<br><a style="margin-left:75px;text-decoration: none;" class="grid-edit-row text-blue" data-toggle="modal" data-target="#groupAUModel" data-id="' + obj2[key4]._id + '" href="#">' + key4 + '</a>';
+                                                        if (Object.keys(obj[key][key2][key3][key4]).length > 0) {
+                                                            for (var key5 in obj[key][key2][key3][key4]) {
+                                                                str += '<br><a style="margin-left:75px;text-decoration: none;" class="grid-edit-row text-blue" data-toggle="modal" data-target="#groupAUModel" data-id="' + obj2[key5]._id + '" href="#">' + key5 + '</a>';
+
+                                                                if (Object.keys(obj[key][key2][key3][key4][key5]).length > 0) {
+                                                                    for (var key6 in obj[key][key2][key3][key4][key5]) {
+                                                                        str += '<br><a style="margin-left:75px;text-decoration: none;" class="grid-edit-row text-blue" data-toggle="modal" data-target="#groupAUModel" data-id="' + obj2[key6]._id + '" href="#">' + key6 + '</a>';
+                                                                    }
+                                                                }
+
+
+
+                                                            }
+                                                        }
+
+
+
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                str += '</td>';
+                                str += '<td style="padding: 1px 15px; border-top:0px solid #726c6c; border-left:1px solid #726c6c; border-right:1px solid #726c6c; border-bottom:1px solid #726c6c;">' + ((obj2[key] && obj2[key].F_BLSHEET !== "") ? obj2[key].F_BLSHEET : "") + '</td>';
+                                str += '<td style="padding:1px 15px; border-top:0px solid #726c6c; border-left:1px solid #726c6c; border-right:1px solid #726c6c; border-bottom:1px solid #726c6c;">' + ((obj2[key] && obj2[key].F_BSNO !== "") ? obj2[key].F_BSNO : "") + '</td>';
+                                str += '<td style="padding: 1px 15px; border-top:0px solid #726c6c;border-bottom:1px solid #726c6c; border-left:0px; border-right:1px solid #726c6c;">' + ((obj2[key] && obj2[key].F_PLACCT !== "") ? obj2[key].F_PLACCT : "") + '</td>';
+                                str += '<td style="padding:1px 15px; border-top:0px solid #726c6c;border-bottom:1px solid #726c6c; border-left:0px; border-right:1px solid #726c6c;">' + ((obj2[key] && obj2[key].F_PLNO !== "") ? obj2[key].F_PLNO : "") + '</td>';
+                                str += '</tr>';
+                            }
+                            $('#masterTable tbody').html(str);
+                            $("#groupLink").html(groupCode);
+                            // $("#groupCode").select2();
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                        }
+                    });
+                }
+
+                $(document).ready(function () {
+
+                    var SubmitUrlId;
+                    var populate_data = {};
+                    var action_type;
+                    var NewObject;
+                    var flag = false;
+
+                    getGroupList("Group");
+
+                    // DATATABLE.
+                    /*var dataColumns = [{
+                        data: "_id",
+                        sTitle: "Id",
+                        visible: false
+                    },{
+                        data: "groupCode",
+                        sTitle: "Group Code",
+                        visible: true,
+                        className : "column-200",
+                        render: function (data, type, row) {
+                            // return '<a href="#" class="grid-edit text-st-purple"  data-id="'+row._id+'">'+data+'</a>';
+                            var html = '<a  class="grid-edit-row text-st-purple" data-toggle="modal" data-target="#groupAUModel" data-id="' + row._id + '" href="#">' + data + '</a>';
+                            return html;
+                        },
+                    },{
+                        data: "accountingYear",
+                        sTitle: "Accounting Year",
+                        visible: false,
+                        className : "column-160"
+                    },{
+                        data: "groupName",
+                        sTitle: "Group",
+                        visible: false,
+                        className : "column-150"
+                    },{
+                        data: "closingbalDr",
+                        sTitle: "Closing Dr",
+                        visible: true,
+                        className : "column-100 text-right"
+                    },{
+                        data: "closingbalCr",
+                        sTitle: "Closing Cr",
+                        visible: true,
+                        className : "column-100 text-right"
+                    },{
+                        data: "groupLink",
+                        sTitle: "Group Link",
+                        visible: true,
+                        className : "column-150"
+                    }];
+                
+                    var DrawTableInquiry = DrawCustomDataTable("masterTable", 350, "/route/FS_MASTERS/data-grid-view", dataColumns, [
+                        [0, "desc"]
+                        ], "frm-grid-search",null,true,true);
+                
+                    $( "#frm-grid-search" ).validate({
+                            errorPlacement: function(error, element) {
+                        },submitHandler: function(form) {
+                            DrawTableInquiry.ajax.reload();
+                        } 
+                    });*/
+
+                    $("#sukhoERP").validate({
+                        submitHandler: function (form) {
+                            var $form = $(form);
+                            var url = $form.attr('action');
+                            if (action_type == "PUT") {
+                                url = "/route/FS_MASTERS/groupUpdate";
+                                url += SubmitUrlId;
+                            }
+                            var formdata = $form.serializeObject();
+                            if (formdata.groupLink) {
+                                $.ajax({
+                                    url: url,
+                                    type: action_type || "POST",
+                                    data: JSON.stringify(formdata),
+                                    contentType: "application/json; charset=utf-8",
+                                    dataType: "json",
+                                    success: function (result) {
+                                        getGroupList("Group");
+                                        if (result.message == "Save Successfully") {
+                                            $("#success-alert-add").alert();
+                                            $("#success-alert-add").fadeTo(2000, 500).slideUp(500, function () {
+                                            });
+                                        } else {
+                                            $("#success-alert-update").alert();
+                                            $("#success-alert-update").fadeTo(2000, 500).slideUp(500, function () {
+                                            });
+                                        }
+                                        document.getElementById("sukhoERP").reset();
+                                        $("#parent").trigger('change');
+                                        $("#branch").select2();
+                                        // DrawTableInquiry.ajax.reload();
+                                        // action_type = "POST";
+                                        // SubmitUrlId = "";
+                                    },
+                                    error: function (jqXHR, textStatus, errorThrown) {
+                                        $("#success-alert-error").alert();
+                                        $("#success-alert-error").fadeTo(2000, 500).slideUp(500, function () {
+                                        });
+                                    }
+                                });
+                            } else {
+                                notification({ type: "danger", message: "Cant Create Group without groupLink." })
+                            }
+                        }
+                    });
+
+                    $(".form_add_entry").click(function () {
+                        $('#groupAUModel').modal('show');
+                        document.getElementById("sukhoERP").reset();
+                        action_type = "POST";
+                        $(".form-title").html("Add New");
+                        // $(".form_add_entry").hide();
+                        $("#groupLink").select2();
+                    });
+
+                    $(document).on('change', '.accountingYear', function () {
+                        // DrawTableInquiry.ajax.reload();
+                    });
+
+
+                    // POPULATE DATA.
+                    $(document).on('click', '.grid-edit-row', function () {
+                        var id = $(this).attr("data-id");
+                        $("#erp_formSubmit").html("Update");
+                        $.ajax({
+                            url: "/route/FS_MASTERS/" + id,
+                            type: "GET",
+                            success: function (data) {
+                                $('#groupAUModel').modal('show');
+                                $(".form_add_entry").show();
+                                var dataNew = data;
+                                $.when($('#sukhoERP').populate(dataNew)).done(function (x) {
+                                    SubmitUrlId = "/" + dataNew._id;
+                                    action_type = "PUT";
+                                    NewObject = data;
+                                    flag = true;
+                                    $(".form_add_entry").show();
+                                    $("#groupLink").select2();
+                                });
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                $("#success-alert-error").alert();
+                                $("#success-alert-error").fadeTo(2000, 500).slideUp(500, function () {
+                                });
+                            }
+                        });
+                    });
+
+                });
+
+                //for print Checklist
+                function printGroupingDetails() {
+                    var divToPrint = document.getElementById("masterTable");
+                    divToPrint.style.border = "1px";
+                    newWin = window.open("");
+                    newWin.document.write(divToPrint.outerHTML);
+                    newWin.print();
+                    newWin.close();
+                };
+
+            </script>
+
+            <% include ../partials/footer %>

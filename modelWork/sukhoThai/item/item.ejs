@@ -1,0 +1,784 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+
+        <style type="text/css">
+            .partyList {
+                position: absolute;
+                width: 100%;
+                border: 1px solid #ccc;
+                z-index: 2;
+                background-color: #fff;
+                box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
+                padding: 10px 5px;
+            }
+
+            .partyList ul {
+                max-height: 200px;
+            }
+
+            .partyList ul li {
+                padding: 5px;
+                cursor: pointer;
+                transition: all 0.5s ease;
+            }
+
+            .partyList ul li:hover {
+                background-color: #ddd;
+            }
+        </style>
+
+        <div class="content__inner">
+            <h2 class="page-title">Payment Pool Master</h2>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card">
+                        <form id="frm-grid-search" name="frm-grid-search" style="display: block;" autocomplete="OFF">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="">Branch</label>
+                                    <select class="form-control select2 branchSearch" name="branch" id="branch">
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">For Expense</label>
+                                    <div class="select">
+                                        <select class="form-control" name="forExpense">
+                                            <option value=""></option>
+                                            <option value="Rent">Rent</option>
+                                            <option value="Purchase">Purchase</option>
+                                            <option value="Proffesional Fees">Proffesional Fees</option>
+                                            <option value="Utilities">Utilities</option>
+                                            <option value="Vehicle Expenses">Vehicle Expenses</option>
+                                            <option value="Fire Extinguisher">Fire Extinguisher</option>
+                                            <option value="GST">GST</option>
+                                            <option value="TDS">TDS</option>
+                                        </select>
+                                        <i class="form-group__bar"></i>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">PAYMENT CYCLE</label>
+                                    <div class="select">
+                                        <select class="form-control" name="payCycle">
+                                            <option value=""></option>
+                                            <option value="Days">Days</option>
+                                            <option value="Weekly">Weekly</option>
+                                            <option value="Monthly">Monthly</option>
+                                            <option value="Quaterly">Quaterly</option>
+                                            <option value="Half Yearly">Half Yearly</option>
+                                            <option value="Yearly">Yearly</option>
+                                        </select>
+                                        <i class="form-group__bar"></i>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Party Name</label>
+                                    <input type="text" class="form-control" name="partyName">
+                                    <i class="form-group__bar"></i>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Validity</label>
+                                    <input type="text" class="form-control validity" name="date1" id="validity">
+                                    <i class="form-group__bar"></i>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary btn-guest btn-block">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-6 mb-3 mb-sm-0">
+                                    <a href="#0" data-toggle="modal" data-target="#addnewpaymentpoolmodal"
+                                        class="btn btn-block btn-primary">+ Add New</a>
+                                </div>
+
+                            </div>
+                            <hr>
+                            <div class="col-md-12 r-col">
+                                <table id="paymentPoolTable"
+                                    class="table table-bordered table-striped display nowrap order-column"
+                                    style="width:100%;">
+                                    <tbody class="appar">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="addnewpaymentpoolmodal" tabindex="-1" role="dialog"
+            aria-labelledby="addnewpaymentpoolmodalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addnewpaymentpoolmodalLabel">Payment Pool</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="poolMaster" name="poolMaster" autocomplete="OFF">
+                        <div class="modal-body">
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="">Inv Type</label>
+                                        <div class="select">
+                                            <select name="INV_TYPE" class="form-control" onclick="getItemsData(this)"
+                                                required>
+                                                <option value=""></option>
+                                                <option value="Item">Item</option>
+                                                <option value="ItemGroup">ItemGroup</option>
+
+                                            </select>
+                                            <i class="form-group__bar"></i>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="">Item Group</label>
+                                        <div class="select">
+                                            <select name="ITEM_GROUP" class="form-control itemData" required>
+                                                <option value=""></option>
+                                            </select>
+                                            <i class="form-group__bar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6  ITEM_SRNO">
+                                    <div class="form-group">
+                                        <label for="">Item Sr No.</label>
+                                        <input type="number" name="ITEM_SRNO" class="form-control ITEM_SRNO">
+                                        <i class="form-group__bar"></i>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6  ITEM_NAME">
+                                    <div class="form-group">
+                                        <label for="">Item Name</label>
+                                        <input type="text" name="ITEM_NAME" class="form-control ITEM_NAME">
+                                        <i class="form-group__bar"></i>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="">Item Unit</label>
+                                        <div class="select">
+                                            <select name="ITEM_UMO" class="form-control" required>
+                                                <option value=""></option>
+                                            </select>
+                                            <i class="form-group__bar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="col-md-6  ITEM_UMO">
+                                    <div class="form-group">
+                                        <label for="">Item Unit</label>
+                                        <input type="text" name="ITEM_UMO" class="form-control ITEM_UMO">
+                                        <i class="form-group__bar"></i>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn-block btn btn-primary notifier submitPoolData">Save Data To
+                                pool
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/af.js"
+            type="text/javascript"></script>
+        <script>
+            var partyNew = true;
+            var DrawTableInquiry;
+
+
+            // function getItemsData() {
+            //     $.ajax({
+            //         type: 'post',
+            //         url: "/route/itemReq/itemList",
+            //         success: function (result) {
+            //             console.log("resultresultresult", result)
+            //             var resData = '';
+            //             for (var i = 0; i < result.length; i++) {
+            //                 if (result[i].INV_TYPE === "Item") {
+            //                     console.log("result[i].INV_TYPE", result[i].INV_TYPE)
+            //                     resData += '<option value="' + result[i].type + '">' + '</option>';
+
+            //                 } else if (result[i].INV_TYPE === "Item Group") {
+            //                     resData += '<option value="' + result[i].group + '">' + '</option>';
+            //                 }
+            //                 if (resData !== "") {
+            //                     document.querySelector('.paySubd').innerHTML = resData;
+            //                 }
+            //             };
+            //             $('.branch').html(resData);
+            //             $('.branchSearch').html(resData);
+            //         },
+            //         error: function (jqXHR, textStatus, errorThrown) {
+            //             alert("Error In Loading Data. Please Refresh Page.");
+            //         }
+            //     });
+            // }
+
+            var data = { 'DBFNAME': ['INV_MASTER'] };
+
+            // function getItemsData() {
+            //     $.ajax({
+            //         type: 'post',
+            //         url: "/route/itemReq/itemList",
+            //         data: data,
+            //         success: function (result) {
+            //             console.log("resultresult", result);
+            //             var option1 = ``;
+
+            //             result.data.forEach(ele => {
+            //                 console.log("dataaaaaaaaa", ele);
+            //                 if (ele.type == "Item") {
+            //                     option1 += `<option value="${ele.INV_TYPE}">${ele.INV_TYPE}</option>`;
+            //                 } else if (ele.group == "Item Group") {
+            //                     option1 += `<option value="${ele.group}">${ele.group}</option>`;
+            //                 }
+
+            //                if (option1 !== "") {
+            //                    document.querySelector('.paySub').innerHTML = option1;
+            //                 }
+
+            //             })
+            //             // $(".INV_TYPE").append(option1);
+            //             // $(".ITEM_GROUP").append(option1);
+            //             // $(".ITEM_GROUP").append(option1);
+            //         },
+            //         error: function (jqXHR, textStatus, errorThrown) {
+            //             alert("Error In Loading Data. Please Refresh Page.");
+            //         }
+            //     });
+            // }
+
+            // function getItemsData() { //run
+            //     $.ajax({
+            //         type: 'post',
+            //         url: "/route/itemReq/itemList",
+            //         data: data,
+            //         success: function (result) {
+            //             console.log("resultresult", result);
+            //             var option1 = ``;
+
+            //             result.data.forEach(ele => {
+            //                 console.log("dataaaaaaaaa", ele);
+            //                 if (ele.INV_TYPE == "Item") {
+            //                     option1 += `<option value="${ele.INV_TYPE}">${ele.INV_TYPE}</option>`;
+            //                 } else if (ele.INV_TYPE == "ItemGroup") {
+            //                     option1 += `<option value="${ele.ITEM_NAME}">${ele.ITEM_NAME}</option>`;
+            //                 }
+
+            //                if (option1 !== "") {
+            //                    document.querySelector('.paySubd').innerHTML = option1;
+            //                 }
+
+            //             })
+
+            //         },
+            //         error: function (jqXHR, textStatus, errorThrown) {
+            //             alert("Error In Loading Data. Please Refresh Page.");
+            //         }
+            //     });
+            // }
+
+            function getItemsData() { //run
+                $.ajax({
+                    type: 'post',
+                    url: "/route/itemReq/itemList",
+                    data: data,
+                    success: function (result) {
+                        console.log("resultresult", result);
+                        var option1 = ``;
+
+                        result.data.forEach(ele => {
+                            console.log("dataaaaaaaaa", ele);
+                            if (ele.INV_TYPE == "Item") {
+                                option1 += `<option value="${ele.ITEM_GROUP}">${ele.ITEM_GROUP}</option>`;
+                            } else if (ele.INV_TYPE == "ItemGroup") {
+                                option1 += `<option value="${ele.ITEM_GROUP}">${ele.ITEM_GROUP}</option>`;
+                            }
+
+                            if (option1 !== "") {
+                                document.querySelector('.itemData').innerHTML = option1;
+                            }
+
+                        })
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("Error In Loading Data. Please Refresh Page.");
+                    }
+                });
+            }
+
+            var data = { 'master_type': ['Unit'] };
+
+            console.log("datatdatdtata", data);
+            $.ajax({
+                url: '/route/itemReq/BC_MASTER',
+                type: 'post',
+                data: data,
+                success: function (result) {
+                    console.log(result);
+                    var option = ``;
+
+                    result.data.forEach(ele => {
+                        console.log("dataaaaaaaaaUnit", ele);
+                        if (ele.master_type == "Unit") {
+                            option += `<option value="${ele.value}">${ele.value}</option>`;
+                        }
+
+                    })
+                    $(".ITEM_UMO").append(option);
+
+                }
+            })
+
+
+
+            function stopPay(poolNumber) {
+                var a = confirm("Are you want to stop payment for this pool?")
+                if (a) {
+                    $.ajax({
+                        url: "/route/paymentPool/stopPayment",
+                        type: "POST",
+                        data: JSON.stringify({ poolNumber: poolNumber }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (result) {
+
+                            // location.reload();
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert("Error In Saving SMS Data.");
+                        }
+                    });
+                }
+            }
+
+            function getUser(id) {
+                var id = id.getAttribute('data-id');
+                $.ajax({
+                    url: "/route/itemReq/BC_MASTER",
+                    type: "post",
+                    data: { id: id },
+                    success: function (result) {
+                        console.log("hi");
+                        console.log(result.data[0]);
+                        var iddata = {
+                            id: result.data[0]._id
+                        }
+                        $.when($('#poolMaster').populate(result.data[0])).done(function (x) { });
+
+
+                        populate('#poolMaster', iddata);
+                        $('#addnewpaymentpoolmodalLabel').modal('show');
+                    }
+                })
+            }
+            function convertToDateNew(data, type) {
+                var day, month, year, date;
+                var monthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                // var date = new Date(data);
+                // var dateTimeFormat = function (date) {
+                data = new Date(data);
+                var time = Math.round(data.getTime() / 1000) - 19800;
+                date = new Date(time * 1000);
+
+                var year = date.getFullYear();
+                var month = date.getMonth() + 1;
+                var day = date.getDate();
+
+                if (month < 10) month = '0' + month;
+                if (day < 10) day = '0' + day;
+                var getHours = date.getHours(); // => 9
+                var getMinutes = date.getMinutes(); // =>  30
+                var getSeconds = date.getSeconds(); // => 51
+                if (type == "Date") {
+                    // var parseDate = day + "/" + monthNames[month] + "/" + year;
+                    month = parseInt(month);
+                    var parseDate = day + " " + monthNames[month - 1] + " " + year;
+                    return parseDate;
+                } else {
+                    var parseDate = customPad(getHours) + ":" + customPad(getMinutes);
+                    return parseDate;
+                }
+
+            }
+
+            function customPad(a, b, c, d) {
+                return a = (a || c || 0) + '', b = new Array((++b || 3) - a.length).join(c || 0), d ? a + b : b + a
+            }
+
+            function branchData() {
+                $.ajax({
+                    type: 'get',
+                    url: "/route/spaLocationST/getLocationListNew",
+                    cache: false,
+                    success: function (result) {
+
+                        var resData = '';
+                        resData += '<option value="">SELECT</option>';
+                        resData += '<option value="ALL">ALL</option>';
+                        for (var i = 0; i < result.length; i++) {
+                            resData += '<option value="' + result[i].ST_BRN + '">' + result[i].ST_BRN + ' - ' + result[i].ST_LOCN + '</option>';
+                        };
+                        $('.branch').html(resData);
+                        $('.branchSearch').html(resData);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("Error In Loading Data. Please Refresh Page.");
+                    }
+                });
+            }
+
+            $(document).ready(function () {
+                $('#validity').daterangepicker({
+                    locale: {
+                        format: 'DD/MM/YYYY'
+                    },
+                    startDate: moment().startOf('month'),
+                    endDate: moment().endOf('month'),
+                    ranges: {
+                        'Today': [moment(), moment()],
+                        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                        'This Month': [moment().startOf('month'), moment().endOf('month')],
+                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month')
+                            .endOf('month')
+                        ]
+                    }
+                });
+                $('#validity').val("");
+                // branchData();
+                var dataColumns = [
+
+                    {
+                        data: "_id",
+                        sTitle: "Id",
+                        visible: false
+                    },
+
+                    {
+                        data: "INV_TYPE",
+                        sTitle: "INV TYPE",
+                        visible: true,
+                        className: "fs15--design",
+                    },
+
+                    {
+                        data: "ITEM_GROUP",
+                        sTitle: "ITEM GROUP",
+                        visible: true,
+                        className: "fs15--design",
+                    },
+
+                    {
+                        data: "ITEM_SRNO",
+                        sTitle: "INV. SRNO",
+                        visible: true,
+                        className: "fs15--design",
+                    },
+
+                    {
+                        data: "ITEM_NAME",
+                        sTitle: "ITEM NAME",
+                        visible: true,
+                        className: "fs15--design",
+                    },
+
+                    {
+                        data: "ITEM_UMO",
+                        sTitle: "ITEM UNIT",
+                        visible: true,
+                        className: "fs15--design",
+                    },
+
+                    {
+                        data: "Item",
+                        sTitle: "Action",
+                        visible: true,
+
+                        render: function (data, type, row) {
+
+                            var html =
+                                ' <span class="btn btn-primary btn-block " data-id="' + row
+                                    ._id +
+                                '" onclick="getUser(this) "><i class="fa fa-pencil"></i>  Edit</span>';
+
+                            return html;
+                        }
+                    }
+
+                ];
+
+
+                DrawTableInquiry = DrawCustomDataTable("paymentPoolTable", 500,
+                    "/route/itemReq/gridData", dataColumns, [
+                    [0, "asc"]
+                ], "frm_grid_search", null, true, true);
+
+                $("#frm-grid-search").validate({
+                    errorPlacement: function (error, element) {
+                    }, submitHandler: function (form) {
+                        DrawTableInquiry.ajax.reload();
+                    }
+                });
+                $("form#poolMaster").submit(function (e) {
+                    e.preventDefault();
+                });
+
+                $("#poolMaster").validate({
+                    ignore: [],
+                    errorPlacement: function (error, element) {
+                        error.insertAfter(element);
+                    },
+                    submitHandler: function (form) {
+                        $(".overlay").show();
+                        var $form = $(form);
+
+                        var url = "/route/itemReq/saveBcRequest";
+                        var formData = $form.serializeObject();
+                        console.log(formData);
+                        action_type = "POST";
+
+
+                        $.ajax({
+                            url: url,
+                            type: action_type,
+                            data: JSON.stringify(formData),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+
+                            success: function (result) {
+                                partyNew = true;
+                                if (result) {
+                                    DrawTableInquiry.ajax.reload();
+                                    $('.notifier').text(result.message);
+                                    $('.notifier').addClass('bg-green');
+                                    $('.notifier').removeClass('bg-red');
+                                    $('.notifier').removeClass('btn-primary');
+                                    setTimeout(() => {
+                                        $('#addnewpaymentpoolmodal').modal('hide');
+                                        $('.notifier').text("Save Data To Pool");
+                                        $('.notifier').removeClass('bg-red');
+                                        $('.notifier').removeClass('bg-green');
+                                        $('.notifier').addClass('btn-primary');
+                                    }, 2000)
+                                } else {
+                                    $('.notifier').text(result.message);
+                                    $('.notifier').addClass('bg-red');
+                                    $('.notifier').removeClass('bg-green');
+                                    $('.notifier').removeClass('btn-primary');
+                                }
+                                $('.submitPoolData').removeAttr('disabled');
+                            }
+                        });
+                    }
+                });
+            }
+            );
+
+
+            $(document).on('click', '.grid-edit-row', function () {
+                var number = $(this).attr('data-mob');
+                MOB_NUMBER = number;
+                var name = $(this).attr('data-name');
+                GUEST_NAME = name;
+                var extnNo = '<%= username.F21_EXTN %>';
+                // extnNo = "4589";
+                $("#SMSModelHeading").html(GUEST_NAME);
+                clickToCall(extnNo, number);
+                document.getElementById("AppointmentForm").reset();
+                var id = $(this).attr("data-id");
+                var url = "/route/itemReq/" + id;
+                console.log(url);
+                $(".smsText__heading").html("<span>" + name + "</span><span>" + number + "</span>");
+                $("#smsSendModule").modal('show');
+                $.get(url, {}, function (data) {
+                    populate_data = data;
+                    $.when($('#AppointmentForm').populate(data)).done(function (x) {
+                        // $('.select2').select2();
+                        SubmitUrlId = "/" + populate_data._id;
+                        action_type = "PUT";
+                        NewObject = data;
+                        flag = true;
+                    });
+                });
+            });
+
+            $('.payCycle').on('change', function () {
+                var val = $(this).val();
+                if (val === "Weekly") {
+                    $('.payWeekDay').removeClass('d-none');
+                    $('.payMonthDate').addClass('d-none');
+                    $('.payDay').addClass('d-none');
+                } else if (val === "Days") {
+                    $('.payDay').removeClass('d-none');
+                    $('.payWeekDay').addClass('d-none');
+                    $('.payMonthDate').addClass('d-none');
+                } else {
+                    $('.payWeekDay').addClass('d-none');
+                    $('.payMonthDate').removeClass('d-none');
+                    $('.payDay').addClass('d-none');
+                }
+            });
+
+            $('.intimationGiven').on('change', function () {
+                var val = $(this).val();
+                if (val === "Yes") {
+                    $('.intimationDay').removeClass('d-none');
+                    $('.intimationMobile').removeClass('d-none');
+                } else {
+                    $('.intimationDay').addClass('d-none');
+                    $('.intimationMobile').addClass('d-none');
+                }
+            });
+
+            $('.gstRate').on('keyup', function () {
+                var val = ($(this).val() !== "") ? parseInt($(this).val()) : 0;
+                var basicAmount = ($('.basicAmount').val() !== "") ? parseInt($('.basicAmount').val()) : 0;
+                var gstAmount = basicAmount * (val / 100);
+                $('.gstAmount').val(gstAmount);
+                $('.grossAmount').val(basicAmount + gstAmount);
+                $('.netAmount').val(basicAmount + gstAmount);
+            });
+
+            $('.tdsRate').on('keyup', function () {
+                var val = ($(this).val() !== "") ? parseInt($(this).val()) : 0;
+                var basicAmount = ($('.basicAmount').val() !== "") ? parseInt($('.basicAmount').val()) : 0;
+                var grossAmount = ($('.grossAmount').val() !== "") ? parseInt($('.grossAmount').val()) : 0;
+                var tdsAmount = basicAmount * (val / 100);
+                $('.tdsAmount').val(tdsAmount);
+                $('.netAmount').val(grossAmount - tdsAmount);
+            });
+
+            $('.accountCode').on('keyup', function () {
+                var val = $(this).val();
+                $.ajax({
+                    url: "/route/paymentPool/partyDetails",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ text: val }),
+                    dataType: "json",
+                    success: function (result) {
+                        var str = ``;
+                        for (let i = 0; i < result.data.length; i++) {
+                            str += `<li onclick="setDataToParty(this)" data-bal="0" data-id="${result.data[i].accountCode}" data-val="${result.data[i].accountCode}">${result.data[i].accountCode}</li>`;
+                        }
+                        if (str !== "") {
+                            $('.partyList ul').html(str);
+                            $('.partyList').removeClass('d-none');
+                        }
+                    }
+                });
+            });
+
+
+            $(document).on('click', '#smsFormSubmit', function () {
+                var smsText = $("#smsText").val();
+                var obj = {};
+                obj.guestMobileNumber = MOB_NUMBER;
+                obj.guestName = GUEST_NAME;
+                obj.smsValue = smsText;
+                if (smsText == "") {
+                    alert('Please Fill SMS Text');
+                } else {
+                    $.ajax({
+                        url: "/route/stCallLog/onMissedCallSendSmsToGuest",
+                        type: "POST",
+                        data: JSON.stringify(obj),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (result) {
+                            alert("SMS SEND.");
+                            $("#smsSendModule .close").click();
+                            // location.reload();
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert("Error In Saving SMS Data.");
+                        }
+                    });
+                }
+            });
+
+            $(document).on('blur', '.updatePurpose', function () {
+                var guestPurpose = $(this).val();
+                var fieldId = $(this).attr("data-id");
+                var obj = {};
+                // obj.guestMobileNumber = MOB_NUMBER;
+                obj.guestPurpose = guestPurpose;
+                // obj.smsValue = smsText;
+                if (smsText == "") {
+                    alert('Please Fill data');
+                } else {
+                    $.ajax({
+                        url: "/route/stCallLog/updateNamePurpose/" + fieldId,
+                        type: "PUT",
+                        data: JSON.stringify(obj),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (result) {
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            // alert("Error In Saving Data.");
+                        }
+                    });
+                }
+            });
+
+            $(document).on('blur', '.updateName', function () {
+                var guestname = $(this).val();
+                var fieldId = $(this).attr("data-id");
+                var obj = {};
+                // obj.guestMobileNumber = MOB_NUMBER;
+                obj.name = guestname;
+                // obj.smsValue = smsText;
+                if (smsText == "") {
+                    alert('Please Fill name');
+                } else {
+                    $.ajax({
+                        url: "/route/stCallLog/updateNamePurpose/" + fieldId,
+                        type: "PUT",
+                        data: JSON.stringify(obj),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (result) {
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            // alert("Error In Saving Data.");
+                        }
+                    });
+                }
+            });
+
+
+
+        </script>
+
+        <% include ../partials/footer %>

@@ -1,0 +1,755 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+
+
+        <style>
+            /* ---------------- */
+            .contentRow {
+                white-space: break-spaces !important;
+            }
+
+            .tourcode,
+            .formno {
+                text-transform: uppercase;
+                font-size: 16px;
+                font-weight: 800;
+            }
+
+            .tourname {
+                font-size: 12px;
+            }
+
+            .tour-detials {
+                font-size: 15px;
+                white-space: nowrap;
+            }
+
+            .background-box {
+                background: #dadada;
+                padding: 1px 5px;
+                border-radius: 4px;
+            }
+
+            .col-150 {
+                min-width: 150px;
+                max-width: 150px;
+                width: 150px;
+            }
+
+            .col-50 {
+                min-width: 50px;
+                max-width: 50px;
+                width: 50px;
+            }
+
+            .alert {
+                width: auto;
+                padding: 20px;
+                font-size: 15px;
+                top: 63px !important;
+                right: 20px !important;
+                z-index: 999999 !important;
+            }
+
+            .ibTable tr td {
+                padding: 3px;
+            }
+
+            .calIpBox {
+                border-bottom: 1px solid #fff;
+            }
+
+            label.error {
+                display: block !important;
+            }
+
+            .select2-container--default .select2-selection--multiple {
+                max-height: 50px;
+            }
+
+            /* ------------------ */
+
+
+            .refresh-table {
+                position: absolute
+            }
+
+            .bgff {
+                margin-left: 30px;
+                margin-right: 30px;
+                margin-bottom: 15px;
+                font-size: 14px;
+
+            }
+
+            .form-control {
+                padding: 12px 19px;
+                box-sizing: border-box;
+                border: 1px solid rgb(211, 221, 225);
+                border-radius: 4px;
+                background-color: rgb(255, 255, 255);
+                color: rgb(69, 85, 96);
+                font-family: inherit;
+                font-size: 12px;
+                font-weight: 500;
+                transition: background-color 300ms ease-in-out 0s, color 300ms ease-in-out 0s;
+            }
+
+            .form-control:focus {
+                box-shadow: rgb(175 224 235) 0px 0px 3px 0px;
+                border-color: rgb(188 238 249);
+                outline: none;
+                transition: box-shadow 300ms ease-in-out 0s, border-color 300ms ease-in-out 0s;
+            }
+
+            .select2-container--open .select2-dropdown--above {
+                z-index: 99999 !important;
+            }
+
+            .select2-container {
+                display: inline;
+                z-index: 9999;
+            }
+
+            .hamburger-menu {
+                height: 100%;
+                max-height: 92%;
+                width: 0;
+                position: fixed;
+                z-index: 1;
+                top: 55px;
+                left: 0px;
+                background-color: #fff;
+                overflow-x: hidden;
+                transition: .5s;
+                padding-top: 50px;
+                box-shadow: 0 1px 6px 0 rgb(32 33 36 / 28%);
+            }
+
+            .hamburger-menu .closebtn {
+                position: absolute;
+                top: 0;
+                right: 10px;
+                margin-left: 50px;
+                padding: 8px 8px 8px 32px;
+                text-decoration: none;
+                font-size: 25px;
+                color: #818181;
+                display: block;
+                transition: .3s;
+            }
+
+
+
+            label.error {
+                position: relative !important;
+                left: 0px !important;
+                top: 4px !important;
+                font-size: 11px !important;
+                display: block !important;
+            }
+
+            .fs15--design:not(th) {
+                font-size: 13px;
+                font-weight: 450;
+
+            }
+        </style>
+
+        <div class="content__inner" style="margin-top: 2%;">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="card">
+
+                        <div class="card-body card-body--without-title">
+                            <div id="mySidenav" class="hamburger-menu">
+                                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                                <div class="hamburger-content">
+                                    <form id="frm_grid_search" name="frm_grid_search">
+                                        <!-- <div class="bgff">
+                                            <label>Item Code</label>
+                                            <input type="hidden" class="form-control uniqueID" name="id" value="0">
+                                            <input type="text" class="form-control F_ITEMCD" name="F_ITEMCD" />
+                                        </div> -->
+
+
+                                        <div class="bgff">
+                                            <button type="submit"
+                                                class="btn btn-primary btn-guest height-30 width-50 btn-block">SEARCH
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="box-header with-border with-hamburger">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <a href="javascript:void(0);" class="box-header-hamburger-menu"
+                                            onclick="openNav()">
+                                            <i class="fa fa-bars fa-2x" aria-hidden="true"></i>
+                                        </a>
+
+                                    </div>
+                                    <div class="col-md-5">
+                                        <h3 class="box-title">Item Master Details</h3>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <span class="btn btn-primary" style="float: right;" id="AddData"><i
+                                                class="fa fa-plus"></i> Add New Item</span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 r-col">
+                                <table id="uspList"
+                                    class="table table-bordered table-striped display nowrap order-column"
+                                    style="width:100%;">
+                                    <tbody class="appar">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="newUserBox" tabindex="-1" role="dialog" aria-labelledby="newUserBox"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">Item Master Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="regForm">
+                            <div class="row gutter--3px">
+                                <div class="col-md-12" style="font-size: 14px; color: #363434;">
+                                    <div class="row gutter--3px ">
+
+                                        <div class="form-group row col-sm-12">
+                                            <input type="hidden" class="form-control uniqueID" name="id" value="0">
+                                            <input type="hidden" class="form-control tranNo" name="tranNo" value="0">
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Item Code
+                                                <span style="color: rgb(158, 6, 6);">*</span></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control F_ITEMCD" name="F_ITEMCD"
+                                                    autocomplete="off" required>
+                                            </div>
+                                        </div>
+
+
+
+                                        <!-- <div class="form-group row col-sm-6">
+
+                                            <div class="col-md-12" style="margin-top: 30px;">
+                                                <label class="fs15--design">
+                                                    Preferred Supplier
+                                                </label>
+                                                <select class="form-control F_SUP" id="F_SUP" name="F_SUP[]" required multiple>
+                                                </select>
+                                            </div>
+                                        </div> -->
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design"> Preferred
+                                                Supplier
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control F_SUP" id="F_SUP" name="F_SUP[]" required
+                                                    multiple>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">SPA Zone
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" name="ITM_ZONE"
+                                                    autocomplete="off">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">SPA Zone
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" name="ITM_ZONE"
+                                                    autocomplete="off">
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Consumption No
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="number" class="form-control Consum_No" name="Consum_No"
+                                                    autocomplete="off">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Item Name
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control F_ITEMNM" name="F_ITEMNM"
+                                                    autocomplete="off">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Item Category
+                                            </label>
+                                            <div class="col-sm-8">
+
+                                                <select class="form-control" id="itemcategory" name="F_ITEMCTG">
+                                                    <option value="" selected>SELECT</option>
+                                                    <option value="Fixed">Fixed</option>
+                                                    <option value="Loose">Loose</option>
+                                                </select>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Item Type
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control" id="F_ITEMTY" name="F_ITEMTY">
+                                                    <option value="" selected>SELECT</option>
+                                                    <option value="Fixed Asset">Fixed Asset</option>
+                                                    <option value="Reusable">Reusable</option>
+                                                    <option value="Consumable">Consumable</option>
+                                                    <option value="Project">Project</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Item Unit
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control ITM_UNIT" name="ITM_UNIT"
+                                                    autocomplete="off">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Item Cost
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="number" class="form-control ITM_COST" name="ITM_COST"
+                                                    autocomplete="off">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">SPA Cost
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="number" class="form-control SPA_COST" name="SPA_COST"
+                                                    value="0">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Therapy Item (Y
+                                                If Item Used In Therapys)
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control" id="THERAPYITM" name="THERAPYITM">
+                                                    <option value="" selected>SELECT</option>
+                                                    <option value="Y">Yes</option>
+                                                    <option value="N">No</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Delivery Time
+                                                (Days)
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="number" class="form-control ITM_DLVDAY" name="ITM_DLVDAY"
+                                                    value="0">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Use Frequency
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control" id="ITM_FREQ" name="ITM_FREQ">
+                                                    <option value="" selected>SELECT</option>
+                                                    <option value="Daily">Daily</option>
+                                                    <option value="Weakly">Weakly</option>
+                                                    <option value="Monthly">Monthly</option>
+                                                    <option value="Quarterly">Quarterly</option>
+                                                    <option value="Fixed">Fixed</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-6">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Stock Count(Daily
+                                                Stock Count Needed)
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control ITM_DLYSTK" name="ITM_DLYSTK">
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-10">
+
+                                    <button type="submit" class="btn btn-primary btn-block">SAVE</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <script>
+            var DrawTableInquiry;
+
+            $(document).ready(function () {
+                getSupplierCategoryList();
+                //getKesarianNameData()
+
+                var dataColumns = [
+
+                    {
+                        data: "_id",
+                        sTitle: "Id",
+                        visible: false
+                    },
+                    {
+                        data: "tranNo",
+                        sTitle: "Sr No",
+                        visible: true,
+                        className: "fs15--design column-50",
+                    },
+
+                    {
+                        data: "F_ITEMCD",
+                        sTitle: "ITEM CODE",
+                        visible: true,
+                        sortable: false,
+                        className: "column-130",
+
+                        render: function (data, type, row) {
+                            var dataRender = "-";
+                            if (row && row.F_ITEMCD) {
+                                dataRender = '<a href="#" class="gridEditInventoryItemCode text-st-purple" data-id="' + row._id + '">' + row.F_ITEMCD + '</a>'
+                            }
+                            return dataRender;
+                        }
+
+                    }, {
+                        data: "F_ITEMNM",
+                        sTitle: "ITEM NAME",
+                        visible: true,
+                        sortable: false,
+                        className: "column-150",
+                        render: function (data, type, row) {
+                            var dataRender = "-";
+                            if (row && row.F_ITEMNM) {
+                                dataRender = row.F_ITEMNM;
+                            }
+                            return dataRender;
+                        }
+
+                    }, {
+                        data: "F_ITEMTY",
+                        sTitle: "ITEM TYPE",
+                        visible: true,
+                        sortable: false,
+                        className: "column-110",
+                        render: function (data, type, row) {
+                            var dataRender = "-";
+                            if (row && row.F_ITEMTY) {
+                                dataRender = row.F_ITEMTY;
+                            }
+                            return dataRender;
+                        }
+
+                    }, {
+                        data: "ITM_UNIT",
+                        sTitle: "ITEM UNIT",
+                        visible: true,
+                        sortable: false,
+                        render: function (data, type, row) {
+                            var dataRender = "-";
+                            if (row && row.ITM_UNIT) {
+                                dataRender = row.ITM_UNIT;
+                            }
+                            return dataRender;
+                        }
+                    }, {
+                        data: "ITM_COST",
+                        sTitle: "ITEM COST",
+                        visible: true,
+                        sortable: false,
+                        render: function (data, type, row) {
+                            var dataRender = "-";
+                            if (row && row.ITM_COST) {
+                                dataRender = row.ITM_COST;
+                            }
+                            return dataRender;
+                        }
+                    }, {
+                        data: "SPA_COST",
+                        sTitle: "SPA COST",
+                        visible: true,
+                        sortable: false,
+                        render: function (data, type, row) {
+                            var dataRender = "-";
+                            if (row && row.SPA_COST) {
+                                dataRender = row.SPA_COST;
+                            }
+                            return dataRender;
+                        }
+                    },
+                    {
+                        data: "ITM_ZONE",
+                        sTitle: "SPA ZONE",
+                        visible: true,
+                        sortable: false,
+                        render: function (data, type, row) {
+                            var dataRender = "-";
+                            if (row && row.ITM_ZONE) {
+                                dataRender = row.ITM_ZONE;
+                            }
+                            return dataRender;
+                        }
+                    },
+
+                    {
+                        data: "action",
+                        sTitle: "Action",
+                        visible: true,
+                        className: "fs15--design column-50",
+                        render: function (data, type, row) {
+                            //console.log(row);
+                            var html =
+                                ' <span class="btn btn-primary btn-block" data-id="' + row
+                                    ._id +
+                                '" onclick="getUser(this) "><i class="fa fa-pencil"></i> </span>';
+                            return html;
+                        }
+                    }
+                ];
+
+
+                DrawTableInquiry = DrawCustomDataTable("uspList", 350,
+                    "/route/itemMasterNew/grid-data", dataColumns, [
+                    [0, "asc"]
+                ], "frm_grid_search", null, true, true);
+
+                $("#frm_grid_search").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        DrawTableInquiry.ajax.reload();
+                    }
+                });
+
+                $('.tab-a').click(function () {
+                    $(".tab").removeClass('tab-active');
+                    $(".tab[data-id='" + $(this).attr('data-id') + "']").addClass("tab-active");
+                    $(".tab-a").removeClass('active-a');
+                    $(this).parent().find(".tab-a").addClass('active-a');
+                });
+
+                $('.textUpper').on('keyup', function (e) {
+                    $(this).val($(this).val().toUpperCase());
+                });
+
+                $("form#regForm").submit(function (e) {
+                    e.preventDefault();
+                });
+
+                $("#regForm").validate({
+                    rules: {
+                    },
+                    messages: {
+                    },
+                    errorPlacement: function (error, element) {
+                        offset = element.offset();
+                        error.insertAfter(element)
+                        error.addClass('message');
+                        error.css('display', 'block!important');
+                        error.css('color', 'red!important');
+
+                    },
+                    submitHandler: function (form) {
+                        $('#newUserBox').modal('hide');
+                        var $form = $(form);
+                        var formData = $form.serializeObject();
+                        var method = "post";
+                        var url = "/route/itemMasterNew/create";
+                        console.log("formDataformData", formData)
+                        if (formData.id != 0) {
+                            url =
+                                '/route/itemMasterNew/updateData/' +
+                                formData.id;
+                            method = "put";
+                        }
+                        console.log("formData", formData)
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(formData),
+                            //data: formData,
+                            dataType: "json",
+                            success: function (result) {
+
+                                if (result.status) {
+                                    //$("#regForm")[0].reset();
+                                    DrawTableInquiry.ajax.reload();
+                                }
+
+                            }
+                        });
+                    }
+                });
+            });
+
+            $(document).on("click", "#AddData", function () {
+                $('.uniqueID').val("0");
+                $("#newUserBox").modal("show");
+                DrawTableInquiry.ajax.reload();
+                $("#regForm")[0].reset();
+                $("#firstContent").select2();
+                $(".F_SUP").select2();
+                $(".F_SUP")[0].reset();
+
+
+
+            });
+
+            function populate(frm, data) {
+                $.each(data, function (key, value) {
+                    $('[name=' + key + ']', frm).val(value);
+                });
+                $('.F_SUP').select2();
+                // $("#firstContent").select2();
+            }
+
+            function getUser(id) {
+                var id = id.getAttribute('data-id');
+                $('.uniqueID').val(id);
+                $.ajax({
+                    url: "/route/itemMasterNew/getdata",
+                    type: "get",
+                    data: {
+                        id: id
+                    },
+                    success: function (result) {
+
+                        var iddata = {
+                            id: result.data._id
+                        }
+                        // $("#firstContent").select2();
+                        $('.F_SUP').select2();
+                        populate('#regForm', result.data);
+                        populate('#regForm', iddata);
+                        $('#newUserBox').modal('show');
+                        getUser();
+
+                    }
+                })
+            }
+
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+
+
+
+            function getSupplierCategoryList() {
+                var tray_url = "/route/itemMaster/SUP";
+                $.getJSON(tray_url, function (result) {
+                    console.log("resultresult", result)
+                    var optionList3 = '<option value="">SELECT SUPPLIER</option>';
+                    for (var i = 0; i < result.data.length; i++) {
+
+                        optionList3 += '<option value="' + result.data[i].F_ACCTNM + '">' + result.data[i].F_ACCTNM + '</option>';
+                    }
+
+                    $('.F_SUP').html(optionList3);
+                    $('.F_SUP').select2();
+                });
+            }
+
+            function populate(frm, data) {
+                $.each(data, function (key, value) {
+                    $('[name=' + key + ']', frm).val(value).trigger('change');
+                    $('.F_SUP').select2();
+                });
+
+
+            }
+
+
+            function getUser(id) {
+                var id = id.getAttribute('data-id');
+                $('.uniqueID').val(id);
+                $('.F_SUP').select2();
+                $.ajax({
+                    url: "/route/itemMasterNew/getdata",
+                    type: "get",
+                    data: {
+                        id: id
+                    },
+                    success: function (result) {
+                        var iddata = {
+                            id: result.data._id
+                        };
+                        // Populate the form with the result data
+                        populate('#regForm', result.data);
+                        populate('#regForm', iddata);
+
+                        // Show the modal
+                        $.when($('#regForm').populate(result.data)).done(function (x) {
+                            $('.F_SUP').select2();
+                        });
+                        $('#newUserBox').modal('show');
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("Error in loading user data. Please try again.");
+                    }
+                });
+            }
+
+
+        </script>
+
+        <% include ../partials/footer %>

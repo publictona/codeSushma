@@ -1,0 +1,748 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+
+        <style>
+            .add-tck {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .alert {
+                width: 600px;
+                /* Adjust the width as per your requirement */
+                height: 35px;
+                /* Adjust the height as per your requirement */
+                padding-bottom: 15px;
+                padding-top: 15px;
+                font-size: 15px;
+                position: fixed;
+                /* Ensure the alert stays in place */
+                top: 68px !important;
+                right: 0px !important;
+                left: 0;
+                overflow: hidden;
+                padding: 8px;
+                z-index: 999999 !important;
+                word-wrap: break-word;
+                /* Ensure long text breaks into the next line */
+
+            }
+
+
+            .alert-error .fa-check-circle:before {
+                content: "\f071" !important;
+            }
+
+            .alert button {
+                top: 8px !important;
+            }
+
+            #success-alert-item,
+            #danger-alert {
+                width: 500px;
+                /* Set width for success and error alerts */
+                height: 100px;
+                /* Set height for success and error alerts */
+            }
+        </style>
+
+        <div class="box">
+            <div class="box-header with-border with-hamburger">
+                <a href="javascript:void(0);" class="box-header-hamburger-menu" onclick="openNav()">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </a>
+                <h3 class="box-title">Air Ticket In Stock</h3>
+            </div>
+            <div class="box-body">
+
+
+
+                <div class="row gutter--3px">
+
+                    <div class="col-md-12 r-col">
+                        <!-- <div class="add-tck">
+                            <h4 id="formTitle" style="color: rgb(9, 9, 77);"><strong>Add Ticket In Stock </strong></h4>
+                             <button class="btn btn-primary " onclick="addNewUser(this)">
+                            Add Ticket 
+                            </button>
+                        </div> -->
+
+
+                        <div class="col-md-5 r-col">
+                            <div class="add-tck">
+                                <h4 id="formTitle" style="color: rgb(9, 9, 77);"><strong> </strong></h4>
+                                <button class="btn btn-primary " onclick="addNewUser(this)">
+                                    Add Ticket
+                                </button>
+                            </div>
+
+                            <form id="regForm">
+                                <div class="row gutter--3px">
+                                    <!-- Form fields -->
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for=""><strong>ID/Both <span
+                                                        style="color: rgb(165, 10, 10);">*</span></strong></label>
+                                            <input type="hidden" class="form-control" name="id" id="masId" value="0" />
+                                            <select name="F_INTDOM" id="F_INTDOM" class="form-control enquery-source"
+                                                required>
+                                                <option value="">Select</option>
+                                                <option value="I">I</option>
+                                                <option value="D">D</option>
+                                                <option value="B">Both</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- -------------start-------------- -->
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">
+                                                <strong>ALN/BSP </strong>
+                                            </label>
+
+                                            <select name="ALN" id="ALN" class="form-control enquery-source">
+                                                <option value="">Select</option>
+                                                <option value="ALN">ALN</option>
+                                                <option value="BSP">BSP</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">
+                                                <strong>ALN</strong>
+                                            </label>
+                                            <!-- disabled -->
+                                            <select name="F_AIRLNNO" id="F_AIRLNNO" class="form-control enquery-source">
+                                                <option value="">Select</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- --------------------------end--------------------- -->
+
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label for="">
+                                                <strong>By Agent</strong>
+                                            </label>
+
+                                            <select name="F_AGENTCD" id="F_AGENTCD" class="form-control F_AGENTCD">
+                                                <option value="">Select</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="">
+                                                <strong>Branch</strong>
+                                            </label>
+
+                                            <select name="KT_BRANCH" id="KT_BRANCH" class="form-control enquery-source">
+                                                <option value="">Select</option>
+                                                <option value="HO">HO</option>
+                                                <option value="P2">P2</option>
+                                            </select>
+
+
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label for="">
+                                                <strong>Start Tkt <span
+                                                        style="color: rgb(165, 10, 10);">*</span></strong>
+                                            </label>
+                                            <input type="text" class="form-control" name="F_FROMTKT" autocomplete="off"
+                                                id="F_FROMTKT" required placeholder=" Enter Start Tkt No" />
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label for="">
+                                                <strong>End Tkt</strong>
+                                            </label>
+                                            <input type="text" class="form-control" name="F_TILLTKT" id="F_TILLTKT"
+                                                placeholder=" Enter End Tkt No" autocomplete="off" />
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="">
+                                                <strong>Total Tkt</strong>
+                                            </label>
+                                            <input type="number" class="form-control" name="F_TOTALTKT"
+                                                autocomplete="off" id="F_TOTALTKT" autocomplete="off" readonly />
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">
+                                                <strong>Quota</strong>
+                                            </label>
+
+                                            <select name="F_QUOTA" id="F_QUOTA" class="form-control enquery-source">
+                                                <option value="">Select</option>
+                                                <option value="Q">Quota</option>
+                                                <option value="C">Cheque</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">
+                                                <strong>MPD</strong>
+                                            </label>
+                                            <input type="text" class="form-control" name="F_MPD" id="F_MPD"
+                                                oninput="this.value = this.value.toUpperCase();" autocomplete="off" />
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">
+                                                <strong>SAS</strong>
+                                            </label>
+                                            <select name="F_SAS" id="F_SAS" class="form-control enquery-source">
+                                                <option value="">Select</option>
+                                                <option value="S">Steal A Seat</option>
+                                                <option value="E">E Ticket</option>
+                                                <option value="A">Auto</option>
+                                                <option value="M">Manual</option>
+                                                <option value="M">Virtual MPD</option>
+                                            </select>
+
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="">
+                                                <strong>Chq No</strong>
+                                            </label>
+
+                                            <input type="number" class="form-control " name="F_CHQNO" id="F_CHQNO"
+                                                autocomplete="off" />
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="">
+                                                <strong> Chq Date</strong>
+                                            </label>
+                                            <input type="text" class="form-control datepicker" name="F_CHQDT"
+                                                id="F_CHQDT" autocomplete="off" />
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="">
+                                                <strong>Cheque Rs</strong>
+                                            </label>
+                                            <input type="text" class="form-control" name="F_CHQRS" id="F_CHQRS"
+                                                autocomplete="off" />
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">
+                                                <strong>By Bill No</strong>
+                                            </label>
+                                            <input type="text" class="form-control" name="F_BILLNO" id="F_BILLNO"
+                                                autocomplete="off" />
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">
+                                                <strong>Bill Dt</strong>
+                                            </label>
+                                            <input type="text" class="form-control datepicker" name="F_BILLDT"
+                                                id="F_BILLDT" autocomplete="off" />
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-primary btn-block">SAVE</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <!-- Alerts -->
+                            <div class="col-md-12">
+                                <div class="alert alert-success hide-alert-box" id="success-alert-item">
+                                    <button type="button" class="close" data-dismiss="alert">x</button>
+                                    <strong>Success!</strong> Record added successfully.
+                                </div>
+                                <div class="alert alert-danger hide-alert-box" id="danger-alert">
+                                    <button type="button" class="close" data-dismiss="alert">x</button>
+                                    <strong>Error!</strong> <span class="custom_error"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Table -->
+                        <div class="col-md-7 r-col">
+                            <table id="uspList" class="table table-bordered table-striped display nowrap order-column"
+                                style="width:100%;">
+                                <tbody class="appar"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var DrawTableInquiry;
+
+            $(document).ready(function () {
+                getAgent();
+                getAirLine();
+
+
+                var dataColumns = [{
+                    data: "_id",
+                    sTitle: "Id",
+                    visible: false
+                },
+
+                {
+                    data: "F_TRANNO",
+                    sTitle: "Tran#",
+                    visible: true,
+                    className: "fs13--design column-12",
+                    render: function (data, type, row) {
+                        var html =
+                            ' <a  data-id="' + row
+                                ._id +
+                            '" onclick="getUser(this) " >' + row.F_TRANNO + '</a>';
+                        return html;
+                    }
+
+                },
+
+                {
+                    data: "F_INTDOM",
+                    sTitle: "ID#",
+                    visible: true,
+                    className: "fs13--design column-12",
+
+                },
+
+                {
+                    data: "F_AIRLNNO",
+                    sTitle: "ALN NO#",
+                    visible: true,
+                    className: "fs13--design column-12",
+
+                },
+
+                {
+                    data: "F_AGENTCD",
+                    sTitle: "Agt#",
+                    visible: true,
+                    className: "fs13--design column-12",
+                },
+
+                {
+                    data: "F_FROMTKT",
+                    sTitle: "From Tkt#",
+                    visible: true,
+                    className: "fs13--design column-12",
+                },
+
+                {
+                    data: "F_TILLTKT",
+                    sTitle: "Till Tkt#",
+                    visible: true,
+                    className: "fs13--design column-12",
+                },
+
+
+
+                {
+                    data: "F_TOTALTKT",
+                    sTitle: "Total Tkt#",
+                    visible: true,
+                    className: "fs13--design column-12",
+                },
+
+                {
+                    data: "F_CHQNO",
+                    sTitle: "Che No#",
+                    visible: true,
+                    className: "fs13--design column-12",
+                },
+
+                {
+                    data: "F_CHQRS",
+                    sTitle: "Amount#",
+                    visible: true,
+                    className: "fs13--design column-12",
+                },
+
+                {
+                    data: "F_CHQDT",
+                    sTitle: "chqDt#",
+                    visible: false,
+                    className: "fs13--design column-12",
+                    render: function (data, type, row) {
+                        return dateFormat(row.F_CHQDT);
+                    }
+                },
+
+                {
+                    data: "F_BILLDT",
+                    sTitle: "billDt#",
+                    visible: false,
+                    className: "fs13--design column-12",
+                    render: function (data, type, row) {
+                        return dateFormat(row.F_BILLDT);
+                    }
+                },
+
+                {
+                    data: "F_RCVDBY",
+                    sTitle: "User#",
+                    visible: true,
+                    className: "fs13--design column-12",
+                },
+
+                ];
+
+
+                DrawTableInquiry = DrawCustomDataTable("uspList", 350, "/route/airTicketInStock/grid-data", dataColumns, [[0, "desc"]], "frm_grid_search", null, true, true);
+
+                $("#regForm").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        handleFormSubmit(form);
+                    }
+                });
+
+                // Handle Add New User button
+                $("#addNewUser").click(function () {
+                    addNewUser();
+                });
+
+                //////////////////////////////////DISABLE DROPDOWN ///////////////////////////////////////////////////////
+                $("#F_AIRLNNO").prop('disabled', true);
+                // Add change event listener to F_AIRLNNO dropdown
+                $("#ALN").change(function () {
+                    var selectedValue = $(this).val();
+
+                    if (selectedValue === 'ALN') {
+                        // If ALN is selected, enable and show the ALN dropdown
+                        $("#F_AIRLNNO").prop('disabled', false);
+                        alert('ALN selected: Please fill in the ALN field.');
+                    } else {
+                        // If BSP is selected, disable and hide the F_AIRLNNO dropdown
+                        $("#F_AIRLNNO").prop('disabled', true);
+                        $('#F_AIRLNNO').val('').trigger('change');
+                        $("#F_AIRLNNO").val(""); // Clear the F_AIRLNNO selection when disabled
+                        alert('BSP selected: ALN is disabled.');
+                    }
+                });
+
+
+                ///////////////////////////////////////TICKET GENERATION////////////////////////////////////////////////////
+
+
+                $("#F_FROMTKT").on('change', function () {
+                    // Get the value of F_FROMTKT (Start Tkt)
+                    var fromTicket = parseInt($(this).val(), 10);  // Convert to an integer
+
+                    if (isNaN(fromTicket) || fromTicket <= 0) {
+                        alert('Please enter a valid Start Ticket number.');
+                        return;
+                    }
+
+                    // Prompt the user for the number of tickets
+                    var numOfTickets = prompt("Enter the number of tickets:");
+                    numOfTickets = parseInt(numOfTickets, 10);  // Convert to an integer
+
+                    if (isNaN(numOfTickets) || numOfTickets.length >= 0) {
+                        alert('Please Enter A Valid Ticket Number.');
+                        return;
+                    }
+
+                    // Calculate the F_TILLTKT (End Tkt) value
+                    var tillTicket = fromTicket + numOfTickets - 1;  // -1 to include the start ticket in the range
+
+                    // Set the calculated value in the F_TILLTKT field
+                    $("#F_TILLTKT").val(tillTicket);
+
+                    // Set the total number of tickets in the F_TOTALTKT field
+                    $("#F_TOTALTKT").val(numOfTickets);  // Save the ticket count in F_TOTALTKT
+
+                    $.ajax({
+                        url: '/route/airTicket/checkTKT1',  // Use your specified API route
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            fromTicket: fromTicket,
+                            tillTicket: tillTicket
+                        }),
+                        success: function (response) {
+                            if (response.exists) {
+                                // Corrected notification function
+                                notification({
+                                    type: "error",
+                                    message: "Ticket Range already exists please Try Another Start Ticket Number."
+                                });
+                                // $('#regForm').find('input, select, textarea').prop('disabled', true);
+                                //  $('#F_FROMTKT').prop('disabled', false);
+                                $('#F_QUOTA').prop('disabled', true);
+                                $('#F_MPD').prop('disabled', true);
+                                $('#F_SAS').prop('disabled', true);
+                                $('#F_CHQDT').prop('disabled', true);
+                                $('#F_BILLNO').prop('disabled', true);
+                                $('#F_BILLDT').prop('disabled', true);
+                                $('#F_CHQRS').prop('disabled', true);
+                                $('#F_CHQNO').prop('disabled', true);
+
+                            } else {
+                                // Prompt the user to confirm ticket generation
+                                var generateTicket = confirm("The range of tickets is from " + fromTicket + " to " + tillTicket + ". Do you want to generate the tickets?");
+
+                                if (generateTicket) {
+                                    // If user confirms, proceed with ticket generation logic
+                                    alert("Tickets are being generated.");
+                                    // Add your ticket generation logic here
+                                } else {
+                                    // If user cancels, do nothing or handle cancellation
+                                    alert("Ticket generation canceled.");
+                                }
+
+                                $('#F_QUOTA').prop('disabled', false);
+                                $('#F_MPD').prop('disabled', false);
+                                $('#F_SAS').prop('disabled', false);
+                                $('#F_CHQDT').prop('disabled', false);
+                                $('#F_BILLNO').prop('disabled', false);
+                                $('#F_BILLDT').prop('disabled', false);
+                                $('#F_CHQRS').prop('disabled', false);
+                                $('#F_CHQNO').prop('disabled', false);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert("An error occurred while checking the ticket range.");
+                        }
+                    });
+
+                });
+
+            });
+
+            function addNewUser() {
+                // Reset the form for a new entry
+                $("#regForm")[0].reset();
+                $("#formTitle").text("Add Ticket");  // Update form title to Add Entry
+                $("#masId").val(0);  // Ensure the ID is set to 0 for new entries
+
+                // Reset select2 dropdowns if applicable
+                $('#F_INTDOM').val('').trigger('change');  // Reset select dropdown
+                $('#F_AGENTCD').val('').trigger('change');  // Reset select dropdown (if select2 used)
+                $('#F_AIRLNNO').val('').trigger('change');
+                $('#F_QUOTA').val('').trigger('change');
+                $('#F_SAS').val('').trigger('change');
+
+
+                $('#newUserBox').modal('show');  // Show the form (assuming modal)
+            }
+
+            function getUser(id) {
+                var id = id.getAttribute('data-id');
+                $.ajax({
+                    url: "/route/airTicketInStock/getData",
+                    type: "get",
+                    data: { id: id },
+                    success: function (result) {
+
+                        $("#formTitle").text("Edit Ticket");  // Update form title to Edit Entry
+                        //  $('#newUserBox').modal('show');  // Show the form modal
+
+                        var F_TRANNO = '&nbsp;&nbsp;&nbsp;&nbsp;Tran No :- ' + result.data.F_TRANNO;
+                        $("#topTranNo").html(F_TRANNO);
+
+                        var iddata = {
+                            id: result.data._id
+                        }
+                        $.when($('#regForm').populate(result.data)).done(function (x) {
+
+                        });
+
+                        $("#F_AIRLNNO").select2();
+                        $("#F_AGENTCD").select2();
+
+                        // ------
+                        populate('#regForm', result.data);
+                        populate('#regForm', iddata);
+
+                    }
+                });
+            }
+
+
+            function handleFormSubmit(form) {
+                var $form = $(form);
+                var formData = $form.serializeObject();
+                var method = "post";
+                var url = "/route/airTicketInStock/create";
+
+                if (formData.id && formData.id != 0) {  // If ID exists and is not 0, it's an edit operation
+                    url = '/route/airTicketInStock/update/' + formData.id;
+                    method = "put";
+                }
+
+                $.ajax({
+                    url: url,
+                    type: method,
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(formData),
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.status) {
+                            notification({ type: "success", message: result.msg });
+                            DrawTableInquiry.ajax.reload();  // Reload the data table
+                            $("#regForm")[0].reset();  // Reset the form after submission
+                            $("#formTitle").text("Add Entry");  // Set title back to Add Entry
+                            addNewUser();
+                        }
+                    },
+                    error: function (xhr) {
+                        // Capture and display error message from the server
+                        // if (xhr.status === 400) {
+                        //     var response = JSON.parse(xhr.responseText);
+                        //     notification({ type: "error", message: response.msg });  // Show error notification
+                        // } else {
+                        //     notification({ type: "error", message: "An unexpected error occurred." });
+                        // }
+                    }
+                });
+            }
+
+            function populate(frm, data) {
+                $.each(data, function (key, value) {
+                    if (key === 'F_BILLDT' && value) {
+                        // Use moment to format F_BILLDT to YYYY/MM/DD
+                        const F_BILLDT = moment(value).format('DD/MM/YYYY');
+                        $('[name=' + key + ']', frm).val(F_BILLDT);
+                    } else if (key === 'F_CHQDT' && value) {
+                        // Use moment to format F_CHQDT to YYYY/MM/DD
+                        const F_CHQDT = moment(value).format('DD/MM/YYYY');
+                        $('[name=' + key + ']', frm).val(F_CHQDT);
+                    } else {
+                        // For other fields, just assign the value directly
+                    }
+                    $('[name=' + key + ']', frm).val(value);
+                });
+                DrawTableInquiry.ajax.reload();  // Reload the data table
+            }
+
+
+
+
+            // function populate(frm, data) {
+            //     $.each(data, function (key, value) {
+            //         $('[name=' + key + ']', frm).val(value);
+
+            //         // if (key === 'F_BILLDT' && value) {
+            //         //     // Use moment to format F_BILLDT to YYYY-MM-DD
+            //         //     const F_BILLDT = moment(value).format('YYYY/MM/DD');
+            //         //     $('[name=' + key + ']', frm).val(F_BILLDT);
+            //         // }else if (key === 'F_CHQDT' && value) {
+            //         //     // Use moment to format F_BILLDT to YYYY-MM-DD
+            //         //     const F_CHQDT = moment(value).format('YYYY/MM/DD');
+            //         //     $('[name=' + key + ']', frm).val(F_CHQDT);
+            //         // } 
+            //         DrawTableInquiry.ajax.reload();  // Reload the data table
+
+            //         //  $("#regForm")[0].reset(); 
+            //     });
+            // }
+
+            function notification({ type, message }) {
+                if (type === "success") {
+                    $("#success-alert-item").removeClass("hide-alert-box").text(message);
+                } else if (type === "error") {
+                    $("#danger-alert").removeClass("hide-alert-box").text(message);
+                }
+
+            }
+
+            function getAgent() {
+                $.ajax({
+                    url: "/route/rsData/getAR_AGTMS/",
+                    type: "get",
+                    //data: JSON.stringify(getData),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        // console.log("resulttttttttttttgetAgent", result);
+                        result = JSON.stringify(result);
+                        result = JSON.parse(result);
+                        var options = '<option value="">Select Agent</option>';
+                        for (var i = 0; i < result.length; i++) {
+                            options += '<option value="' + result[i].F_AGTCD + '">' + result[i].F_AGTNM + '</option>';
+                        }
+                        $("#F_AGENTCD").html(options);
+                        $("#F_AGENTCD").select2();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                    }
+                });
+            }
+
+            function getAirLine() {
+                $.ajax({
+                    url: "/route/rsData/getAirLine/",
+                    type: "get",
+                    //data: JSON.stringify(getData),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        // console.log("resulttttttttttttgetAirLine", result);
+                        result = JSON.stringify(result);
+                        result = JSON.parse(result);
+                        var options = '<option value="">Select Airline</option>';
+                        for (var i = 0; i < result.length; i++) {
+                            // console.log("resulttttttttttttgetAirLine", result);
+                            options += '<option value="' + result[i].F_AIRLNNO + '">' + result[i].F_AIRLNNM + '</option>';
+                        }
+                        $("#F_AIRLNNO").html(options);
+                        $("#F_AIRLNNO").select2();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                    }
+                });
+            }
+
+        </script>
+
+        <% include ../partials/footer %>

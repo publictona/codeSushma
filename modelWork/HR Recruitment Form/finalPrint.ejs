@@ -1,0 +1,563 @@
+<style>
+    @media print {
+        .page-break {
+            display: block;
+            page-break-before: always;
+        }
+
+        tfoot img {
+            position: fixed;
+            bottom: 0;
+        }
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-12 text-right"><i class="fa fa-print btn btn-primary" onclick="printHrForm(this)"
+            style="margin-bottom:5px; "></i></div>
+    <div class="col-md-12 table-responsive" id="hrRecruimentFormPrint" style="font-family: monospace;">
+
+        <table style="width:100%;">
+
+            <tr>
+                <td colspan="6">
+                    <h3>Manpower Request Form</h3>
+                </td>
+                <td><img src="https://image.kesari.in/upload/assets/kesari-tours.png" style="float:right;width:50px;">
+                </td>
+            </tr>
+        </table>
+
+        <table style="width:100%; font-size:12px;">
+            <tr colspan="6">
+                <td style="vertical-align:bottom;">KESARI TOURS PVT. LTD, Kesari-314,L.J.Road,Mahim,Mumbai India-400016 www.Kesari.in</td>
+                  
+            </tr>
+        </table>
+
+        <hr>
+        <!-- ----------------------- requirement table start--------- -->
+        <table border="1" cellpadding="0" cellspacing="0"
+            style="width:100%;font-size:12px;border-spacing: 0.5rem;border-collapse: collapse;">
+            <tbody>
+                <div>
+                    <h4>Requirement Details</h4>
+
+
+                    <tr>
+                        <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:25%;">
+                            Reference No:
+                        </td>
+                        <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:75%;">
+                            <%=reference_No%>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:75%;">
+                            Date
+                        </td>
+                        <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:25%;">
+                            <%= dateRequest %>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:75%;">
+                            Requestor Name
+
+                        </td>
+                        <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:25%;">
+                            <%= requestorName %>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:75%;">
+                            Requestor
+                            Designation
+                        </td>
+                        <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:25%;">
+                            <%= requestorDesignation %>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:75%;">
+                            Position To Be
+                            Filled
+                        </td>
+                        <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:25%;">
+                            <%= positionFilled %>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:75%;">
+                            Location
+                        </td>
+                        <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:25%;">
+                            <%=location%>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:75%;">
+                            Position/
+                            Vacancy
+                        </td>
+                        <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">
+                            <%=inlineRadioOptionss%>
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:75%;">
+                            Budget Salary/CTC
+                        </td>
+                        <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:25%;">
+                            Existing Salary :<%=exitMin%>
+                                |
+
+                                New Position Salary:<%=exitMax%>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2"
+                            style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:75%; white-space: normal;">
+                            Has an Internal Candidate(s) been identified
+
+                        </td>
+                        <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:25%;">
+                            <%=inlineRadioOptions%>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2"
+                            style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:75%; white-space: normal;">
+                            Critical Impact of This Position on The Business
+                        </td>
+                        <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:25%;">
+                            <%=impactPosition%>
+                        </td>
+                    </tr>
+
+                </div>
+                <div>
+            </tbody>
+        </table>
+        <br>
+
+        <!-- Position Profile -->
+
+        <table border="1" cellpadding="0" cellspacing="0"
+            style="width:100%;font-size:12px;border-spacing: 0.5rem;border-collapse: collapse;">
+            <tbody>
+                <h4>Position Profile Details</h4>
+
+                <tr>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width: 50%;">
+                        Designation/Title
+                    </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width: 50%;">
+                        <%=designationTitle%>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2"
+                        style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width: 50%;white-space: normal;">
+                        Reporting To (The
+                        Position To Whom The Person Reports to)
+                    </td>
+                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width: 50%;">
+                        <%=reportingTo%>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2"
+                        style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width: 50%; white-space: normal;">
+                        Job
+                        Description(Functions the Person will be the Person <br>
+                        Reports to)
+                    </td>
+                    <td colspan="3"
+                        style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width: 30%; width: 50%;">
+                        <%=jobDescription%>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2"
+                        style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; white-space: normal; width: 50%;">
+                        Qualification And Job Specification 
+                        (Mention the Skill  <br> sets/qualities & 
+                        competencies needed for the <br> position to face the
+                        challenges involved in the Job)
+                    </td>
+                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width: 50%;">
+                        <%=specification%>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+
+        <!-- experiance Details -->
+        <h5>Experiance Details :</h5>
+
+        <table border="1" cellpadding="0" cellspacing="0"
+            style="width:70%;font-size:12px;border-spacing: 0.5rem;border-collapse: collapse; page-break-after: always;">
+            <tbody>
+                <tr colspan="8">
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px; width: 4%;"> Sr
+                        No.
+                    </td>
+
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px; width: 20%;">
+                        Experiance </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px; width: 10%;">
+                        Year </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px; width: 4%;">1
+                    </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px; width: 20%;">
+                        Minimum Experience </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px; width: 10%;">
+                        <%=minn%>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px; width: 4%;">2
+                    </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px; width: 20%;">
+                        Maximum Experience </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px; width: 10%;">
+                        <%=maxEXP%>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px; width:4%;">3</td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px; width: 20%;">
+                        Total Experience </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px; width: 10%;">
+                        <%=totalEXP%>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px; width: 4%;">4
+                    </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px;  width: 20%;">
+                        Relevant Experience </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px;  width: 10%;">
+                        <%=releEXP%>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+
+
+        <!-- Language Table -->
+        <h5>Language Required :</h5>
+
+        <table border="1" cellpadding="0" cellspacing="0"
+            style="width:100%;font-size:12px;border-spacing: 0.5rem;border-collapse: collapse; ">
+            <tbody>
+                <tr colspan="8">
+                    <td colspan="1" style="width:9%;padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">Sr No.
+                    </td>
+                    <td colspan="2" style="width:20%;padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        Language</td>
+                    <td colspan="2" style="width:20%;padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        Read</td>
+                    <td colspan="2" style="width:20%;padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        Write</td>
+                    <td colspan="2" style="width:20%;padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        Speak</td>
+                </tr>
+
+
+
+                <tr>
+                    <td colspan="1" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        1
+                    </td>
+                    <td colspan="2" style="width:32%;padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        <%=lang1%>
+                    </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        <%=reading%>
+
+                    </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        <%=writing%>
+                    </td>
+
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        <%=speaking%>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="1" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        2
+                    </td>
+                    <td colspan="2" style="width:32%;padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        <%=lang2%>
+                    </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        <%=reading2%>
+
+                    </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        <%=writing2%>
+                    </td>
+
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        <%=speaking2%>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="1" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        3
+                    </td>
+                    <td colspan="2" style="width:32%;padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        <%=lang3%>
+                    </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        <%=reading3%>
+
+                    </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        <%=writing3%>
+                    </td>
+
+                    <td colspan="2" style="padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        <%=speaking3%>
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <br>
+
+        <!-- other Details -->
+        <table border="1" cellpadding="0" cellspacing="0"
+            style="width:100%;font-size:12px;border-spacing: 0.5rem;border-collapse: collapse;">
+            <tbody>
+                <h4>Other Details</h4>
+                <tr>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:40%;">
+                        Candidate
+                        Age
+                    </td>
+                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:60%;">
+                        <%= age %>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:40%;">
+                        Requirement For
+                        Two/Four Wheeler
+                    </td>
+                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:60%;">
+                        <%= twoWheeler %>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:40%;">
+                        Requirement to
+                        be Filled(on or before)
+                        Number
+                    </td>
+                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:60%;">
+                        <%= requirementFilledNo %>
+                    </td>
+                </tr>
+
+
+            </tbody>
+        </table>
+
+        <br>
+        <br>
+
+        <!-- -------Approved-table-------- -->
+        <table border="1" cellpadding="0" cellspacing="0"
+            style="width:100%;font-size:12px;border-spacing: 0.5rem;border-collapse: collapse;">
+            <tbody>
+
+
+                <!-- ---------------- -->
+                <tr colspan="8">
+                    <td colspan="2" style="width:15%;padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        Approved By.
+                    </td>
+                    <td colspan="2" style="width:30%;padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        Signature</td>
+                    <td colspan="2" style="width:30%;padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        Date</td>
+                    <td colspan="2" style="width:30%;padding-left: 10px;padding-top: 10px;padding-bottom: 10px;">
+                        Remarks</td>
+                </tr>
+
+
+                <tr>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">
+                        HOD
+
+                    </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">
+
+
+                    </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">
+                    </td>
+
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">
+                        HR
+
+                    </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">
+
+
+                    </td>
+                    </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">
+                    </td>
+
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">
+                        Directors
+
+                    </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">
+
+
+                    </td>
+                    </td>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">
+                    </td>
+
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;">
+                    </td>
+                </tr>
+
+
+            </tbody>
+        </table>
+
+        <!-- =========Recruitment Details========= -->
+
+        <table border="1" cellpadding="0" cellspacing="0"
+            style="width:100%;font-size:12px;border-spacing: 0.5rem;border-collapse: collapse;">
+            <tbody>
+                <h4>Recruitment Details(To be Filled By HR)</h4>
+
+                <tr>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:30%;"> Name Of
+                        Person
+                        Selected
+                    </td>
+                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:70%;">
+                        <%= personSelected %>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:30%;">
+                        Designation
+                    </td>
+                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:70%;">
+                        <%= designationHr %>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"> Gross
+                    </td>
+                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:70%;">
+                        <%= gross %>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:30%;"> CTC
+                    </td>
+                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:70%;">
+                        <%= ctc %>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px;"> Recruited
+                        Through
+                    </td>
+                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:70%;">
+                        <%= recruitedThrough %>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:30%;">
+                        Expected DOJ
+                    </td>
+                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:70%;">
+                        <%= doj %>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:30%;"> Sign of
+                        HR
+                        Manager
+                    </td>
+                    <td colspan="3" style="padding-left: 10px;padding-top: 5px;padding-bottom: 5px; width:70%;">
+                        <%= hrSign %>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <br>
+    </div>
+</div>
+
+<script>
+
+    function printHrForm() {
+        var divToPrint = document.getElementById("hrRecruimentFormPrint");
+        console.log("divToPrint", divToPrint)
+        divToPrint.style.border = "1px";
+        newWin = window.open("");
+        newWin.document.write(divToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    };
+
+
+</script>

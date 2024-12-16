@@ -1,0 +1,526 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+
+        <style>
+            .form-group {
+                margin-bottom: 25px;
+            }
+
+            .uppercase {
+                text-transform: uppercase;
+            }
+
+            .spa-loc .select2-container--default {
+                width: 100% !important;
+            }
+
+          #suppliercat, #amount{
+            padding-left:10px;
+          }
+
+
+        </style>
+
+        <div class="col-sm-12 mb-3">
+            <button class="btn btn-primary" id="Add_New_dealTransaction_Details">
+                Add Deal Transaction Details
+            </button>
+        </div>
+
+        <div id="printModal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-header modal-otp-header">
+                        <h5>Print Deal Transaction List Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span> </button>
+
+                    </div>
+                    <div class="modal-body modal-body-otp" id="printBody">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card">
+            <div class="card-body">
+                <div class="col-sm-12">
+                    <table class="table table-bordered table-striped" id="dealTransactionDetailTable">
+                        <thead>
+                            <div class="col-sm-12"></div>
+
+                            <tr>
+                                <th colspan="16" class="text-center h2">Deal Transaction List Details</th>
+                            </tr>
+                            <br>
+
+                            <!-- //  <div class="col-md-6"> -->
+                            <div class="col-md-12 r-col">
+                                <table id="uspList"
+                                    class="table table-bordered table-striped display nowrap order-column"
+                                    style="width:100%;">
+                                    <tbody class="appar">
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- </div> -->
+                            <tr class="text-center justify-content-center"></tr>
+                        </thead>
+                        <tbody id="insertdealTransactionData"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Table end -->
+
+        <!-- MODAL START -->
+        <div class="modal fade" id="adddealTransactionModel" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title"></h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>×</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <form id="dealTransactionForm" action="/route/dealTransaction/dealTransactionMaster"
+                        autocomplete="off" method="POST">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group m-0">
+                                        <input type="hidden" name="F_TRANNO" value="0">
+                                    </div>
+
+                                    <div class="form-group row col-sm-12">
+                                        <input type="hidden" name="F_ACCTCDNO" value="0">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Account Code </label>
+
+                                        <div class="col-sm-8">
+                                            <select class="form-control F_ACCTCD" id="suppliercat" name="F_ACCTCD"
+                                                required>
+                                                <option value=""></option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row col-md-12">
+                                        <label for="Date Of Request" class="col-sm-4 col-form-label fs15--design"> Valid
+                                            Between
+                                        </label>
+
+                                        <div class="col-md-4">
+                                            <input type="date" class="form-control date-picker" id="dateNow"
+                                                placeholder="From" name="F_VLDDT1" autocomplete="off">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="date" class="form-control date-picker" id="dateNow"
+                                                placeholder="To" name="F_VLDDT2" autocomplete="off">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Deal Amount </label>
+
+                                        <div class="col-md-8">
+                                            <input type="number" class="form-control" placeholder="Enter Amt"
+                                                name="F_DEALAMT" autocomplete="off">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Amt Type </label>
+
+                                        <div class="col-sm-8">
+                                            <select class="form-control" id="amount" name="F_DEALFLG">
+
+                                                <option value="Select">Select</option>
+                                                <option value="Percent">Percent</option>
+                                                <option value="Lumsum">Lumsum</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">SPA Location </label>
+
+                                        <div class="col-sm-8 spa-loc">
+                                            <select class="form-control branchCodeGlobal" name="F_SPALOCN[]" multiple>
+
+                                            </select>
+                                        </div>
+                                    </div> -->
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">SPA Location </label>
+
+                                        <div class="col-sm-8 spa-loc">
+                                            <select class="form-control F_SPALOCN" id="F_SPALOCN"
+                                                name="F_SPALOCN[]" multiple>
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="alert alert-success alert-dismissible fade show alert-hidden"
+                                id="successAlertAddTherapy">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Success! </strong> Record added successfully.
+                            </div>
+
+                            <div class="alert alert-info alert-dismissible fade show alert-hidden"
+                                id="successAlertUpdateTherapy">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <strong>Success! </strong> Record Update successfully.
+                            </div>
+                            <div class="alert alert-danger alert-dismissible fade show d-none" id="success-alert-error">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Error! </strong> <span class="custom_error"></span>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary btn-block buttonSubmitFire">Submit</button>
+                            <button type="reset" class="btn btn-primary buttonReset">Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- MODAL END -->
+
+        <script type="text/javascript">
+
+            $(document).ready(function (e) {
+                getBranchCode();
+                getAccountCode();
+
+                $(document).on("click", "#Add_New_dealTransaction_Details", function () {
+                    $("#adddealTransactionModel").modal("show");
+                    $(".F_TRANNO").val('0');
+                    $(".F_ACCTCDNO").val('0');
+                    $(".modal-title").html("Add New Deal Transaction Details");
+                    $(".buttonSubmitFire").html("SUBMIT");
+                    $(".buttonReset").html("RESET");
+                    $("#dealTransactionForm")[0].reset();
+                    $("#dateNow").val(Date());
+                });
+
+
+
+                var dataColumns = [{
+                    data: "F_TRANNO",
+                    sTitle: "Id",
+                    visible: true
+                },
+
+                {
+                    data: "F_ACCTCDNO",
+                    sTitle: "acc Cd",
+                    visible: true
+                },
+
+                {
+                    data: "F_TRANDT",
+                    sTitle: "Date",
+                    visible: true,
+                    className: "fs15--design",
+                    render: function (data, type, row) {
+                        var html = " ";
+                        return dateFormat(row.F_VLDDT1);
+                    }
+                },
+                {
+                    data: "F_ACCTCD",
+                    sTitle: "Acc Code",
+                    visible: true,
+                    className: "fs15--design",
+                },
+
+                {
+                    data: "F_DEALNO",
+                    sTitle: "Deal No",
+                    visible: true,
+                    className: "fs15--design",
+                },
+
+                {
+                    data: "F_VLDDT1",
+                    sTitle: "Valid Dt1",
+                    visible: true,
+                    className: "fs15--design",
+                    render: function (data, type, row) {
+                        var html = " ";
+                        return dateFormat(row.F_VLDDT1);
+                    }
+
+                },
+                {
+                    data: "F_VLDDT2",
+                    sTitle: "Valid Dt2",
+                    visible: true,
+                    className: "fs15--design",
+                    render: function (data, type, row) {
+                        var html = " ";
+                        return dateFormat(row.F_VLDDT2);
+                    }
+                },
+
+                {
+                    data: "F_DEALAMT",
+                    sTitle: "Deal Amt",
+                    visible: true,
+                    className: "fs15--design",
+                },
+
+                {
+                    data: "F_DEALFLG",
+                    sTitle: " Deal Type",
+                    visible: true,
+                    className: "fs15--design",
+                },
+
+                {
+                    data: "F_SPALOCN",
+                    sTitle: " Spa Location",
+                    visible: true,
+                    className: "fs15--design",
+                },
+
+                {
+                    data: "update",
+                    sTitle: "Action",
+                    visible: true,
+                    render: function (data, type, row) {
+
+                        var html =
+                            ' <span class="btn btn-primary btn-block " data-id="' + row
+                                .F_TRANNO +
+                            '" onclick="updatedealTransactionMaster(this) " > EDIT </span>';
+                        return html;
+                    }
+                },
+
+                {
+                    data: "Deal",
+                    sTitle: "Action",
+                    visible: true,
+                    render: function (data, type, row) {
+                        //console.log(row);
+                        var html =
+
+                            ' <span class="btn btn-primary btn-block" data-id="' + row
+                                ._id +
+                            '" onclick="getdealTransactionPrint(this) "><i class="fa fa-print"></i></span>';
+                        return html;
+                    }
+                }
+                ];
+
+                DrawTableInquiry = DrawCustomDataTable("uspList", 350,
+                    "/route/dealTransaction/grid-Data", dataColumns, [
+                    [0, "asc"]
+                ], "frm_grid_search", null, true, true);
+
+                $("#frm_grid_search").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        DrawTableInquiry.ajax.reload();
+                    }
+                });
+
+                $("#dealTransactionForm").validate({
+                    rules: {
+                    },
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        $(".overlay").show();
+                        var formDom = $(form);
+                        var formData = formDom.serializeObject();
+                        // alert(formData)
+                        /* post method */
+                        $.ajax({
+                            method: "POST",
+                            url: "/route/dealTransaction/dealTransactionMaster",
+                            data: JSON.stringify(formData),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (result) {
+                                console.log(result);
+                                //alert('Successfully saved data');
+                                $("#adddealTransactionModel").modal("hide");
+                                DrawTableInquiry.ajax.reload();
+                                getdealTransactionData();
+                            }
+                        });
+                    }
+                });
+            });
+
+            function getdealTransactionData() {
+                $.ajax({
+                    method: "POST",
+                    url: "/route/dealTransaction/getdealTransactionrDocument",
+                    data: JSON.stringify({}),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        var str = ``;
+                        console.log("resultresultresult", result)
+                        for (var i = 0; i < result.Data.length; i++) {
+                            str += `
+                        <tr class="text-center justify-content-center" data-spa='${result.Data[i].spa}'> 
+                          <td class="align-middle font-weight-bold text-st-purple"> <span data-id="${result.Data[i].F_TRANNO}" onclick="updatedealTransactionMaster(this)"> ${result.Data[i].F_ACCTCD} </span> </td>
+                          <td class="align-middle"> ${result.Data[i].F_ACCTCDNO}</td>
+                          <td class="align-middle"> ${result.Data[i].F_VLDDT1}</td>
+                          <td class="align-middle"> ${result.Data[i].F_VLDDT2}</td>
+                          <td class="align-middle"> ${result.Data[i].F_DEALAMT}</td>
+                          <td class="align-middle"> ${result.Data[i].F_DEALFLG}</td>
+                          <td class="align-middle"> ${result.Data[i].F_SPALOCN}</td>
+                          
+                        </tr>
+                    `;
+                        }
+                        // $("#accountCode").select2();
+                        $('.branchCodeGlobal').select2();
+                        $("#F_ACCTCD").select2();
+                        $("#F_SPALOCN").select2();
+                        $('#insertdealTransactionData').html(str);
+                        $('#dealTransactionDetailTable').dataTable();
+                        // console.log(str);
+                    },
+                })
+            };
+
+            getdealTransactionData();
+
+            function updatedealTransactionMaster(e) {
+                var id = e.getAttribute('data-id');
+                var parent = e.parentNode.parentNode;
+                var obj = {
+                    F_TRANNO: id
+                };
+                // alert(obj);
+                $.ajax({
+                    method: "POST",
+                    url: "/route/dealTransaction/getdealTransactionDataById",
+                    data: JSON.stringify(obj),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        //console.log(result);
+                        $.when($('#dealTransactionForm').populate(result.Data)).done(function (e) { });
+                        $('#adddealTransactionModel').modal('show');
+                        $(".modal-title").html("Update dealTransaction Details");
+
+
+                    }
+                });
+            };
+
+            function setBranchCity(e) {
+                // console.log(e.value)
+                $.ajax({
+                    method: "POST",
+                    url: "/route/dealTransaction/getdealTransactionBranchDetails",
+                    data: JSON.stringify({ ST_BRN: e.value }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result.Data);
+                        $('#shipCity').val(result.Data.F_CITY);
+                        $('#shipAdd').val(result.Data.ST_ADD);
+                        $('#shipPin').val(result.Data.F_PIN);
+                    }
+                });
+            }
+
+            //get Data
+
+            function getdealTransactionPrint(e) {
+                $('.divLoader').show();
+                var id = e.getAttribute('data-id');
+
+                $.ajax({
+                    url: '/route/dealTransaction/dealTransactionPrint/',
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ id: id }),
+                    dataType: "json",
+
+                    success: function (result) {
+                        console.log(result);
+
+                        $('#printBody').html(result.html);
+                        $('#printModal').modal('show');
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        var result = jQuery.parseJSON(jqXHR.responseText);
+                    }
+                });
+            }
+
+            function getAccountCode() {
+                $.get("/route/dealTransaction/getAccCode", function (result) {
+                    var category_json = "";
+                    if (result.length > 0) {
+                        category_json = '<option value="">Select Account Code</option>'
+                        for (var i = 0; i < result.length; i++) {
+                            if (result[i] && result[i] != "" && result[i] != "XXXXXXXXXXXX") {
+                                //  console.log(result[i],"result getsuppliercat hiii")
+                                if (result[i]) {
+                                    category_json += '<option value="' + result[i].toUpperCase() + '">' + result[i].toUpperCase() + '</option>';
+                                }
+                            }
+                        }
+                    } else {
+                        category_json = "";
+                    }
+                    $('.F_ACCTCD').html(category_json);
+                });
+            }
+
+            function getBranchCode() {
+
+                var optionList = '<option value="">SELECT</option>';
+                $.ajax({
+                    url: "/route/spaLocationST/getLocationListNew",
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (filterResult) {
+                        if (filterResult && filterResult.length > 0) {
+                            optionList += '<option value="IN000">IN000-HO/ Mumbai Depot</option>';
+                            $.each(filterResult, function (index, data) {
+
+                                optionList += '<option value="' + data.ST_BRN + '">' + data.ST_BRN + '</option>';
+                            });
+                        }
+                        console.log(optionList);
+                        $("#F_SPALOCN").html(optionList);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("Error in loading branch data.Please refresh page.");
+                    }
+                });
+            }
+
+        </script>
+
+        <% include ../partials/footer %>

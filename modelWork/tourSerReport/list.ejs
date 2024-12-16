@@ -1,0 +1,934 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+        <style>
+            @media print {
+                table {
+                    width: 100%;
+                    border: 1px solid #000000;
+                    border-collapse: collapse;
+                    font-size: 11pt;
+                }
+            }
+
+            .page-break {
+                page-break-before: always;
+            }
+
+            table {
+                font-family: monospace;
+                font-size: 12px;
+            }
+
+            .table>tbody>tr>td,
+            .table>thead>tr>td,
+            .table>thead>tr>th {
+                font-size: 12px;
+            }
+
+            .tourcode,
+            .formno {
+                text-transform: uppercase;
+                font-size: 16px;
+                font-weight: 800;
+            }
+
+            .tourname {
+                font-size: 12px;
+            }
+
+            .tour-detials {
+                font-size: 15px;
+                white-space: nowrap;
+            }
+
+            .background-box {
+                background: #dadada;
+                padding: 1px 5px;
+                border-radius: 4px;
+            }
+
+            .col-150 {
+                min-width: 150px;
+                max-width: 150px;
+                width: 150px;
+            }
+
+            .col-50 {
+                min-width: 50px;
+                max-width: 50px;
+                width: 50px;
+            }
+
+            .alert {
+                width: auto;
+                padding: 20px;
+                font-size: 15px;
+                top: 63px !important;
+                right: 20px !important;
+                z-index: 999999 !important;
+            }
+
+            .ibTable tr td {
+                padding: 3px;
+            }
+
+            .calIpBox {
+                border-bottom: 1px solid #fff;
+            }
+
+            label.error {
+                display: block !important;
+            }
+
+            .txtalign {
+                text-align: right;
+            }
+        </style>
+        <div id="mySidenav" class="hamburger-menu">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <div class="hamburger-content">
+                <form id="frm_grid_search" name="frm_grid_search">
+
+                </form>
+            </div>
+        </div>
+        <div class="box">
+            <div class="box-header with-border with-hamburger">
+                <a href="javascript:void(0);" class="box-header-hamburger-menu" onclick="openNav()">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </a>
+                <h3 class="box-title">TOUR SERVICE ANALYSIS REPORT</h3>
+            </div>
+            <div class="box-body">
+                <div class="row gutter--3px">
+
+
+                    <div class="col-md-2">
+                        <label class="fs12--design">
+                            TOURCODE <span style="color:  rgb(173, 6, 6); font-size: medium;">*</span>
+                        </label>
+                       
+                        <input class="form-control TM_TCD" id="TM_TCD" name="TM_TCD" />
+                    </div>
+
+
+                    <div class="col-md-8">
+                        <div style="margin-top: 20px;">
+                            <span class="btn btn-primary" onclick="psaSummary()">Report</span>
+
+                            <span class="btn btn-success" onclick="printData4()">
+                                <i class="fa fa-print" aria-hidden="true" style="color: white;"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                </div>
+                <div class="col-md-12 printdata">
+                    <div class="col-md-12 infotxt">
+                    </div>
+                    <table class="addtr" border="0"
+                        cellpadding="0" cellspacing="0" style="width:100%;">
+                    </table>
+                </div>
+            </div>
+           
+
+        </div>
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+        <script>
+
+            var DrawTableInquiry;
+
+
+            $(document).ready(function () { });
+
+
+
+
+            function psaSummary() {
+                var TM_TCD = $('.TM_TCD').val();
+                $.ajax({
+                    url: '/route/tourServiceAnalysisReport/getTourServiceAnalysisReport',
+                    method: 'post',
+                    data: { 'TM_TCD': TM_TCD },
+                    success: function (response) {
+                        console.log("responce", response)
+                        const data = response.data; // assuming this contains the required tour information
+
+                        // Helper function to format dates as "7 NOV - 14 NOV @024"
+                        function formatTourDates(TM_DT1, TM_DT2) {
+                            const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+
+                            const date1 = new Date(TM_DT1);
+                            const date2 = new Date(TM_DT2);
+
+                            const day1 = date1.getDate();
+                            const month1 = months[date1.getMonth()];
+                            const day2 = date2.getDate();
+                            const month2 = months[date2.getMonth()];
+                            const year = date1.getFullYear(); // Full year
+                            //const year = String(date1.getFullYear()).slice(-1); // Last digit of the year
+
+                            return `${day1} ${month1} ${year} - ${day2} ${month2} ${year}`;
+                        }
+
+                        // Check if TM_DT1 and TM_DT2 exist in the data and format them
+                        let formattedDate = "Date not available";
+                        if (data[0].TM_DT1 && data[0].TM_DT2) {
+                            formattedDate = formatTourDates(data[0].TM_DT1, data[0].TM_DT2);
+                        }
+
+
+
+                        // HTML Template
+                        var emailHtml = `  <body width="90%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
+        <center style="width: 100%;">
+            <div style="max-width: 848px; margin: 15px auto; background-color: #fff;" class="addtr">
+                <!-- BEGIN BODY -->
+                <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+                    <tbody>
+                        <tr>
+                            <td class="bg_white logo" style="padding: 1em 2.5em 1px; /*! text-align: center */">
+                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="/*! text-align: center; */">
+                                    <tbody>
+                                        <tr>
+                                            <td valign="top" style="padding-top: 20px; padding-right: 15px; vertical-align: middle;" width="90%">
+                                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="icon" style="text-align: left; font-weight: bold; font-size: 16px;padding-bottom:15px;">
+                                                                Tour Service Analysis Report : ${data[0].TM_TCD} 
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-services" style="text-align: left;">
+                                                                <p style="font-weight: 600; font-size: 9.2px; color: #311d40; ">
+                                                                    KESARI TOURS PVT LTD., 314, L.J.Road., mashim, Mumbai, India - 400016. Tel 24332222, Fax.(+9122) 2432 2020, www.kesari.in
+                                                                </p>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                            <td valign="top" style="padding-top: 20px; padding-left: 15px;" width="10%">
+                                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="icon" style="text-align: right;">
+                                                                <img alt="" style="width: 107px; max-width: 600px; height: auto; /*! margin: auto; */ /*! display: block; */" src="https://www.kesari.in/assets/img/kesari-round-logo.png" />
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bg_white logo" style="padding: 1em 2.5em 1px; /*! text-align: center */">
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                    <tbody>
+                                        <!-- end: tr -->
+                                        <tr>
+                                            <td>
+                                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="/*! text-align: center; */">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td valign="top" style="vertical-align: middle; text-align: center;" colspan="2">
+                                                                <h2 style="font-size: 14px;font-weight:bold;">
+                                                                    ${data[0].TOURNAME} |  ${formattedDate} | ${data[0].TM_LEADER}  
+                                                                </h2>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td valign="top" style="vertical-align: middle; text-align: left;">
+                                                                Kindly rate below service as follows
+                                                            </td>
+                                                            <td valign="top" style="vertical-align: middle; text-align: right;">
+                                                                <span>A - Excellent</span>
+                                                                <span style="margin: 0 28px;">B - Good</span>
+                                                                <span>C - Needs Improvement</span>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-top: 10px;">
+                                                <table style="border: 1px solid black; border-collapse: collapse; width: 100%;" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th style="border: 1px solid black; padding: 8px; width: 150px; font-size: 12px;">Place</th>
+                                                            <th style="border: 1px solid black; padding: 8px; width: 100px; font-size: 12px;">Airline</th>
+                                                            <th style="border: 1px solid black; padding: 8px; width: 100px; font-size: 12px;">Bus</th>
+                                                            <th style="border: 1px solid black; padding: 8px; width: 100px; font-size: 12px;">Hotels</th>
+                                                            <th style="border: 1px solid black; padding: 8px; width: 100px; font-size: 12px;">Restaurant</th>
+                                                            <th style="border: 1px solid black; padding: 8px; width: 100px; font-size: 12px;">
+                                                                Extra <br />
+                                                                Topping
+                                                            </th>
+                                                            <th style="border: 1px solid black; padding: 8px; width: 100px; font-size: 12px;">Dry Snacks</th>
+                                                            <th style="border: 1px solid black; padding: 8px; width: 100px; font-size: 12px; width: 84px;">
+                                                                Agent/hotel <br />
+                                                                Services
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                        </tr>
+
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                        </tr>
+
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                        </tr>
+
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                        </tr>
+
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                        </tr>
+
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                        </tr>
+
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                        </tr>
+
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                        </tr>
+
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                        </tr>
+
+
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bg_white logo" style="padding: 1em 2.5em 1px; /*! text-align: center */">
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                    <tbody>
+                                        <!-- end: tr -->
+                                        <tr>
+                                            <td>
+                                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="/*! text-align: center; */">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td valign="top" style="vertical-align: middle; text-align: center;" colspan="2">
+                                                                <h2 style="font-size: 17px; text-align: left;">On Tour Health &amp; Safety Incidences Report</h2>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="" >
+                                                <table style="border: 1px solid black; border-collapse: collapse; width: 100%;" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th style="border: 1px solid black; padding: 8px; width: 26px; font-size: 12px;">Sr.no</th>
+                                                            <th style="border: 1px solid black; padding: 8px; font-size: 12px;">Date</th>
+                                                            <th style="border: 1px solid black; padding: 8px; font-size: 12px;">Incident Details</th>
+                                                            <th style="border: 1px solid black; padding: 8px; font-size: 12px;">Action Taken</th>
+                                                            <th style="border: 1px solid black; padding: 8px; font-size: 12px;">Preventive Measures</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px; height:250px; "></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px; height:250px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px; height:250px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px; height:250px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px; height:250px;"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bg_white logo" style="padding: 1em 2.5em 1px; /*! text-align: center */">
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                    <tbody>
+                                        <!-- end: tr -->
+                                        <tr>
+                                            <td>
+                                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="/*! text-align: center; */">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td valign="top" style="vertical-align: middle; text-align: center;" colspan="2">
+                                                                <h2 style="font-size: 17px; text-align: left;">Industry Movement</h2>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="">
+                                                <table style="border: 1px solid black; border-collapse: collapse; width: 100%;" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th style="border: 1px solid black; padding: 8px; width: 148px; font-size: 12px;"></th>
+                                                            <th style="border: 1px solid black; padding: 8px; font-size: 12px;">Name of Company</th>
+                                                            <th style="border: 1px solid black; padding: 8px; font-size: 12px;">Group Strength</th>
+                                                            <th style="border: 1px solid black; padding: 8px; font-size: 12px;">Agent Used</th>
+                                                            <th style="border: 1px solid black; padding: 8px; font-size: 12px;">USP</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;">Frequent Operators</td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;">Small Operators</td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; font-size: 12px; padding: 8px;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;">Incentive Tours</td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; font-size: 12px;"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr <tr style="page-break-before: always;">
+                            <td class="bg_white logo" style="padding: 1em 2.5em 1px; /*! text-align: center */">
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                    <tbody>
+                                        <!-- end: tr -->
+                                        <tr>
+                                            <td>
+                                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="/*! text-align: center; */">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td valign="top" style="vertical-align: middle; text-align: left; font-size: 10px;">
+                                                                <span>ISSUE No:- 01</span><br>
+                                                                <span>ISSUE Date:- 20/03/2008</span>
+                                                            </td>
+                                                            <td valign="top" style="vertical-align: middle; text-align: center;">
+                                                                <h2 style="font-size: 17px;">GUIDELINES FOR GIVING RATINGS</h2>
+                                                            </td>
+                                                            <td valign="top" style="vertical-align: middle; text-align: right; font-size: 10px;">
+                                                                <span>Revision No:- 01</span><br />
+                                                                <span>Revision Date:- 20/03/2008</span>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="">
+                                                <table style="border-collapse: collapse; width: 100%;" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th style="border: 1px solid black; padding: 8px; line-height:0.4; width: 348px; font-size: 12px; line-height: 0.7;">Hotel</th>
+                                                            <th style="border: 1px solid black; padding: 8px; line-height:0.4; font-size: 12px; line-height: 0.7;">A</th>
+                                                            <th style="border: 1px solid black; padding: 8px; line-height:0.4; font-size: 12px; line-height: 0.7;">B</th>
+                                                            <th style="border: 1px solid black; padding: 8px; line-height:0.4; font-size: 12px; line-height: 0.7;">C (Anything Below 'B')</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4; line-height: 0.7;">1.Clean Bedsheet</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">2.Phone In Working Condition</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">3.Clean Rooms</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">4.Running Hot/Cold Water</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">5.Toiletaries</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">6.Towels</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">7. Appliances in Working order</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">8.Prompt Room Service</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">9.Houskeeping in Time</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                      
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-top:20px;">
+                                                <table style="border-collapse: collapse; width: 100%;" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th style="border: 1px solid black; padding: 8px; line-height:0.4; width: 348px; font-size: 12px;">Bus</th>
+                                                            <th style="border: 1px solid black; padding: 8px; line-height:0.4; font-size: 12px;">A</th>
+                                                            <th style="border: 1px solid black; padding: 8px; line-height:0.4; font-size: 12px;">B</th>
+
+                                                            <th style="border: 1px solid black; padding: 8px; line-height:0.4; font-size: 12px;">C (Anything Below 'B')</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">1.Proper Intact Seat</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">2.Pushback Seat Condition</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">3.Air Conditioning</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">4.Cleanliness</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">5.Public Address System</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">6.Entertainment System(CD Player/TV)</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">7.Wi-Fi </td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">8.Presentable Driver </td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">9.Helpfull Cleaner</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">10.Cushion Cover</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">11.Stool</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                           <td style="padding-top:20px;">
+                                                <table style="border-collapse: collapse; width: 100%;" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th style="border: 1px solid black; padding: 8px; line-height:0.4; width: 348px; font-size: 12px;">Airline</th>
+                                                            <th style="border: 1px solid black; padding: 8px; line-height:0.4; font-size: 12px;">A</th>
+                                                            <th style="border: 1px solid black; padding: 8px; line-height:0.4; font-size: 12px;">B</th>
+
+                                                            <th style="border: 1px solid black; padding: 8px; line-height:0.4; font-size: 12px;">C (Anything Below 'B')</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">1.On time Dep-Arrival</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">2.Proper Seating Arrangement</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">3.Meal Request Followed</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">4.Inflight Entertainment System</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">5.Courteous Staff</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">6.Co'operative ground staff</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">7.Smooth boarding procedure</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">8.Proper Inflight Servive</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                         
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-top:20px;">
+                                                <table style="border-collapse: collapse; width: 100%;" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th style="border: 1px solid black; padding: 8px; line-height:0.4; width: 348px; font-size: 12px;">Restaurant</th>
+                                                            <th style="border: 1px solid black; padding: 8px; line-height:0.4; font-size: 12px;">A</th>
+                                                            <th style="border: 1px solid black; padding: 8px; line-height:0.4; font-size: 12px;">B</th>
+
+                                                            <th style="border: 1px solid black; padding: 8px; line-height:0.4; font-size: 12px;">C (Anything Below 'B')</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">1.Seating Arrangment</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                       
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">2. Cleaniness</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">3. Toilet</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">4.Buffet Setup</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">5.Ambience</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">6.Hygine</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;">7.Cutlery</td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                            <td style="border: 1px solid black; padding: 8px; line-height:0.4;"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <!-- end tr -->
+                        <!-- end tr -->
+                        <!-- end:tr -->
+                        <!-- 1 Column Text + Button : END -->
+                    </tbody>
+                </table>
+            </div>
+        </center>
+    </body>
+            `;
+
+                        // Inject the HTML into a div with the class .email-container
+                        //  $('.infotxt').html(emailHtml);
+                        $('.addtr').html(emailHtml);
+
+                    },
+                    error: function (error) {
+                        console.error('Error fetching package details:', error);
+                    }
+                });
+            }
+
+
+            function getsupplier() {
+                var catparam = $(".PKG_CATEGORY").val();
+                //console.log("catparamcatparamcatparamcatparam",catparam)
+
+                var tray_url = "/route/fitPackage/getSupplier/" + catparam;
+                $.getJSON(tray_url, function (data) {
+                    var optionList1 = '<option value="select"></option>';
+                    $.each(data, function () {
+                        if (this) {
+                            // console.log("datadata",this.FIT_PKG_DESTINATION)
+                            optionList1 += '<option value="' + this.FIT_PKG_DESTINATION + '">' +
+                                this.FIT_PKG_DESTINATION + '</option>'
+                        }
+                    });
+                    $('.TM_TCD').html(optionList1);
+                    $('.TM_TCD').select2();
+                });
+            }
+
+            // function printData4() {
+            //     var newWin = window.open("");
+            //     newWin.document.write(document.querySelector('.printdata').innerHTML);
+            //     setTimeout(function () {
+            //         newWin.print();
+            //         newWin.close();
+            //     }, 500);
+            // }
+
+            function printData4() {
+                // Check if .printdata has content to avoid empty print output
+                const printContent = document.querySelector('.printdata').innerHTML;
+                if (!printContent.trim()) {
+                    console.warn("No content to print in .printdata element.");
+                    return;
+                }
+
+                // Open a new window
+                var newWin = window.open("", "_blank");
+
+                // Write the HTML structure including the styles for printing
+                newWin.document.write(`
+        <html>
+             <body>
+                ${printContent}
+            </body>
+        </html>
+    `);
+
+                // Close the document to finish loading the HTML in the new window
+                newWin.document.close();
+
+                // Trigger the print dialog with a delay to ensure content is fully rendered
+                setTimeout(function () {
+                    newWin.print();
+                    newWin.close();
+                }, 500);
+            }
+
+            $("#TM_TCD").autocomplete({
+                source: function (request, response) {
+                    var formData = {};
+                    formData.q = request.term;
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        url: "/route/rsData/searchTourcode",
+                        dataType: "json",
+                        data: JSON.stringify(formData),
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                var AC = new Object();
+                                //autocomplete default values REQUIRED
+                                AC.label = item._id;
+                                AC.value = item._id;
+
+                                return AC
+                            }));
+                        }
+                    });
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    var tour_code = ui.item.value;
+                }
+            });
+
+
+        </script>
+        <% include ../partials/footer %>

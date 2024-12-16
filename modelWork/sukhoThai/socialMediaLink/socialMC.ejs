@@ -1,0 +1,783 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+
+        <style>
+            .form-group {
+                margin-bottom: 25px;
+            }
+
+            #spaLoc {
+                padding-left: 10px;
+            }
+
+            .uppercase {
+                text-transform: uppercase;
+            }
+
+            /* ------tab s------ */
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                background-color: #eaeeed;
+                font-family: 'sans-serif', sans-serif;
+            }
+
+            .tab-container {
+                margin: 5% 10%;
+                background-color: #b7bbba;
+                padding: 3%;
+                border-radius: 4px;
+            }
+
+            .tab-menu {}
+
+            .tab-menu ul {
+                margin: 0;
+                padding: 0;
+            }
+
+            .tab-menu ul li {
+                list-style-type: none;
+                display: inline-block;
+            }
+
+            .tab-menu ul li a {
+                text-decoration: none;
+                color: #333;
+                background-color: #e0e6e4;
+                padding: 7px 25px;
+                border-radius: 4px;
+                margin-left: 10px;
+            }
+
+            .tab-menu ul li a.active-a {
+                background-color: #777;
+                color: #ffffff;
+                font-weight: bold;
+            }
+
+            .tab {
+                display: none;
+            }
+
+            .tab h2 {
+                color: rgba(0, 0, 0, .7);
+            }
+
+            .tab p {
+                color: rgba(0, 0, 0, 0.6);
+                text-align: justify;
+            }
+
+            .tab-active {
+                display: block;
+            }
+
+            .tab .badge {
+                margin-right: 5px;
+            }
+
+
+
+
+            .spa-loc .checkbox>input[type=checkbox] {
+                left: 10px !important;
+                top: 10px !important;
+                opacity: 1 !important;
+            }
+
+            .btn-group,
+            .btn-group-vertical {
+                display: block;
+            }
+
+            label.error {
+                bottom: 22px !important;
+                left: 14px !important;
+            }
+
+            .row.gutter--3px {
+                margin-bottom: 10px;
+            }
+
+
+            span.btn.btn-primary.btn-block {
+                width: 50%;
+            }
+
+
+            .dataTables_scroll {
+                margin-top: -48px;
+            }
+
+
+
+            /* -----e----- */
+        </style>
+
+
+        <div class="tab-menu d-flex">
+            <ul class="d-flex mx-auto">
+                <li><a href="#" class="tab-a active-a" data-id="tab1" onclick="test1()">Master</a></li>
+                <li><a href="#" class="tab-a" data-id="tab2" onclick="test2()">Social Media Link</a></li>
+
+            </ul>
+        </div>
+        <!--end of tab-menu-->
+        <br>
+
+        <!---------------------- tab1------------------------ -->
+
+        <div class="tab tab-active" data-id="tab1">
+            <div class="box-body">
+                <div class="row gutter--3px">
+
+                    <div class="col-md-8 r-col mx-auto ">
+                        <div class="card">
+                            <div class="card-body">
+                                <span class="btn btn-primary mb-3" id="Add_master"><i class="fa fa-plus"></i> Generate
+                                    Social Media Link</span>
+
+
+                                <table id="uspList"
+                                    class="table table-bordered table-striped display nowrap order-column"
+                                    style="width:100%;">
+                                    <tbody class="appar">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+            <!-- MODAL START -->
+            <div class="modal fade" id="newUserBox" tabindex="-1" role="dialog" aria-labelledby="newUserBox"
+                aria-hidden="true">
+                <div class="modal-dialog modal-md" role="document">
+                    <div class="modal-content">
+
+
+                        <div class="modal-header">
+                            <h5 class="modal-title"></h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <span>×</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form id="regForm">
+                                <div class="row gutter--3px">
+                                    <div class="col-md-12">
+                                        <div class="row gutter--3px ">
+
+                                            <div class="form-group row col-sm-12">
+                                                <input type="hidden" class="form-control Department" name="id"
+                                                    value="0">
+
+                                                <label for="" class="col-sm-5 col-form-label fs15--design">Social Media
+                                                    Name <span style="color: rgb(131, 5, 5);">*</span></label>
+                                                <div class="col-sm-7">
+                                                    <input type="text" class="form-control socialMediaName"
+                                                        name="socialMediaName" placeholder="Enter Name" required />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row col-sm-12">
+                                                <label for="" class="col-sm-5 col-form-label fs15--design">Link Key Name
+                                                    <span style="color: rgb(131, 5, 5);">*</span></label>
+                                                <div class="col-sm-7">
+                                                    <input type="text" class="form-control socialMediaLinkKeyName"
+                                                        name="socialMediaLinkKeyName" placeholder="Enter Key Name"
+                                                        required />
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mt-10">
+
+                                        <button type="submit" class="btn btn-primary btn-block">SAVE</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- MODAL END -->
+        </div>
+
+        <!-- -------------------------tab2--------------------------------------- -->
+
+        <div class="tab " data-id="tab2">
+            <div class="box-body">
+                <div class="row gutter--3px">
+                    <div class="col-md-6 r-col mx-auto ">
+                        <div class="card">
+                            <div class="card-body">
+                                <span class="btn btn-primary mb-3" id="Add_SocialMediaLink"><i class="fa fa-plus"></i>
+                                    Add New Social Media Link </span>
+
+
+                                <table id="uspList1"
+                                    class="table table-bordered table-striped display nowrap order-column"
+                                    style="width:100%;">
+                                    <tbody class="appar">
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="modal fade" id="newUserBox1" tabindex="-1" role="dialog" aria-labelledby="newUserBox1"
+                aria-hidden="true">
+                <div class="modal-dialog modal-md" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title"></h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <span>×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="regForm1">
+                                <div class="row gutter--3px">
+                                    <div class="col-md-12">
+                                        <div class="row gutter--3px ">
+                                            <div>
+                                                <input type="hidden" class="form-control Designation" name="id"
+                                                    value="0">
+                                            </div>
+
+                                            <div class="form-group row col-sm-12">
+                                                <label for="" class="col-sm-4 col-form-label fs15--design"> Branch <span
+                                                        style="color: rgb(131, 5, 5);">*</span>
+                                                </label>
+                                                <div class="col-sm-8">
+
+                                                    <select name="ST_BRN" class="form-control ST_BRN" id="spaLoc"
+                                                        itemid="Add_SocialMediaLink" onchange="getTourDetail(this)">
+                                                        <option value="">Please select branch</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                      
+
+                                            <!-- <h5>Social Media Link Add </h5> -->
+                                            <table id="jbrkdtlTable" class="table table-bordered table-striped"
+                                                style="width:100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Link</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+
+
+                                            <!-- </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mt-10">
+
+                                        <button type="submit" class="btn btn-primary btn-block">SAVE</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!------------------------- script 1------------------------------- -->
+        <script>
+            var DrawTableInquiry;
+
+            $(document).ready(function () {
+
+                var dataColumns = [{
+                    data: "_id",
+                    sTitle: "Id",
+                    visible: false
+                },
+
+
+                {
+                    data: "socialMediaName",
+                    sTitle: "Social Media Name",
+                    visible: true,
+                    className: "fs15--design column-50",
+                },
+
+                {
+                    data: "socialMediaLinkKeyName",
+                    sTitle: "Social Media Link Key Name",
+                    visible: true,
+                    className: "fs15--design column-50",
+                },
+
+
+
+                ];
+
+
+                DrawTableInquiry = DrawCustomDataTable("uspList", 300,
+                    "/route/socialMediaLinksMaster/grid-data", dataColumns, [
+                    [0, "asc"]
+                ], "frm_grid_search1", null, true, true);
+
+                $("#frm_grid_search1").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        DrawTableInquiry.ajax.reload();
+                    }
+                });
+                $('.textUpper').on('keyup', function (e) {
+                    $(this).val($(this).val().toUpperCase());
+                });
+
+                $('.tab-a').click(function () {
+                    $(".tab").removeClass('tab-active');
+                    $(".tab[data-id='" + $(this).attr('data-id') + "']").addClass("tab-active");
+                    $(".tab-a").removeClass('active-a');
+                    $(this).parent().find(".tab-a").addClass('active-a');
+                });
+
+
+
+                $("form#regForm").submit(function (e) {
+                    //  $('#newUserBox').modal('hide');
+                    e.preventDefault();
+                });
+
+                $("#regForm").validate({
+                    rules: {
+                        //  F_CODE10: "required",
+                    },
+                    messages: {
+                        // F_CODE10: "Department is required",
+                    },
+                    errorPlacement: function (error, element) {
+                        offset = element.offset();
+                        error.insertAfter(element)
+
+                    },
+
+                    submitHandler: function (form) {
+                        $('#newUserBox').modal('hide');
+                        var obj = {};
+                        var $form = $(form);
+                        var formData = $form.serializeObject();
+
+                        var method = "post";
+                        var url = "/route/socialMediaLinksMaster/create";
+                        //console.log("formDataformData", formData);
+                        if (formData.id != 0) {
+                            url =
+                                '/route/socialMediaLinksMaster/updateData/' +
+                                formData.id;
+                            method = "put";
+                        }
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(formData),
+                            //data: formData,
+                            dataType: "json",
+                            success: function (result) {
+
+                                if (result.status) {
+
+                                    DrawTableInquiry.ajax.reload();
+                                    $("#regForm")[0].reset();
+                                } else {
+
+                                    notification({
+                                        type: "error",
+                                        message: result.msg // You may customize the error message here
+                                    });
+                                }
+
+
+                            },
+
+                            error: function (xhr, status, error) {
+                                // Handle AJAX error
+                                console.error("AJAX Error:", status, error);
+                                notification({
+                                    type: "primary",
+                                    message: "Already Exist" // You may customize the error message here
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+
+
+            $(document).on("click", "#Add_master", function () {
+
+                // $('#suppliercat').removeAttr('disabled');
+
+                $("#newUserBox").modal("show");
+                DrawTableInquiry.ajax.reload();
+                $("#regForm")[0].reset();
+                $(".modal-title").html("Social Media Link Details");
+
+            });
+
+            function populate(frm, data) {
+                $.each(data, function (key, value) {
+                    $('[name=' + key + ']', frm).val(value);
+                });
+                $('.sector').select2();
+            }
+
+
+
+            function getUser(id) {
+
+                var id = id.getAttribute('data-id');
+
+                $.ajax({
+                    url: "/route/socialMediaLinksMaster/getdata",
+                    type: "get",
+                    data: {
+                        id: id
+                    },
+                    success: function (result) {
+                        console.log("hi");
+                        console.log(result);
+
+                        var iddata = {
+                            id: result.data._id
+                        }
+
+                        populate('#regForm', result.data);
+                        populate('#regForm', iddata);
+                        $('#newUserBox').modal('show');
+
+                    }
+                })
+            }
+
+
+
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+
+            function test1() {
+                DrawTableInquiry.ajax.reload();
+            }
+
+
+
+        </script>
+
+        <!------------------------- script 2-------------------------------- -->
+        <script>
+            var DrawTableInquiry1;
+            $(document).ready(function () {
+                getBranchCode();
+
+                var dataColumns = [{
+                    data: "_id",
+                    sTitle: "Id",
+                    visible: false
+                },
+
+                {
+                    data: "ST_BRN",
+                    sTitle: "Branch",
+                    visible: true,
+                    className: "fs15--design  column-50",
+                },
+
+
+               {
+                    data: "action",
+                    sTitle: "Edit",
+                    visible: true,
+                    className: "column-60",
+                    render: function (data, type, row) {
+                        //console.log(row);
+                        var html =
+                            ' <span class="btn btn-primary btn-block" data-id="' + row
+                                ._id +
+                            '" onclick="getUser1(this) "><i class="fa fa-pencil"></i> Edit</span>';
+                        return html;
+                    }
+                },
+
+
+
+                    // {
+                    //     data: "v",
+                    //     sTitle: "A",
+                    //     visible: true,
+                    //     className: "fs15--design column-50",
+                    //     render: function (data, type, row) {
+                    //         var html = '';
+                    //         html = '<span class="btn btn-primary btn-block"  onclick="getTourDetail(this)" >View</span>';
+
+                    //         return html;
+                    //     }
+                    // },
+
+
+
+                ];
+
+
+                DrawTableInquiry1 = DrawCustomDataTable("uspList1", 300,
+                    "/route/socialMediaLinks/grid-data", dataColumns, [
+                    [0, "asc"]
+                ], "frm_grid_search1", null, true, true);
+
+                $("#frm_grid_search1").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        DrawTableInquiry1.ajax.reload();
+                    }
+                });
+
+                $('.textUpper').on('keyup', function (e) {
+                    $(this).val($(this).val().toUpperCase());
+                });
+
+                $('.tab-a').click(function () {
+                    $(".tab").removeClass('tab-active');
+                    $(".tab[data-id='" + $(this).attr('data-id') + "']").addClass("tab-active");
+                    $(".tab-a").removeClass('active-a');
+                    $(this).parent().find(".tab-a").addClass('active-a');
+                });
+
+
+
+                $("form#regForm1").submit(function (e) {
+                    e.preventDefault();
+                });
+
+                $("#regForm1").validate({
+                    rules: {
+                        //F_CODE: "required",
+                    },
+                    messages: {
+                        //F_CODE: "Designation is required",
+
+                    },
+                    errorPlacement: function (error, element) {
+                        offset = element.offset();
+                        error.insertAfter(element)
+                        error.addClass('message');
+                        error.css('display', 'block!important');
+                    },
+
+                    submitHandler: function (form) {
+                        $('#newUserBox1').modal('hide');
+                        var obj = {};
+                        var $form = $(form);
+                        var formData = $form.serializeObject();
+                        // formData.F_TYPE = $('#getSocilaMediaLink').val();
+                        var method = "post";
+                        var url = "/route/socialMediaLinks/create";
+                        console.log("formDataformDatalink", formData);
+                        if (formData.id != 0) {
+                            url =
+                                '/route/socialMediaLinks/updateData/' +
+                                formData.id;
+                            method = "put";
+                        }
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(formData),
+                            //data: formData,
+                            dataType: "json",
+                            success: function (result) {
+                                // console.log("resultresultresultresult", result)
+
+                                if (result.status) {
+
+                                    $(".Designation").val(0)
+                                    DrawTableInquiry1.ajax.reload();
+                                    $("#regForm1")[0].reset();
+                                    // getTourDetail()
+                                }
+
+
+                            },
+
+                        });
+                    }
+                });
+            });
+
+
+
+            $(document).on("click", "#Add_SocialMediaLink", function () {
+
+                $("#newUserBox1").modal("show");
+                $(".modal-title").html("Social Media Links Details");
+
+                $("#regForm1")[0].reset();
+
+            });
+
+            function populate(frm, data) {
+                $.each(data, function (key, value) {
+                    $('[name=' + key + ']', frm).val(value);
+                });
+                $('.sector').select2();
+            }
+
+            function getUser1(id) {
+
+                var id = id.getAttribute('data-id');
+
+                $.ajax({
+                    url: "/route/socialMediaLinks/getdata",
+                    type: "get",
+                    data: {
+                        id: id
+                    },
+                    success: function (result) {
+
+                        // console.log("hi", result);
+
+                        var iddata = {
+                            id: result.data._id
+                        }
+
+                        populate('#regForm1', result.data);
+                        populate('#regForm1', iddata);
+                        $('#newUserBox1').modal('show');
+                        //  getTourDetail()
+                    }
+                })
+            }
+
+
+
+            function getTourDetail() {
+                $.ajax({
+                    url: "/route/socialMediaLinks/getDataFromMaster",
+                    type: "get",
+                    success: function (result) {
+                       // console.log("result", result)
+
+                        var str = ''; 
+                        //console.log("strstrstr", str)
+
+                        if (result.linkList) {
+                            for (var i = 0; i < result.linkList.length; i++) {
+                                str += `<tr>
+                                    <tr> <td>${result.linkList[i].socialMediaLinkKeyName}</td> <td><input class="form-control" name="linkList[${i}][${result.linkList[i].socialMediaLinkKeyName}]" autocomplete="off"></></td></tr>
+                                </tr>`;
+                            }
+                        }
+                        $('#jbrkdtlTable tbody').html(str);
+                    }
+                });
+            }
+
+            // function getTourDetail(e) {
+            //     createJbrkDTlTab();
+            //     // $('#tourBreakUpModel').modal('show');
+            // }
+
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+
+
+            function test2() {
+                DrawTableInquiry1.ajax.reload();
+            }
+
+            function getBranchCode() {
+
+                var optionList = '<option value="">SELECT</option>';
+                $.ajax({
+                    url: "/route/spaLocationST/getLocationListNew",
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (filterResult) {
+                        if (filterResult && filterResult.length > 0) {
+                            optionList += '<option value="IN000">IN000-HO/ Mumbai Depot</option>';
+                            $.each(filterResult, function (index, data) {
+
+                                optionList += '<option value="' + data.ST_BRN + '">' + data.ST_BRN + '</option>';
+                            });
+                        }
+                        // console.log("optionListoptionList", optionList);
+                        $(".ST_BRN").html(optionList);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("Error in loading branch data.Please refresh page.");
+                    }
+                });
+            }
+
+            function getUserTourDetails(e) {
+                var id = e.getAttribute('data-id');
+                // var mstNo = e.getAttribute('data-mst');
+                // $('.jbdtlId').val(id);
+                $.ajax({
+                    url: "/route/socialMediaLinks/getDataFromMaster",
+                    type: "get",
+                    data: {
+                        id: id
+                    },
+                    success: function (result) {
+
+
+                        var iddata = {
+                            id: result.data._id
+                        }
+
+                        $.when($('#TourDetailsForm').populate(result.data)).done(function (x) {
+
+                        });
+                        $('#tourDetailsBox').modal('show');
+
+                    }
+                })
+            }
+
+        </script>
+
+        <% include ../partials/footer %>

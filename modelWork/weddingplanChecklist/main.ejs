@@ -1,11 +1,39 @@
 <% include ../partials/head %>
   <% include ../partials/header %>
-    <% var module_name="weddingPlanCheckList";
-     var columns="g_Mail Print c_Date guest_Name g_Mobile";
-    %>
+    <% var module_name="weddingPlanCheckList" ; var columns="g_Mail Print c_Date guest_Name g_Mobile" ; %>
 
-    <div class="col-md-12 text-right"><i class="fa fa-print btn btn-primary" onclick="printVoucher()"
-      style="margin-bottom:5px; "></i></div>
+
+      <span class="fa fa-print btn btn-primary" onclick="getWeddingChecklistPrint()"></span>
+
+      <div id="printModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header modal-otp-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+
+              </button>
+              <h4>Print Checklist</h4>
+
+            </div>
+            <div class="modal-body modal-body-otp" id="printBody">
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="col-md-12 text-right"><i class="fa fa-print btn btn-primary" onclick="printVoucher()"
+          style="margin-bottom:5px; "></i></div>
+
+      <ul>
+        <li class="text-info fs15--design p-10 text-uppercase brnAct d-none" onclick="getComplimentaryVouClick()"><i
+            class="fa fa-list-alt"></i>
+          Print Complimentary Voucher
+        </li>
+      </ul> -->
+
       <div class="row">
         <!-- left column -->
         <div class="col-md-7">
@@ -19,7 +47,7 @@
             <div data-app="formApp" data-controller="formController">
               <form data-submit="processForm()" id="erp_form" action="/route/weddingPlanCheckList" autocomplete="off">
                 <div class="box-body gutter--3px">
-                <div class="form-group col-md-3">
+                  <div class="form-group col-md-3">
                     <label class="fs14--design" for="date"> Guest Name <span class="text-red">*</span></label>
                     <input type="text" class="form-control guest_Name " name="guest_Name" placeholder="Enter Guest Name"
                       autocomplete="off" />
@@ -28,44 +56,30 @@
 
                   <div class="form-group col-md-3">
                     <label class="fs14--design" for="date"> Guest Mobile <span class="text-red">*</span></label>
-                    <input type="number" class="form-control g_Mobile " name="g_Mobile"
-                      placeholder="Enter Guest Mobile" autocomplete="off" />
+                    <input type="number" class="form-control g_Mobile " name="g_Mobile" placeholder="Enter Guest Mobile"
+                      autocomplete="off" />
                   </div>
 
                   <div class="form-group col-md-3">
                     <label class="fs14--design" for="date"> Guest Email <span class="text-red">*</span></label>
-                    <input type="email" class="form-control g_Mail " name="g_Mail"
-                      placeholder="Enter Guest Email" autocomplete="off" />
+                    <input type="email" class="form-control g_Mail " name="g_Mail" placeholder="Enter Guest Email"
+                      autocomplete="off" />
                   </div>
 
                   <div class="form-group col-md-3">
                     <label class="fs14--design" for="date">Date <span class="text-red">*</span></label></label>
-                    <input type="text" class="form-control datepicker" name="c_Date" placeholder="DD/MM/YYYY"  />
+                    <input type="text" class="form-control datepicker" name="c_Date" placeholder="DD/MM/YYYY" />
                   </div>
-
-
-
-                  <!-- <div class="form-group col-md-3">
-                    <label class="fs14--design" for="name">Wedding Type <span class="text-red">*</span></label>
-                    <select name="wedding_type" id="wedding_type" class="form-control select2"
-                      data-model="formData.name">
-                      <option value="">Select type</option>
-                      <option value="Regular">Regular</option>
-                      <option value="Offline">Destination</option>
-                      <option value="Specific">Specific</option>
-                    </select>
-                  </div> -->
-                
-               
 
                   <div id="entry1" class="clonedInput col-md-12">
                     <fieldset class="contact_details">
                       <legend><strong> CheckList Remark</strong></legend>
                       <section id="line_1" class="gutter--3px">
-                       
+
 
                         <div class="form-group row col-md-12">
-                          <label for="gather_guest_list" class="col-lg-3 col-form-label col-form-label-lg fs15--design">Gather Guest
+                          <label for="gather_guest_list"
+                            class="col-lg-3 col-form-label col-form-label-lg fs15--design">Gather Guest
                             List</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" name="checkList[0][gather_guest_list]"
@@ -74,7 +88,8 @@
                         </div>
 
                         <div class="form-group row col-md-12">
-                          <label for="Narrow_down_dates" class="col-sm-3 col-form-label fs15--design "> Narrow Down Date </label>
+                          <label for="Narrow_down_dates" class="col-sm-3 col-form-label fs15--design "> Narrow Down Date
+                          </label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control datepicker" name="checkList[0][Narrow_down_dates]"
                               id="membar_Narrow_down_dates_1" placeholder="DD/MM/YYYY" />
@@ -82,7 +97,8 @@
                         </div>
 
                         <div class="form-group row col-md-12">
-                          <label for="create_wedding_website" class="col-sm-3 col-form-label fs15--design">Create Wedding
+                          <label for="create_wedding_website" class="col-sm-3 col-form-label fs15--design">Create
+                            Wedding
                             Website</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" name="checkList[0][create_wedding_website]"
@@ -98,7 +114,8 @@
                         </div>
 
                         <div class="form-group row col-md-12">
-                          <label for="settle_a_budget" class="col-sm-3 col-form-label fs15--design">Settle A Budget</label>
+                          <label for="settle_a_budget" class="col-sm-3 col-form-label fs15--design">Settle A
+                            Budget</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" name="checkList[0][settle_a_budget]"
                               id="membar_settle_a_budget_1" />
@@ -114,7 +131,8 @@
                         </div>
 
                         <div class="form-group row col-md-12">
-                          <label for="final_number_of_events" class="col-sm-3 col-form-label fs15--design">Final Number of
+                          <label for="final_number_of_events" class="col-sm-3 col-form-label fs15--design">Final Number
+                            of
                             Events</label>
                           <div class="col-sm-9">
                             <input type="number" class="form-control" name="checkList[0][final_number_of_events]"
@@ -123,7 +141,8 @@
                         </div>
 
                         <div class="form-group row col-md-12">
-                          <label for="book_entertainment" class="col-sm-3 col-form-label fs15--design">Book Entertainment</label>
+                          <label for="book_entertainment" class="col-sm-3 col-form-label fs15--design">Book
+                            Entertainment</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" name="checkList[0][book_entertainment]"
                               id="membar_book_entertainment_1" />
@@ -131,7 +150,8 @@
                         </div>
 
                         <div class="form-group row col-md-12">
-                          <label for="wedding_trousou" class="col-sm-3 col-form-label fs15--design">Wedding Trousou</label>
+                          <label for="wedding_trousou" class="col-sm-3 col-form-label fs15--design">Wedding
+                            Trousou</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" name="checkList[0][wedding_trousou]"
                               id="membar_wedding_trousou_1" />
@@ -139,7 +159,8 @@
                         </div>
 
                         <div class="form-group row col-md-12">
-                          <label for="wedding_outfits" class="col-sm-3 col-form-label fs15--design">Wedding Outfits</label>
+                          <label for="wedding_outfits" class="col-sm-3 col-form-label fs15--design">Wedding
+                            Outfits</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" name="checkList[0][wedding_outfits]"
                               id="membar_wedding_outfits_1" />
@@ -147,7 +168,8 @@
                         </div>
 
                         <div class="form-group row col-md-12">
-                          <label for="invitation_selection" class="col-sm-3 col-form-label fs15--design">Invitation Selection</label>
+                          <label for="invitation_selection" class="col-sm-3 col-form-label fs15--design">Invitation
+                            Selection</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" name="checkList[0][invitation_selection]"
                               id="membar_invitation_selection_1" />
@@ -164,7 +186,8 @@
                         </div>
 
                         <div class="form-group row col-md-12">
-                          <label for="make_up_artist" class="col-sm-3 col-form-label fs15--design">Make Up Artist</label>
+                          <label for="make_up_artist" class="col-sm-3 col-form-label fs15--design">Make Up
+                            Artist</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" name="checkList[0][make_up_artist]"
                               id="membar_make_up_artist_1" />
@@ -172,7 +195,8 @@
                         </div>
 
                         <div class="form-group row col-md-12">
-                          <label for="acessory_shopping" class="col-sm-3 col-form-label fs15--design">Acessory Shopping</label>
+                          <label for="acessory_shopping" class="col-sm-3 col-form-label fs15--design">Acessory
+                            Shopping</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" name="checkList[0][acessory_shopping]"
                               id="membar_acessory_shopping_1" />
@@ -204,10 +228,7 @@
 
                         <div class="form-group row col-md-12">
                           <label for="payment_mode" class="col-sm-3 col-form-label fs15--design">Payment Mode</label>
-                          <!-- <input type="text" class="form-control" name="checkList[0][payment_mode]"
-                            id="membar_payment_mode_1" /> -->
                           <div class="col-sm-9">
-
                             <select name="checkList[0][payment_mode]" id="payment_mode" class="form-control select2"
                               data-model="formData.name">
                               <option value="">Select type</option>
@@ -226,7 +247,8 @@
                           </div>
                         </div>
                         <div class="form-group row col-md-12">
-                          <label for="F_and_B_finalization" class="col-sm-3 col-form-label fs15--design">F And B Finalization</label>
+                          <label for="F_and_B_finalization" class="col-sm-3 col-form-label fs15--design">F And B
+                            Finalization</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" name="checkList[0][F_and_B_finalization]"
                               id="membar_F_and_B_finalization_1" />
@@ -242,7 +264,8 @@
                         </div>
 
                         <div class="form-group row col-md-12">
-                          <label for="pre_wedding_shoot" class="col-sm-3 col-form-label fs15--design">Pre Wedding Shoot</label>
+                          <label for="pre_wedding_shoot" class="col-sm-3 col-form-label fs15--design">Pre Wedding
+                            Shoot</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" name="checkList[0][pre_wedding_shoot]"
                               id="membar_pre_wedding_shoot_1" />
@@ -250,14 +273,13 @@
                         </div>
 
                         <div class="form-group row col-md-12">
-                          <label for="honeymoon_booking" class="col-sm-3 col-form-label fs15--design">Honeymoon Booking</label>
+                          <label for="honeymoon_booking" class="col-sm-3 col-form-label fs15--design">Honeymoon
+                            Booking</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" name="checkList[0][honeymoon_booking]"
                               id="membar_honeymoon_booking_1" />
                           </div>
                         </div>
-
-
 
                         <div class="form-group row col-md-12">
                           <label for="goodie_bags" class="col-sm-3 col-form-label fs15--design">Goodie Bags</label>
@@ -268,7 +290,8 @@
                         </div>
 
                         <div class="form-group row col-md-12">
-                          <label for="thank_you_goods" class="col-sm-3 col-form-label fs15--design">Thank You Goods</label>
+                          <label for="thank_you_goods" class="col-sm-3 col-form-label fs15--design">Thank You
+                            Goods</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" name="checkList[0][thank_you_goods]"
                               id="membar_thank_you_goods_1" />
@@ -294,13 +317,13 @@
 
 
                         <div class="form-group row col-md-12">
-                          <label for="whether_prection_prevention" class="col-sm-3 col-form-label fs15--design">Whether 
+                          <label for="whether_prection_prevention" class="col-sm-3 col-form-label fs15--design">Whether
                             Prevention</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" name="checkList[0][whether_prection_prevention]"
                               id="membar_whether_prection_prevention_1" />
                           </div>
-                            </div>
+                        </div>
 
                       </section>
                     </fieldset>
@@ -357,28 +380,26 @@
                     </div>
                   </div>
                 </div><!-- /.box-header -->
-                 <div class="space--9"></div> 
+                <div class="space--9"></div>
 
                 <section class="grid-table" id="ajaxtable">
                   <div class="box-body table-responsive">
                     <table
-                       class="table table-hover table-fixed ajax_table_fixed table-bordered table-striped weblink-table"
+                      class="table table-hover table-fixed ajax_table_fixed table-bordered table-striped weblink-table"
                       id="table-grid-view">
                       <thead>
                         <tr>
-                          <% var columns_arr=columns.split(" ");
-                    %>
-                    <% for(var i=0; i<columns_arr.length; i++) { %>
-                    <th data-sortable=" true" data-field="<%= columns_arr[i]; %>" class="col-sortable"
-                            data-order="desc">
+                          <% var columns_arr=columns.split(" ");%>
+                          <% for(var i=0; i<columns_arr.length; i++) { %>
+                          <th data-sortable=" true" data-field="<%= columns_arr[i]; %>" class="col-sortable" data-order="desc">
                             <%= columns_arr[i].toUpperCase().replace("_"," "); %>
-                      <i class=" fa fa-fw fa-sort sort-col-<%=columns_arr[i]; %>"></i>
-                              </th>
-                              <% } %>
+                            <i class=" fa fa-fw fa-sort sort-col-<%=columns_arr[i]; %>"></i>
+                          </th>
+                        <% } %>
                         </tr>
-                        <!--  <th colspan="3">Actions</th> -->
                       </thead>
                       <tbody id="tbody-grid-view">
+
                       </tbody>
                     </table>
                     <div style="display:none;" id="table-grid-nav">
@@ -414,8 +435,8 @@
             autoclose: true
           });
 
-          
-        
+
+
 
 
           $(window).load(function () {
@@ -434,6 +455,7 @@
             // if(flag == true)
             $('.btn-submit').removeAttr('disabled');
           });
+
           $(".form_add_entry").click(function () {
             document.getElementById("erp_form").reset();
             $(".select2").select2();
@@ -510,9 +532,10 @@
             });
             // alert( "Handler for .click() called." );
           });
+          
           $("#erp_form").validate({
             rules: {
-             
+
               guest_Name: { required: true },
               wedding_type: { required: true },
               g_Mobile: { required: true },
@@ -520,11 +543,6 @@
 
             },
             errorPlacement: function (error, element) {
-              // if (element.attr("name") == "room_subtype" ){
-              // error.appendTo(element.parent()  );
-              // }else{
-              //  error.insertAfter(element);
-              // }
             }, submitHandler: function (form) {
               /* get the elements required for the post method*/
               $(".overlay").show();
@@ -606,14 +624,38 @@
 
         });
 
-        //for print Checklist
-    function printVoucher() {
-        var divToPrint = document.getElementById("tourCmplVoucher");
-        divToPrint.style.border = "1px";
-        newWin = window.open("");
-        newWin.document.write(divToPrint.outerHTML);
-        newWin.print();
-        newWin.close();
-    };
+        function getWeddingChecklistPrint(e) {
+          $('.divLoader').show();
+          //var obj = { tourCode: globalVarObj.tourCode, tourForm: globalVarObj.tourForm };
+          $.ajax({
+            url: '/route/weddingPlanCheckList/weddingplan/' + id,
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(),
+            dataType: "json",
+
+            success: function (result) {
+              console.log(result);
+              //bind the html in respective tag and show modal.
+              $('#printBody').html(result.data);
+              $('#printModal').modal('show');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              var result = jQuery.parseJSON(jqXHR.responseText);
+            }
+          });
+        }
+
+        function printWeddingCheckList() {
+          var divToPrint = document.getElementById("weddingcheckListPrint");
+          divToPrint.style.border = "1px";
+          newWin = window.open("");
+          newWin.document.write(divToPrint.outerHTML);
+          newWin.print();
+          newWin.close();
+        };
+
       </script>
+
+
       <% include ../partials/footer %>

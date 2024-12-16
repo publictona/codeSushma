@@ -1,0 +1,1301 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+        <style>
+            #poForm .modal-dialog {
+                max-width: 1000px;
+                padding: 0 15px;
+            }
+
+            .ui-menu {
+                z-index: 9999;
+            }
+
+            #itemTable td {
+                padding: 2px !important;
+                border: 1px solid #d3d3d3;
+            }
+
+            #itemTable td:first-child {
+                text-align: center;
+            }
+
+            .sukho--tag {
+                color: indigo;
+                font-weight: 500;
+                cursor: pointer;
+            }
+
+            td .form-control {
+                color: #000 !important;
+            }
+
+            .pt-15 {
+                padding-top: 15px;
+            }
+
+            .f-500 {
+                font-weight: 500;
+            }
+
+            .hamburger-menu {
+                height: 100%;
+                max-height: 92%;
+                width: 0;
+                position: fixed;
+                z-index: 1;
+                top: 55px;
+                left: 0px;
+                background-color: #fff;
+                overflow-x: hidden;
+                transition: .5s;
+                padding-top: 50px;
+                box-shadow: 0 1px 6px 0 rgb(32 33 36 / 28%);
+            }
+
+            .hamburger-menu .closebtn {
+                position: absolute;
+                top: 0;
+                right: 10px;
+                margin-left: 50px;
+                padding: 8px 8px 8px 32px;
+                text-decoration: none;
+                font-size: 25px;
+                color: #818181;
+                display: block;
+                transition: .3s;
+            }
+
+            .bgff {
+                margin-left: 30px;
+                margin-right: 30px;
+                margin-bottom: 15px;
+                font-size: 14px;
+
+            }
+
+            .card-body {
+                color: #2b2929;
+            }
+
+            input {
+                color: #000;
+            }
+        </style>
+
+        <div class="content__inner" style="margin-top: 2%;">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="card">
+
+                        <div class="card-body card-body--without-title">
+
+                            <div class="box-header with-border with-hamburger">
+                                <div id="mySidenav" class="hamburger-menu">
+                                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                                    <div class="hamburger-content">
+                                        <div class="card">
+                                            <form id="frm_grid_search" name="frm_grid_search">
+                                                <div class="card-body">
+                                                    <div class="form-group">
+                                                        <label for="">From Date</label>
+                                                        <input type="text" class="form-control sdate date-picker"
+                                                            name="start_date" placeholder="From" id="sdate" />
+                                                        <i class="form-group__bar"></i>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="">To Date</label>
+                                                        <input type="text" class="form-control edate date-picker"
+                                                            name="end_date" id="edate" placeholder="To" />
+                                                        <i class="form-group__bar"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <button type="submit" class="btn btn-block btn-primary btn-guest"
+                                                        onclick="closeNav()">Search</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <a href="javascript:void(0);" class="box-header-hamburger-menu"
+                                            onclick="openNav()">
+                                            <i class="fa fa-bars fa-2x" aria-hidden="true"></i>
+                                        </a>
+
+                                    </div>
+                                    <div class="col-md-5">
+                                        <h3 class="box-title">PURCHASE ORDER (PO)</h3>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <span class="btn btn-primary" style="float: right;"
+                                            onclick="addEditPo('add')"><i class="fa fa-plus"></i> ADD PURCHASE
+                                            ORDER</span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 r-col">
+                                <table id="poTable"
+                                    class="table table-bordered table-striped display nowrap order-column"
+                                    style="width:100%;">
+                                    <tbody class="appar">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="mailPo" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Mail PO</h4>
+                        <button type="button" class="close" data-dismiss="modal" id="multitaskingModal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="">Email Id</label>
+                            <input type="text" class="form-control guestEmail">
+                            <input type="hidden" class="form-control poNo" value="">
+                            <i class="form-group__bar"></i>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-block submitEmail"
+                            onclick="sendPoEmail(this)">Send PO Mail</button>
+                    </div>
+                    <div class="resultHtml"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="poPrint" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">PO Print <i class="fa fa-print" onclick="printPoPdf()"></i></h4>
+                        <button type="button" class="close" data-dismiss="modal" id="multitaskingModal">&times;</button>
+                    </div>
+                    <div class="modal-body" id="printReceiptWraper2">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="poForm" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add/Update PO</h4>
+                        <button type="button" class="close" data-dismiss="modal" id="multitaskingModal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mb-4">
+                            <div class="col-lg-4 col-md-5">
+                                <div class="row">
+                                    <div class="col-md-12 col-6">
+                                        <div class="row">
+                                            <label class="col-lg-4 col-md-5 col-12 col-form-label">PO Number:</label>
+                                            <div class="col-lg-8 col-md-7 col-12">
+                                                <div class="form-group mb-2">
+                                                    <input type="text" class="form-control poNumber poHeader"
+                                                        name="F_PONO" readOnly>
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-6">
+                                        <div class="row">
+                                            <label class="col-lg-4 col-md-5 col-12 col-form-label">PO Date:</label>
+                                            <div class="col-lg-8 col-md-7 col-12">
+                                                <div class="form-group mb-2">
+                                                    <input type="text" class="form-control flatpickr poDate poHeader"
+                                                        onblur="setPoNumber()" name="F_PODT" />
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8 col-md-7">
+                                <div class="row">
+                                    <label class="col-lg-2 col-md-3 col-12 col-form-label">By Supplier:</label>
+                                    <div class="col-lg-10 col-md-9 col-12">
+                                        <div class="form-group mb-2">
+                                            <input type="text" class="form-control supplier poHeader" name="F_ACCTCD">
+                                            <i class="form-group__bar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="row">
+                                            <label class="col-lg-4 col-12 col-form-label">PO By:</label>
+                                            <div class="col-lg-8 col-12">
+                                                <div class="form-group mb-2">
+                                                    <div class="select">
+                                                        <select class="form-control poBy poHeader" name="F_POBY">
+                                                            <option value=""></option>
+                                                        </select>
+                                                        <i class="form-group__bar"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="row">
+                                            <label class="col-lg-4 col-12 col-form-label">For Branch:</label>
+                                            <div class="col-lg-8 col-12">
+                                                <div class="form-group mb-2">
+                                                    <div class="select">
+                                                        <select class="form-control branch poHeader" name="F_PO4BRN">
+                                                            <option value=""></option>
+                                                        </select>
+                                                        <i class="form-group__bar"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table id="itemTable" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width:5%;">Sr</th>
+                                    <th style="width:20%;">Item</th>
+                                    <th style="width:35%;">Description</th>
+                                    <th style="width:10%;">Unit</th>
+                                    <th style="width:10%;">Qty</th>
+                                    <th style="width:10%;">Rate/Unit</th>
+                                    <th style="width:10%;">Rs</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-srno="1">
+                                    <td>1
+                                        <input type="hidden" class="poDtl" name="F_POSRNO" value="1">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control items poDtl" name="ITM_NO">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_NM" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_UNIT" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_QTY"
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_RATE" readonly
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_AMOUNT"
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                </tr>
+                                <tr data-srno="2">
+                                    <td>2
+                                        <input type="hidden" name="F_POSRNO" class="poDtl" value="2">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control items poDtl" name="ITM_NO">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_NM" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_UNIT" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_QTY"
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_RATE" readonly
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_AMOUNT"
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                </tr>
+                                <tr data-srno="3">
+                                    <td>3
+                                        <input type="hidden" name="F_POSRNO" class="poDtl" value="3">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control items poDtl" name="ITM_NO">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_NM" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_UNIT" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_QTY"
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_RATE" readonly
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_AMOUNT"
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                </tr>
+                                <tr data-srno="4">
+                                    <td>4
+                                        <input type="hidden" name="F_POSRNO" class="poDtl" value="4">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control items poDtl" name="ITM_NO">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_NM" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_UNIT" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_QTY"
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_RATE" readonly
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_AMOUNT"
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                </tr>
+                                <tr data-srno="5">
+                                    <td>5
+                                        <input type="hidden" name="F_POSRNO" class="poDtl" value="5">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control items poDtl" name="ITM_NO">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_NM" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_UNIT" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_QTY"
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_RATE" readonly
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_AMOUNT"
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                </tr>
+                                <tr data-srno="6">
+                                    <td>6
+                                        <input type="hidden" name="F_POSRNO" class="poDtl" value="6">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control items poDtl" name="ITM_NO">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_NM" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_UNIT" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_QTY"
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_RATE" readonly
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_AMOUNT"
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                </tr>
+                                <tr data-srno="7">
+                                    <td>7
+                                        <input type="hidden" name="F_POSRNO" class="poDtl" value="7">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control items poDtl" name="ITM_NO">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_NM" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_UNIT" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_QTY"
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_RATE" readonly
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_AMOUNT"
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                </tr>
+                                <tr data-srno="8">
+                                    <td>8
+                                        <input type="hidden" name="F_POSRNO" class="poDtl" value="8">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control items poDtl" name="ITM_NO">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_NM" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_UNIT" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_QTY"
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_RATE" readonly
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_AMOUNT"
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                </tr>
+                                <tr data-srno="9">
+                                    <td>9
+                                        <input type="hidden" name="F_POSRNO" class="poDtl" value="9">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control items poDtl" name="ITM_NO">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_NM" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_UNIT" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_QTY"
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_RATE" readonly
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_AMOUNT"
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                </tr>
+                                <tr data-srno="10">
+                                    <td>10
+                                        <input type="hidden" name="F_POSRNO" class="poDtl" value="10">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control items poDtl" name="ITM_NO">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_NM" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_UNIT" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_QTY"
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_RATE" readonly
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poDtl" name="ITM_AMOUNT"
+                                            onkeyup="itemTotal(this)">
+                                    </td>
+                                </tr>
+                                <tr style="background-color: #fff;">
+                                    <td colspan="5" class="text-right f-500">Basic Amount:</td>
+                                    <td></td>
+                                    <td>
+                                        <input type="text" class="form-control poHeader" name="F_POBASIC"
+                                            onkeyup="itemTotal4()">
+                                    </td>
+                                </tr>
+                                <tr style="background-color: #fff;">
+                                    <td colspan="5" class="text-right f-500">C.G.S.T %</td>
+                                    <td>
+                                        <input type="text" class="form-control poHeader" name="CGST_PER"
+                                            onkeyup="itemTotal3()">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poHeader" name="CGST_AMT"
+                                            onkeyup="itemTotal4()">
+                                    </td>
+                                </tr>
+                                <tr style="background-color: #fff;">
+                                    <td colspan="5" class="text-right f-500">S.G.S.T %</td>
+                                    <td>
+                                        <input type="text" class="form-control poHeader" name="SGST_PER"
+                                            onkeyup="itemTotal3()">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poHeader" name="SGST_AMT"
+                                            onkeyup="itemTotal4()">
+                                    </td>
+                                </tr>
+                                <tr style="background-color: #fff;">
+                                    <td colspan="5" class="text-right f-500">I.G.S.T %</td>
+                                    <td>
+                                        <input type="text" class="form-control poHeader" name="IGST_PER"
+                                            onkeyup="itemTotal3()">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control poHeader" name="IGST_AMT"
+                                            onkeyup="itemTotal4()">
+                                    </td>
+                                </tr>
+                                <tr style="background-color: #fff;">
+                                    <td colspan="5" class="text-right f-500">Final Amount:</td>
+                                    <td></td>
+                                    <td>
+                                        <input type="text" class="form-control poHeader text-right" name="F_POAMT">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label
+                                        class="col-sm-4 col-md-5 col-lg-4 text-sm-right col-form-label">Destination:</label>
+                                    <div class="col-sm-8 col-md-7 col-lg-8">
+                                        <div class="form-group mb-2">
+                                            <input type="text" class="form-control poHeader" name="F_DESTIN">
+                                            <i class="form-group__bar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label class="col-sm-4 col-md-5 col-lg-4 text-sm-right col-form-label">Despatch
+                                        Through:</label>
+                                    <div class="col-sm-8 col-md-7 col-lg-8">
+                                        <div class="form-group mb-2">
+                                            <input type="text" class="form-control poHeader" name="F_DESPATCH">
+                                            <i class="form-group__bar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label class="col-sm-4 col-md-5 col-lg-4 text-sm-right col-form-label">Delivery
+                                        Terms:</label>
+                                    <div class="col-sm-8 col-md-7 col-lg-8">
+                                        <div class="form-group mb-2">
+                                            <input type="text" class="form-control poHeader" name="F_DLVTERM">
+                                            <i class="form-group__bar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label class="col-sm-4 col-md-5 col-lg-4 text-sm-right col-form-label">Payment
+                                        Terms:</label>
+                                    <div class="col-sm-8 col-md-7 col-lg-8">
+                                        <div class="form-group mb-2">
+                                            <input type="text" class="form-control poHeader" name="F_PAYTERM">
+                                            <i class="form-group__bar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label class="col-sm-4 col-md-5 col-lg-4 text-sm-right col-form-label">GSTNO. Of
+                                        Region:</label>
+                                    <div class="col-sm-8 col-md-7 col-lg-8">
+                                        <div class="form-group mb-2">
+                                            <div class="select">
+                                                <select class="form-control poHeader" name="GST_REGION">
+                                                    <option value=""></option>
+                                                    <option value="M">Mumbai</option>
+                                                    <option value="B">Bangalore</option>
+                                                    <option value="G">Goa</option>
+                                                    <option value="K">Kashmir</option>
+                                                </select>
+                                            </div>
+                                            <i class="form-group__bar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label
+                                        class="col-sm-4 col-md-5 col-lg-4 text-sm-right col-form-label">Remark:</label>
+                                    <div class="col-sm-8 col-md-7 col-lg-8">
+                                        <div class="form-group mb-2">
+                                            <input type="text" class="form-control poHeader" name="F_REMARK1">
+                                            <input type="hidden" class="form-control poHeader" name="F_REMARK2">
+                                            <input type="hidden" class="form-control poHeader" name="F_REMARK3">
+                                            <i class="form-group__bar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <span class="btn-primary btn btn-block" onclick="savePo(this)">Save PO</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javaScript">
+   var DrawTableInquiry = "";
+function getPoData(e){
+    var obj={
+        pono:e.getAttribute('data-po')
+    }
+    $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: "/route/po/getPo",
+        dataType: "json",
+        data: JSON.stringify(obj),
+        success: function (data) {
+           if(data.data){
+              setDataToModal(data.data);
+           }
+        },
+    });
+}
+
+function setDataToModal(data){
+    for(var key in data){
+        if(document.querySelector('[name="'+key+'"]')){
+            if(key==="F_PODT"){
+                data[key]=dateFormat(data[key]);
+            }
+            document.querySelector('[name="'+key+'"]').value=data[key];
+        }
+    }  
+    // $('.branch').select2();
+    // $('.poBy').select2();
+    for(var i=0;i<data.detailList.length;i++){
+    
+        
+    for(var key2 in data.detailList[i]){
+        var x=document.querySelector('#itemTable tbody tr[data-srno="'+data.detailList[i].F_POSRNO+'"] [name="'+key2+'"]');
+        if(x){
+            document.querySelector('#itemTable tbody tr[data-srno="'+data.detailList[i].F_POSRNO+'"] [name="'+key2+'"]').value=data.detailList[i][key2];
+        }
+    }
+    }
+    $('#poForm').modal('show');  
+   
+}
+
+function savePo(e){
+    e.setAttribute('disabled','disabled');
+    var x=document.querySelectorAll(".poHeader");
+    var ob={};
+    for(i=0;i<x.length;i++){
+        ob[x[i].getAttribute('name')]=x[i].value;
+    }
+    
+    var x=document.querySelectorAll("#itemTable tbody tr");
+    var dtlArr=[];
+    
+    for(i=0;i<x.length;i++){
+        var ob2={};
+        var y=x[i].querySelectorAll('.poDtl');
+        if(y.length>0){
+            for(j=0;j<y.length;j++){
+                if(y[j].getAttribute('name')==="F_POSRNO"){
+                    ob2[y[j].getAttribute('name')]=(y[j].value)?parseInt(y[j].value):0;
+                }
+                else if(y[j].getAttribute('name')==="ITM_QTY"){
+                    ob2[y[j].getAttribute('name')]=(y[j].value)?parseInt(y[j].value):0;
+                }
+                else if(y[j].getAttribute('name')==="ITM_RATE"){
+                    ob2[y[j].getAttribute('name')]=(y[j].value)?parseFloat(y[j].value):0;
+                }
+                else if(y[j].getAttribute('name')==="ITM_AMOUNT"){
+                    ob2[y[j].getAttribute('name')]=(y[j].value)?parseFloat(y[j].value):0;
+                }else{
+                    ob2[y[j].getAttribute('name')]=y[j].value;
+                }
+            }
+            if(ob2.ITM_AMOUNT){
+            dtlArr.push(ob2);
+            }
+        }
+    }
+    var obj={
+        header:ob,
+        details:dtlArr
+    }
+    var isValid=true;
+    // var errMsg=[];
+    // if(ob.F_PONO===""){
+    //     isValid=false;
+    //     errMsg.push("Please enter PO Number");
+    // }
+    // if(ob.F_PODT===""){
+    //     isValid=false;
+    //     errMsg.push("Please enter PO Date");
+    // }
+    // if(ob.F_ACCTCD===""){
+    //     isValid=false;
+    //     errMsg.push("Please enter suppiler name");
+    // }
+    // if(dtlArr.length===0){
+    //     isValid=false;
+    //     errMsg.push("Please enter PO Items");
+    // }
+    if(isValid){
+    $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: "/route/po/savePo",
+        dataType: "json",
+        data: JSON.stringify(obj),
+        success: function (data) {
+            if(data.status){
+            e.removeAttribute('disabled');
+           // showNotification({type:"success","message":data.message});
+           alert("PO DATA ADDED SUCCESSFULLY")
+               clearForm();
+               $('#poForm').modal('hide'); 
+             DrawTableInquiry.ajax.reload(); 
+           }else{
+           alert("SOMETHING WENT WRONG")
+            //showNotification({type:"error","message":data.message});
+           }
+        },
+    });
+    }   else{
+     alert("SOMETHING WENT WRONG")
+       //showNotification({type:"error","message":errMsg.join('<br>')});
+    }
+}
+function clearForm(){
+    var x=document.querySelectorAll(".poHeader");
+    var ob={};
+    for(i=0;i<x.length;i++){
+        x[i].value="";
+    }    
+    var x=document.querySelectorAll("#itemTable tbody tr");
+    
+    for(i=0;i<x.length;i++){
+        var y=x[i].querySelectorAll('.poDtl');
+        if(y.length>0){
+            for(j=0;j<y.length;j++){
+              y[j].value="";
+            }   
+        }
+    }
+}
+function getItemCode(e) {
+    //globalDataID = e.getAttribute('data-id');
+    $(".items").autocomplete({
+        source: function (request, response) {
+            // alert("Hiiii");
+            var formData = {};
+            formData.q = request.term;
+          formData.supplier = $('.supplier').val();
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "/route/po/getItemCodeSupplierData",
+                dataType: "json",
+                data: JSON.stringify(formData),
+                success: function (data) {
+                    data = JSON.parse(JSON.stringify(data));
+                    response($.map(data.data, function (item, index) {
+                      item = JSON.parse(JSON.stringify(item));
+                        var AC = new Object();
+                        AC.label = item.F_ITEMNM;
+                        AC.value = item.F_ITEMCD+"-"+item.F_ITEMNM;
+                        AC.itemName = item.F_ITEMNM;
+                        AC.unit = item.ITM_UNIT;
+                        AC.ITM_COST = item.ITM_COST;
+                        return AC
+                        // return AC
+                    }));
+                },
+            });
+        },
+        minLength: 1,
+        select: function (event, ui) {
+            var itemcd = ui.item.value;
+            
+            $(this).parent().next().next().next().next().find('[name="ITM_RATE"]').removeAttr('readonly');
+            $(this).parent().next().next().next().next().find('[name="ITM_RATE"]').val(ui.item.ITM_COST);
+            $(this).parent().next().next().next().next().find('[name="ITM_RATE"]').attr('readonly');
+            $(this).parent().next().find('[name="ITM_NM"]').removeAttr('readonly');
+            $(this).parent().next().find('[name="ITM_NM"]').val(ui.item.itemName);
+            $(this).parent().next().find('[name="ITM_NM"]').attr('readonly');
+            $(this).parent().next().next().find('[name="ITM_UNIT"]').removeAttr('readonly');
+            $(this).parent().next().next().find('[name="ITM_UNIT"]').val(ui.item.unit);
+            $(this).parent().next().next().find('[name="ITM_UNIT"]').attr('readonly');
+        },
+        change: function (e, u) {
+            if (u.item == null) {
+                $(this).val("");
+                return false;
+            }
+        }
+    });
+
+}
+    function itemTotal(e){
+        var parent=e.parentNode.parentNode;
+        var qty=(parent.querySelector('[name="ITM_QTY"]').value)?parseFloat(parent.querySelector('[name="ITM_QTY"]').value):0;
+        var rate=(parent.querySelector('[name="ITM_RATE"]').value)?parseFloat(parent.querySelector('[name="ITM_RATE"]').value):0;
+        var total=qty*rate;
+        parent.querySelector('[name="ITM_AMOUNT"]').value=total;
+        itemTotal2();
+    }
+    function itemTotal2(e){
+        var x=document.querySelectorAll('[name="ITM_AMOUNT"]');
+        var tot=0;
+        for(var i=0;i<x.length;i++){
+            tot=tot+((x[i].value)?parseFloat(x[i].value):0);
+        }
+        document.querySelector('[name="F_POBASIC"]').value=tot;
+        itemTotal3();
+    }
+    function itemTotal3(e){
+        var basic=(document.querySelector('[name="F_POBASIC"]').value)?parseFloat(document.querySelector('[name="F_POBASIC"]').value):0;
+        var sgst=(document.querySelector('[name="SGST_PER"]').value)?parseFloat(document.querySelector('[name="SGST_PER"]').value):0;
+        var cgst=(document.querySelector('[name="CGST_PER"]').value)?parseFloat(document.querySelector('[name="CGST_PER"]').value):0;
+        var igst=(document.querySelector('[name="IGST_PER"]').value)?parseFloat(document.querySelector('[name="IGST_PER"]').value):0;
+
+        var cgstAmt=(cgst)?basic*(cgst/100):0;
+        var sgstAmt=(sgst)?basic*(sgst/100):0;
+        var igstAmt=(igst)?basic*(igst/100):0;
+        document.querySelector('[name="CGST_AMT"]').value=cgstAmt.toFixed(2);
+        document.querySelector('[name="SGST_AMT"]').value=sgstAmt.toFixed(2);
+        document.querySelector('[name="IGST_AMT"]').value=igstAmt.toFixed(2);
+        document.querySelector('[name="F_POAMT"]').value=(basic+cgstAmt+sgstAmt+igstAmt).toFixed(2);
+    }
+    function itemTotal4(e){
+        var basic=(document.querySelector('[name="F_POBASIC"]').value)?parseFloat(document.querySelector('[name="F_POBASIC"]').value):0;
+        var cgstAmt=(document.querySelector('[name="CGST_AMT"]').value)?parseFloat(document.querySelector('[name="CGST_AMT"]').value):0;
+        var sgstAmt=(document.querySelector('[name="SGST_AMT"]').value)?parseFloat(document.querySelector('[name="SGST_AMT"]').value):0;
+        var igstAmt=(document.querySelector('[name="IGST_AMT"]').value)?parseFloat(document.querySelector('[name="IGST_AMT"]').value):0;
+        document.querySelector('[name="F_POAMT"]').value=(basic+cgstAmt+sgstAmt+igstAmt).toFixed(2);
+    }
+    function openNav() {
+        document.getElementById("mySidenav").classList.add('open');
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").classList.remove('open');
+    }
+
+    // function openNav() {
+    //             document.getElementById("mySidenav").style.width = "250px";
+    //         }
+
+    // function closeNav() {
+    //             document.getElementById("mySidenav").style.width = "0";
+    //         }
+
+    function reformatDate(data){
+        var newDate="";
+        if(data){
+        var year = data.substr(0,4);
+        var month = data.substr(5,2);
+        var mydate = data.substr(8,2);
+            newDate = mydate+"/"+month+"/"+year;
+            }
+        return newDate;
+    }
+
+  function mailPo(e){
+    var poNo=e.getAttribute('data-po');
+    $('.poNo').val(poNo);
+    $('#mailPo').modal('show');
+  }
+  function addEditPo(type){
+    if(type==="add"){
+       setPoNumber();
+    }
+    $('#poForm').modal('show');
+  }
+
+  function setPoNumber(){
+    var obj={
+        date:$('.poDate').val()
+    }
+    $.ajax({
+        url: "/route/po/generatePoNumber",
+        type: "POST",
+        data: JSON.stringify(obj),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+           if(result){
+                $('.poNumber').val(result.data)
+            }
+        }
+    });
+  }
+  function printPo(e){
+    e.setAttribute('disabled','disabled');
+    var obj={
+      poNo:e.getAttribute('data-po')
+    }
+    $.ajax({
+        url: "/route/po/downloadPo",
+        type: "POST",
+        data: JSON.stringify(obj),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (result) {
+            $('#poPrint .modal-body').html(result.html);
+            $('#poPrint').modal('show');
+            e.removeAttribute('disabled');
+          
+        
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert("ERROR! Please Refresh page.");
+        }
+    });
+  }
+  function printPoPdf(){
+    var divToPrint = document.getElementById("printReceiptWraper2");
+    divToPrint.style.border = "1px";
+    newWin = window.open("");
+    newWin.document.write(divToPrint.outerHTML);
+    newWin.print();
+    newWin.close();
+  }
+
+  function sendPoEmail(e){
+    e.setAttribute('disabled','disabled');
+    e.textContent="Sending PO Email";
+    var obj={
+      poNo:$('.poNo').val(),
+      emailId:$('.guestEmail').val()
+    }
+
+    if(obj.emailId){
+        if(validateEmail(obj.emailId)){
+                $.ajax({
+                    url: "/route/po/generatePo",
+                    type: "POST",
+                    data: JSON.stringify(obj),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                     $('.resultHtml').html(result.result);
+                      e.removeAttribute('disabled');
+                      e.textContent="Successfully send PO email";
+                      setTimeout(() => {
+                        $('.guestEmail').val('');
+                        $('.resultHtml').html('');
+                        $('.poNo').val('');
+                        alert("Successfully send invoice email");
+                        $('#mailPo').modal('hide');
+                        e.textContent="Send PO Mail";
+                      }, 2000);
+                    
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("ERROR! Please Refresh page.");
+                    }
+                });
+            }else{
+                alert("Please enter valid email id");
+            }
+        }
+  }
+
+  function validateEmail(emailField){
+        var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,5})$/;
+        if (reg.test(emailField) == false) {
+            return false;
+        }else{
+        return true;
+        }
+    }
+
+ function getSupplierList(e) {
+        $(".supplier").autocomplete({
+            source: function (request, response) {
+                // alert("Hiiii");
+                var formData = {};
+                formData.q = request.term;
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    url: "/route/workToDo/getSupplierList",
+                    dataType: "json",
+                    data: JSON.stringify(formData),
+                    success: function (data) {
+                        data = JSON.parse(JSON.stringify(data));
+                        response($.map(data.data, function (item, index) {
+                            item = JSON.parse(JSON.stringify(item));
+
+                            var AC = new Object();
+
+                            AC.label = item.F_ACCTCD;
+                            AC.value = item.F_ACCTCD;
+
+                            return AC
+
+                        }));
+                    },
+                });
+            },
+            minLength: 1,
+            select: function (event, ui) {
+                var itemcd = ui.item.value;
+
+            },
+            change: function (e, u) {
+                if (u.item == null) {
+                    $(this).val("");
+                    return false;
+                }
+            }
+        });
+}
+    function setBranch(){
+        
+        $.ajax({
+            type: 'GET',
+            url: "http://login.sukhothai.in/route/spaLocationST/getLocationListNew",
+            cache: false,
+            async: false,
+            success: function (data) {
+                var result = data;
+                var html = '<option value="">SELECT</option>';
+                for (var i = 0; i < result.length; i++) {
+                    var selected = "";
+                    html += '<option value="' + result[i].ST_BRN +'"' + selected + '>' + result[i].ST_BRN + ' - ' + result[i].ST_SHORT + '</option>';
+                }
+                $('.branch').html(html);
+                // $('.branch').select2();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Error In Loading RSID Data. Please Refresh Page.");
+            }
+        }); 
+    }
+    function setUser(){
+        $.ajax({
+            type: 'GET',
+            url: "/route/po/getrsID",
+            cache: false,
+            async: false,
+            success: function (result) {
+             var result = result.data;
+                var html = '<option value="">SELECT</option>';
+                for (var i = 0; i < result.length; i++) {
+                    var selected = "";
+                    html += '<option value="' + result[i].F21_IDNO +'"' + selected + '>' + result[i].F21_IDNO + ' - ' + result[i].F21_SUKONM + '</option>';
+                }
+                $('.poBy').html(html);
+              //  $('.poBy').select2();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Error In Loading RSID Data. Please Refresh Page.");
+            }
+        }); 
+    }
+
+    function notification(type, message, options = {}) {
+  // Check if the browser supports notifications
+  if (!("Notification" in window)) {
+    console.error("This browser does not support desktop notification");
+    return;
+  }
+
+  // Request permission to show notifications if not already granted
+  if (Notification.permission !== "granted") {
+    Notification.requestPermission().then(permission => {
+      if (permission !== "granted") {
+        console.error("Notification permission denied.");
+        return;
+      }
+    });
+  }
+
+  // Function to show a notification
+  
+}
+
+function showNotification(title, body, icon) {
+    new Notification(title, { body, icon });
+  }
+
+    $(document).ready(function() {
+        getSupplierList();
+        setBranch();
+        setUser();
+        getItemCode();
+        $(".poDate").flatpickr({
+            // enableTime: !1,
+            dateFormat: "d/m/Y",
+            nextArrow: '<i class="zmdi zmdi-long-arrow-right" />',
+            prevArrow: '<i class="zmdi zmdi-long-arrow-left" />',
+            defaultDate: "today"
+        })
+
+        var dataColumns = [{
+            data: "_id",
+            visible: false
+        },{
+            data: "F_PONO",
+            sTitle: "PO #",
+            visible:true,
+            render: function (data, type, row) {
+              var invNo=JSON.parse(JSON.stringify(row.F_PONO));
+                var html = '<span class="sukho--tag" data-po="'+invNo+'" onclick="getPoData(this)">'+invNo+'</span>';
+                return html;
+            }
+
+        },
+        {
+            data: "F_DESTIN",
+            sTitle: "DEST",
+            visible:true,
+        },
+        {
+            data: "F_POBY",
+            sTitle: "P.O.By",
+            visible:true,
+        },
+        {
+            data: "F_ACCTCD",
+            sTitle: "Supplier",
+            visible:true,
+        },
+        {
+            data: "GST_REGION",
+            sTitle: "GST",
+            visible:true,
+        },
+        {
+            data: "F_POAMT",
+            sTitle: "Rs.",
+            visible:true,
+        },
+        {
+            data: "F_PO4BRN",
+            sTitle: "For",
+            visible:true,
+        },
+        {
+            data: "F_REMARK1",
+            visible:false,
+        },
+        {
+            data: "F_REMARK2",
+            visible:false,
+        },
+        {
+            data: "F_REMARK3",
+            sTitle: "Items",
+            visible:true,
+            render: function (data, type, row) {
+
+                var html = '';
+                if(row.F_REMARK1 || row.F_REMARK2 || row.F_REMARK3){
+                    html=row.F_REMARK1+" "+row.F_REMARK2+" "+row.F_REMARK3;
+                }
+                return html;
+            }
+        },
+        {
+            data: "F_PONO",
+            className:"ACTION",
+            sTitle: "Action",
+            visible:true,
+            className:"column-150",
+            render: function (data, type, row) {
+              var invNo=JSON.parse(JSON.stringify(row.F_PONO));
+                var html = '<span class="btn btn-primary btn-block" data-po="'+invNo+'" onclick="mailPo(this)">Mail PO</span>';
+                return html;
+            }
+        },
+        {
+            data: "F_PONO",
+            className:"ACTION",
+            sTitle: "Download",
+            visible:true,
+            className:"column-100",
+            render: function (data, type, row) {
+                var invNo=JSON.parse(JSON.stringify(row.F_PONO));
+              var html='<span class="btn btn-primary btn-block" data-po="'+invNo+'" onclick="printPo(this)"><i class="fa fa-print"></i></span>';
+                return html;
+            }
+        }
+        ];
+
+        DrawTableInquiry = DrawCustomDataTable("poTable", 350, "/route/po/grid-data", dataColumns, [
+        [0, "desc"]
+          ], "frm_grid_search",null,true,true);
+
+      
+
+
+        $("#frm_grid_search").validate({
+            errorPlacement: function(error, element) {},
+            submitHandler: function(form) {
+                DrawTableInquiry.ajax.reload();
+            }
+        });
+
+         });
+    
+
+       
+
+
+
+</script>
+
+        <% include ../partials/footer %>

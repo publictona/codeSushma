@@ -1,0 +1,441 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+
+        <style>
+            .form-group {
+                margin-bottom: 25px;
+            }
+
+            .uppercase {
+                text-transform: uppercase;
+            }
+        </style>
+
+        <div class="col-sm-12 mb-3">
+            <button class="btn btn-primary" id="add_New_Details">
+                Add Courier Details
+            </button>
+        </div>
+        <!-- Table start -->
+
+        <div id="printModal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-header modal-otp-header">
+                        <h5>Print Courier Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span> </button>
+
+                    </div>
+                    <div class="modal-body modal-body-otp" id="printBody">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="card">
+            <div class="card-body">
+                <div class="col-sm-12">
+                    <table class="table table-bordered table-striped" id="detailTable">
+                        <thead>
+                            <div class="col-sm-12"></div>
+
+                            <!-- //  <div class="col-md-6"> -->
+                            <div class="col-md-12 r-col">
+                                <table id="uspList"
+                                    class="table table-bordered table-striped display nowrap order-column"
+                                    style="width:100%;">
+                                    <tbody class="appar">
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- </div> -->
+                            <tr class="text-center justify-content-center">
+                            </tr>
+                        </thead>
+                        <tbody id="insertData"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Table end -->
+
+        <!-- MODAL START -->
+        <div class="modal fade" id="addModelData" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title"></h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>×</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <form id="newFormData" action="/route/courier/create" autocomplete="off" method="POST">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group m-0">
+                                        <input type="hidden" class="tranNo" name="tranNo" value="0">
+                                    </div>
+
+
+
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Courier <span style="color: rgb(117, 8, 8);">*</span>
+                                            </label>
+
+                                        <div class="col-sm-8">
+                                            <select class="form-control courierCode" name="courierCode" required>
+                                                <option value=""></option >
+                                            </select>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Location <span style="color: rgb(117, 8, 8);">*</span>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control location" name="location" id="location" required>
+                                                <option value=""></option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Description
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <textarea type="text" class="form-control description"
+                                                name="description"></textarea>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design"> Boxes
+                                            </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control noOfBox" name="noOfBox"  />
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Charges(Rs) <span style="color: rgb(128, 8, 8);">*</span></label>
+                                        <div class="col-sm-8">
+                                            <input type="number" class="form-control charges" name="charges" required />
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                            <div class="alert alert-success alert-dismissible fade show alert-hidden"
+                                id="successAlertAddTherapy">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Success! </strong> Record added successfully.
+                            </div>
+
+                            <div class="alert alert-info alert-dismissible fade show alert-hidden"
+                                id="successAlertUpdateTherapy">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <strong>Success! </strong> Record Update successfully.
+                            </div>
+                            <div class="alert alert-danger alert-dismissible fade show d-none" id="success-alert-error">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Error! </strong> <span class="custom_error"></span>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary btn-block buttonSubmitFire">Submit</button>
+                            <button type="reset" class="btn btn-primary buttonReset">Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- MODAL END -->
+
+        <script type="text/javascript">
+
+            $(document).ready(function (e) {
+                getBranchCode();
+                getCourierDatas();
+                getCourierLocDatas();
+                getData();
+                $(document).on("click", "#add_New_Details", function () {
+                    $("#addModelData").modal("show");
+                    $(".tranNo").val('0');
+                    $(".modal-title").html("Add New Courier Details");
+                    $(".buttonSubmitFire").html("SUBMIT");
+                    $(".buttonReset").html("RESET");
+                    $("#newFormData")[0].reset();
+                    //$("#dateNow").val(Date());
+                });
+
+
+                var dataColumns = [
+
+                    {
+                        data: "tranNo",
+                        sTitle: "Tran#",
+                        visible: true,
+                        className: "col-form-label fs15--design column-50",
+                    },
+
+                    {
+                        data: "tranDt",
+                        sTitle: "Date#",
+                        visible: true,
+                        className: "col-form-label fs15--design column-100",
+                        render: function (data, type, row) {
+                            return dateFormat(row.tranDt);
+                        }
+                    },
+
+                    {
+                        data: "courierCode",
+                        sTitle: "Courier#",
+                        visible: true,
+                        className: "col-form-label fs15--design column-150",
+                    },
+
+                    {
+                        data: "location",
+                        sTitle: "Location#",
+                        visible: true,
+                        className: "col-form-label fs15--design column-100",
+                    },
+
+                    {
+                        data: "noOfBox",
+                        sTitle: "Box#",
+                        visible: true,
+                        className: "col-form-label fs15--design column-50",
+                    },
+
+                    {
+                        data: "description",
+                        sTitle: "Description#",
+                        visible: true,
+                        className: "col-form-label fs15--design column-250",
+                    },
+
+                    {
+                        data: "charges",
+                        sTitle: "Charges(Rs)",
+                        visible: true,
+                        className: "col-form-label fs15--design column-70",
+                    },
+
+                    {
+                        data: "update",
+                        sTitle: "Action",
+                        visible: true,
+                        className: "col-form-label fs15--design column-50",
+                        render: function (data, type, row) {
+
+                            var html =
+                                ' <span class="btn btn-primary btn-block " data-id="' + row
+                                    .tranNo +
+                                '" onclick="updateMaster(this) " > EDIT </span>';
+                            return html;
+                        }
+                    },
+
+                    // {
+                    //     data: "shipment",
+                    //     sTitle: "Action",
+                    //     visible: true,
+                    //     render: function (data, type, row) {
+                    //         //console.log(row);
+                    //         var html =
+
+                    //             ' <span class="btn btn-primary btn-block" data-id="' + row
+                    //                 ._id +
+                    //             '" onclick="getPrint(this) "><i class="fa fa-print"></i></span>';
+                    //         return html;
+                    //     }
+                    // }
+                ];
+
+                DrawTableInquiry = DrawCustomDataTable("uspList", 350,
+                    "/route/courier/grid-Data", dataColumns, [
+                    [0, "asc"]
+                ], "frm_grid_search", null, true, true);
+
+                $("#frm_grid_search").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        DrawTableInquiry.ajax.reload();
+                    }
+                });
+
+                $("#newFormData").validate({
+                    rules: {
+                    },
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        $(".overlay").show();
+                        var formDom = $(form);
+                        var formData = formDom.serializeObject();
+
+                        $.ajax({
+                            method: "POST",
+                            url: "/route/courier/create",
+                            data: JSON.stringify(formData),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (result) {
+
+                                $("#addModelData").modal("hide");
+                                DrawTableInquiry.ajax.reload();
+                                getData();
+                            }
+                        });
+                    }
+                });
+            });
+
+            function getData() {
+                $.ajax({
+                    method: "get",
+                    url: "/route/courier/getData",
+                    data: JSON.stringify({}),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        var str = ``;
+                        for (var i = 0; i < result.Data.length; i++) {
+                            str += `
+                        <tr class="text-center justify-content-center" > 
+                          <td class="align-middle font-weight-bold text-st-purple"> <span data-id="${result.Data[i].tranNo}" onclick="updateMaster(this)"> ${result.Data[i].ship_brn} </span> </td>
+                       
+                          <td class="align-middle"> ${result.Data[i].tranDt}</td> 
+                          <td class="align-middle"> ${result.Data[i].tranId}</td>
+                          <td class="align-middle"> ${result.Data[i].courierCode}</td>
+                          <td class="align-middle"> ${result.Data[i].branch}</td>
+                          <td class="align-middle"> ${result.Data[i].location}</td>
+                          <td class="align-middle"> ${result.Data[i].noOfBox}</td>
+                          <td class="align-middle"> ${result.Data[i].description}</td>
+                          <td class="align-middle"> ${result.Data[i].charges}</td>
+                         
+                          
+                        </tr>
+                    `;
+                        }
+                        $('#insertData').html(str);
+                        $('#detailTable').dataTable();
+                        
+                    },
+                })
+            };
+
+           
+
+            function updateMaster(e) {
+                var id = e.getAttribute('data-id');
+
+                var parent = e.parentNode.parentNode;
+                var obj = {
+                    tranNo: id
+                };
+                // alert(obj);
+                $.ajax({
+                    method: "POST",
+                    url: "/route/courier/getDataById",
+                    data: JSON.stringify(obj),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+
+                        $.when($('#newFormData').populate(result.Data)).done(function (e) { });
+                        $('.ship_tocity').attr('disabled', true);
+
+                        $('#addModelData').modal('show');
+                        $(".modal-title").html("Update courier Details");
+                    }
+                });
+            };
+
+            function getCourierDatas() {
+                $.get("/route/courier/getCourierData", function (data) {
+                    option = '<option value="">Select Courier Code</option>'
+                    console.log(data.data[i], "hhhhhhhhhhhhhhhhhhhhhiii")
+                    for (var i = 0; i < data.data.length; i++) {
+                        if (data.data[i]) {
+                            // Add option for each element in the nested array
+                            for (var j = 0; j < data.data[i].data.length; j++) {
+                                option += '<option value="' + data.data[i].data[j] + '">' + data.data[i].data[j] + '</option>';
+                            }
+                        }
+                    }
+
+                    $('.courierCode').html(option);
+                    $('.courierCode').select2;
+                });
+            }
+
+            function getCourierLocDatas() {
+                $.get("/route/courier/getCourierLocData", function (data) {
+                    option1 = '<option value="">Select Courier Location</option>'
+                    for (var i = 0; i < data.data.length; i++) {
+                        if (data.data[i]) {
+                            // Add option for each element in the nested array
+                            for (var j = 0; j < data.data[i].data.length; j++) {
+                                option1 += '<option value="' + data.data[i].data[j] + '">' + data.data[i].data[j] + '</option>';
+                            }
+                        }
+                    }
+
+                    $('.location').html(option1);
+                    $('.location').select2;
+                });
+            }
+
+            //get Data
+            function getPrint(e) {
+                $('.divLoader').show();
+                var id = e.getAttribute('data-id');
+
+                $.ajax({
+                    url: '/route/courier/print/',
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ id: id }),
+                    dataType: "json",
+
+                    success: function (result) {
+                        $('#printBody').html(result.html);
+                        $('#printModal').modal('show');
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        var result = jQuery.parseJSON(jqXHR.responseText);
+                    }
+                });
+            }
+
+        </script>
+
+        <% include ../partials/footer %>

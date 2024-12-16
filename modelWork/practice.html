@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Proficiency Form</title>
+</head>
+<body>
+    <h1>Language Proficiency Form</h1>
+    
+    <form action="submit_form.php" method="post"> <!-- Replace "submit_form.php" with your form processing script -->
+        <h2>Personal Information:</h2>
+        <label for="full-name">Full Name:</label>
+        <input type="text" id="full-name" name="full-name" required><br>
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required><br>
+        <label for="contact">Contact Information:</label>
+        <input type="text" id="contact" name="contact" required><br>
+        
+        <h2>Language Details:</h2>
+        <h3>Language 1:</h3>
+        <label for="lang1-name">Language:</label>
+        <input type="text" id="lang1-name" name="lang1-name" required><br>
+        <label>Level of Proficiency:</label><br>
+        <label for="lang1-reading">Reading:</label>
+        <select id="lang1-reading" name="lang1-reading">
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+            <option value="Fluent">Fluent</option>
+        </select><br>
+        <label for="lang1-writing">Writing:</label>
+        <select id="lang1-writing" name="lang1-writing">
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+            <option value="Fluent">Fluent</option>
+        </select><br>
+        <label for="lang1-speaking">Speaking:</label>
+        <select id="lang1-speaking" name="lang1-speaking">
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+            <option value="Fluent">Fluent</option>
+        </select><br>
+        
+        <!-- Repeat the above code for Language 2 and Language 3, if needed -->
+        
+        <h2>Additional Languages:</h2>
+        <!-- Add fields to capture additional languages if necessary -->
+        
+        <h2>Notes/Comments:</h2>
+        <textarea id="notes" name="notes" rows="4" cols="50"></textarea><br>
+        
+        <h2>Declaration:</h2>
+        <p>I declare that the information provided above accurately represents my language proficiency...</p>
+        <label for="signature">Signature:</label>
+        <input type="text" id="signature" name="signature" required><br>
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required><br>
+        
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

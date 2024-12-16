@@ -1,0 +1,1427 @@
+<% include ../partials/head %>
+    <% include ../partials/header%>
+        <style>
+            .view-data-btn {
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+
+            .dataTables_wrapper {
+                margin-top: 0;
+            }
+
+            .staff-details-accordion>.card {
+                margin-bottom: 3px;
+            }
+
+            .staff-details-accordion .card-header {
+                border-radius: 0;
+                margin-bottom: 0;
+                padding: 0;
+                border-bottom: none;
+            }
+
+            .staff-details-accordion .card-link {
+                margin-top: 0;
+                width: 100%;
+                font-weight: bold;
+                color: #eaad4e;
+                padding: 1rem;
+            }
+
+            .staff-details-accordion .card-link[aria-expanded="false"]::before,
+            .staff-details-accordion .card-link[aria-expanded="true"]::before {
+                font-family: FontAwesome;
+                margin-right: 5px;
+            }
+
+            .staff-details-accordion .card-link[aria-expanded="false"]::before {
+                content: "\f067";
+            }
+
+            .staff-details-accordion .card-link[aria-expanded="true"]::before {
+                content: "\f068";
+            }
+
+            .staff-details-accordion .collapse {
+                border-top: 1px solid #ccc;
+            }
+
+            .staff-details-accordion .card-body .data-title {
+                margin-bottom: 10px;
+            }
+
+            .staff-details-accordion .card-body .card-body {
+                border: 1px solid #ccc;
+            }
+
+            .dataTables_wrapper .table>thead>tr>th {
+                white-space: nowrap;
+                padding-right: 30px;
+                min-width: 140px;
+            }
+
+            .dataTables_wrapper .table>thead>tr>th:first-child {
+                word-wrap: break-word;
+            }
+
+            .sukhoName {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            @media only screen and (min-width: 768px) {
+                .staff-details-accordion .col-form-label {
+                    text-align: right;
+                }
+            }
+        </style>
+
+        <div class="content__inner">
+            <h2 class="page-title">Add New Staff</h2>
+            <form data-submit="processForm()" id="AddStaffErp" action="/route/F21_STAF/AddUPDStaff" autocomplete="off"
+                method="POST">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <a href="#" class="btn btn-primary view-data-btn" data-toggle="modal"
+                            data-target="#therapistDetails" id="refreshTable">
+                            <i class="fa fa-eye" aria-hidden="true"></i> View Data
+                        </a>
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-3 col-12">
+                                <div class="form-group">
+                                    <label for="">Type</label>
+                                    <div class="select">
+                                        <select class="form-control req-class" name="STAFF_TYPE" id="STAFF_TYPE"
+                                            required="">
+                                            <option value="">SELECT</option>
+                                            <option value="Therapist">Therapist</option>
+                                            <option value="Office">Office</option>
+                                            <option value="Reception">Reception</option>
+                                        </select>
+                                        <i class="form-group__bar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-12">
+                                <div class="form-group">
+                                    <label for="">Sukho-Name</label>
+                                    <input type="text" class="req-class form-control" name="F21_SUKONM" id="F21_SUKONM"
+                                        placeholder="Enter Sukho Name" required="" />
+                                    <i class="form-group__bar"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="staff-details-accordion" class="staff-details-accordion">
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="card-link" id="personalDet" data-toggle="collapse" href="#personal-details"
+                                aria-controls="personal-details" aria-expanded="true">Personal Details</a>
+                        </div>
+                        <div id="personal-details" class="collapse show" data-parent="#staff-details-accordion">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Prefix</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="select">
+                                                        <select class="form-control" name="F21_PRE" id="F21_PRE">
+                                                            <option value="">SELECT</option>
+                                                            <option value="MR">MR</option>
+                                                            <option value="MRS">MRS</option>
+                                                            <option value="MS">MS</option>
+                                                            <option value="MISS">MISS</option>
+                                                        </select>
+                                                        <i class="form-group__bar"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Surname</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F21_SNAME"
+                                                        id="F21_SNAME" placeholder="Enter Surname" />
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Firstname</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F21_FNAME"
+                                                        id="F21_FNAME" placeholder="Enter First Name" required />
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Middlename</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F21_MNAME"
+                                                        id="F21_MNAME" placeholder="Enter Middle Name" />
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Birth Date</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="req-class date-picker form-control"
+                                                        name="F21_BIRTH" id="F21_BIRTH" placeholder="Enter Birthdate"
+                                                        required />
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Gender</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="select">
+                                                        <select class="req-class form-control" name="F21_MF" id="F21_MF"
+                                                            required="" />
+                                                        <option value=''>SELECT</option>
+                                                        <option value="M">MALE</option>
+                                                        <option value="F">FEMALE</option>
+                                                        </select>
+                                                        <i class="form-group__bar"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Mobile
+                                                Number</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F21_MOBILE"
+                                                        id="F21_MOBILE" placeholder="Enter Mobile No." />
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Whatsapp
+                                                Number</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F21_WHATAP"
+                                                        id="F21_WHATAP" placeholder="Enter Whatsapp No." />
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Insurance
+                                                Number</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F21_INSUNO"
+                                                        id="F21_INSUNO" placeholder="Enter Insurance No." />
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Joining
+                                                Date</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="date" class="req-class date-picker form-control"
+                                                        name="F21_JOINDT" id="F21_JOINDT"
+                                                        placeholder="Enter Joining Date" required />
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Resign Date</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control date-picker"
+                                                        name="F21_RESIDT" id="F21_RESIDT"
+                                                        placeholder="Enter Resign Date">
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="row">
+                                    <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Rejoin Date</label>
+                                    <div class="col-xl-8 col-lg-7 col-md-6">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control date-picker" name="REJOIN_DT"
+                                                id="REJOIN_DT" placeholder="Enter Rejoin Date">
+                                            <i class="form-group__bar"></i>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">In Branch</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="select">
+                                                        <select class="req-class form-control"
+                                                            placeholder="Enter In Branch" name="ST_BRN" id="ST_BRN"
+                                                            required="" />
+                                                        <option value="">SELECT</option>
+                                                        </select>
+                                                        <i class="form-group__bar"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Department</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="select">
+                                                        <select class="req-class form-control" name="F21_DEPT"
+                                                            id="F21_DEPT" required="">
+                                                            <option value="">SELECT</option>
+                                                            <option value="SPA">SPA</option>
+                                                            <option value="OFFICE">OFFICE</option>
+                                                            <option value="ADMIN">ADMIN</option>
+                                                            <option value="FINANCE">FINANCE</option>
+                                                            <option value="MARKETING">MARKETING</option>
+                                                            <option value="PROJECTS">PROJECTS</option>
+                                                            <option value="MANAGEMENT">MANAGEMENT</option>
+                                                        </select>
+                                                        <i class="form-group__bar"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Designation</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="select">
+                                                        <select class="req-class form-control" name="F21_DESIGN"
+                                                            id="F21_DESIGN" required="">
+                                                            <option value="">SELECT</option>
+                                                            <option value="Therapist">Therapist</option>
+                                                            <option value="Director">Director</option>
+                                                            <option value="Reception">Reception</option>
+                                                            <option value="The Best">The Best</option>
+                                                            <option value="ADMIN">ADMIN</option>
+                                                            <option value="Junior">Junior</option>
+                                                            <option value="Senior">Senior</option>
+                                                            <option value="PROJECTS">PROJECTS</option>
+                                                        </select>
+                                                        <i class="form-group__bar"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">PWD Shift
+                                                (IN)</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Enter PWD Shift (IN)" name="F21_IN" id="F21_IN">
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">PWD Shift
+                                                (OUT)</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F21_OUT"
+                                                        placeholder="Enter PWD Shift (OUT)" id="F21_OUT">
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Rating</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F21_RATING"
+                                                        id="F21_RATING" placeholder="Enter Rating" />
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Insurance
+                                                Exp.</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control date-picker"
+                                                        name="F21_INSUEXP" id="F21_INSUEXP"
+                                                        placeholder="Enter Rating" />
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="collapsed card-link" id="addressDet" data-toggle="collapse"
+                                href="#address-details" aria-controls="address-details" aria-expanded="false">Address
+                                Details</a>
+                        </div>
+                        <div id="address-details" class="collapse" data-parent="#staff-details-accordion">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h3 class="data-title">Address</h3>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="">Building</label>
+                                                            <input type="text" class="form-control" name="F21_BLDG"
+                                                                id="F21_BLDG">
+                                                            <i class="form-group__bar"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="">Street</label>
+                                                            <input type="text" class="form-control" name="F21_STREET"
+                                                                id="F21_STREET">
+                                                            <i class="form-group__bar"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="">Suburb</label>
+                                                            <input type="text" class="form-control" name="F21_SUBURB"
+                                                                id="F21_SUBURB">
+                                                            <i class="form-group__bar"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="">Pincode</label>
+                                                            <input type="text" class="form-control" name="F21_PIN"
+                                                                id="F21_PIN">
+                                                            <i class="form-group__bar"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="">City</label>
+                                                            <input type="text" class="form-control" name="F21_CITY"
+                                                                id="F21_CITY">
+                                                            <i class="form-group__bar"></i>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="">Resedential Telephone</label>
+                                                            <input type="text" class="form-control" name="F21_RESTEL"
+                                                                id="F21_RESTEL">
+                                                            <i class="form-group__bar"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="">State</label>
+                                                            <input type="text" class="form-control" name="State"
+                                                                id="State">
+                                                            <i class="form-group__bar"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="">Country</label>
+                                                            <input type="text" class="form-control" name="Country"
+                                                                id="Country">
+                                                            <i class="form-group__bar"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h3 class="data-title">Home Town Address</h3>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="">Address</label>
+                                                            <input type="text" class="form-control" name="HOME_ADD1"
+                                                                id="HOME_ADD1">
+                                                            <i class="form-group__bar"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="">Pincode</label>
+                                                            <input type="text" class="form-control" name="HOME_PIN"
+                                                                id="HOME_PIN">
+                                                            <i class="form-group__bar"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="">Home Telephone</label>
+                                                            <input type="text" class="form-control" name="HOME_TEL"
+                                                                id="HOME_TEL">
+                                                            <i class="form-group__bar"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="">City</label>
+                                                            <input type="text" class="form-control" name="homeCity"
+                                                                id="HOMETOWN__">
+                                                            <i class="form-group__bar"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="">State</label>
+                                                            <input type="text" class="form-control" name="homeState"
+                                                                id="homeState">
+                                                            <i class="form-group__bar"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="">Country</label>
+                                                            <input type="text" class="form-control" name="homeCountry"
+                                                                id="homeCountry">
+                                                            <i class="form-group__bar"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <a class="collapsed card-link" id="bankDet" data-toggle="collapse" href="#bank-details"
+                                aria-controls="bank-details" aria-expanded="false">PF/Bank Details</a>
+                        </div>
+                        <div id="bank-details" class="collapse" data-parent="#staff-details-accordion">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">UAN No</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F21_UANNO"
+                                                        id="F21_UANNO">
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">PF No</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F21_PFNO"
+                                                        id="F21_PFNO">
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">PF Status</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="select">
+                                                        <select class="form-control" name="PFStatus" id="PFStatusId">
+                                                            <option value="">Select PF Status</option>
+                                                            <option value="PF Registered">PF Registered </option>
+                                                            <option value="All Status is OK">All Status is OK </option>
+                                                            <option value="Document Missing">Document Missing</option>
+                                                            <option value="DOB Wring">DOB Wring </option>
+
+                                                            <option value="Aadhar Not Matching">Aadhar Not Matching
+                                                            </option>
+                                                            <option value="Phone Number Not Link">Phone Number Not Link
+                                                            </option>
+                                                            <option value="Change Of Phone Number">Change Of Phone
+                                                                Number
+                                                            </option>
+                                                            <option value="Name Change">Name Change</option>
+
+                                                            <option value="Document Miss-Match">Document Miss-Match
+                                                            </option>
+                                                            <option value="Partial PF Applied">Partial PF Applied
+                                                            </option>
+                                                            <option value="UAN Number">UAN Number</option>
+                                                            <option value="PF Status Report">PF Status Report</option>
+
+                                                            <option value="PF Form 19A applied">PF Form 19A applied
+                                                            </option>
+                                                            <option value="Pension form 10C applied">Pension form 10C
+                                                                applied
+                                                            </option>
+                                                            <option value="Pf approved and settled">Pf approved and
+                                                                settled
+                                                            </option>
+                                                            <option value="Pf rejected">Pf rejected</option>
+                                                        </select>
+                                                        <i class="form-group__bar"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">PF Sub
+                                                Categories</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <div class="select">
+                                                        <select class="form-control" name="PFSubCategories"
+                                                            id="PFSubCategories">
+                                                            <option value="">Select Sub Categories</option>
+                                                            <option value="Wrong Date of exit">Wrong Date of exit
+                                                            </option>
+                                                            <option value="Documents not clear">Documents not clear
+                                                            </option>
+                                                            <option value="Wrong bank account number">Wrong bank account
+                                                                number
+                                                            </option>
+                                                            <option
+                                                                value="Claim Rejected BANK PASSBOOK NOT ATTESTED BY BANK EMPLOYER">
+                                                                Claim Rejected BANK PASSBOOK NOT ATTESTED BY BANK
+                                                                EMPLOYER
+                                                            </option>
+                                                            <option value="Other plz specify">Other plz specify
+                                                            </option>
+                                                        </select>
+                                                        <i class="form-group__bar"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Other
+                                                Specify</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="PFOtherSpecifyRem"
+                                                        id="PFOtherSpecify">
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">SBI A/C</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F21_SBIAC"
+                                                        id="F21_SBIAC">
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">SBI IFSC
+                                                Code</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F21_ESICNO"
+                                                        id="F21_ESICNO">
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Branch Code</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F21_BRNCD"
+                                                        id="F21_BRNCD">
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">KOTAK A/C</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F21_KOTAKAC"
+                                                        id="F21_KOTAKAC">
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">KOTAK IFSC
+                                                Code</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F21_KOTAKIFSC"
+                                                        id="F21_KOTAKIFSC">
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Kotak Branch
+                                                Code</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F21_KOTAKBRNCD"
+                                                        id="F21_KOTAKBRNCD">
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">PAN Card No</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F_PANCARD"
+                                                        id="F_PANCARD">
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Aadhar Card</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F_AADHAR"
+                                                        id="F_AADHAR">
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Passport
+                                                Number</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F_PPNO" id="F_PPNO">
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Driving
+                                                Licence</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F_DRVLICN"
+                                                        id="F_DRVLICN">
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Electrol No</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F_ELECTROL"
+                                                        id="F_ELECTROL">
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Other Bank
+                                                Name</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="OtherBankName"
+                                                        id="OtherBankName">
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Other Bank
+                                                A/C</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F21_ACNO"
+                                                        id="F21_ACNO">
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-xl-4 col-lg-5 col-md-6 col-form-label">Other Bank IFSC
+                                                Code</label>
+                                            <div class="col-xl-8 col-lg-7 col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" name="F21_ACIFSC"
+                                                        id="F21_ACIFSC">
+                                                    <i class="form-group__bar"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <div class="alert alert-success alert-dismissible fade show alert-hidden"
+                            id="success-alert-add101">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <strong>Success! </strong> Record added successfully.
+                        </div>
+                        <div class="alert alert-info alert-dismissible fade show alert-hidden"
+                            id="success-alert-update101">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <strong>Success! </strong> Record Update successfully.
+                        </div>
+                    </div>
+
+                    <div class="mt-2">
+                        <button type="submit" class="btn btn-block btn-primary SaveTheDetails">Save The Details</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="modal fade" id="therapistDetails" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">STAFF LIST</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+<!-- ----------------------------- -->
+                        <div class="card"> 
+                            <form id="frm_grid_search" name="frm_grid_search">
+                                <div class="row">
+
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="">Branch</label>
+                                            <select name="ST_BRN" class="form-control ST_BRN">
+                                                <option value="">Please select branch</option>
+                                            </select>
+                                            <i class="form-group__bar"></i> 
+                                        </div>
+                                    </div>
+
+                                    <div class="card-footer">
+                                        <button type="submit"
+                                            class="btn btn-block btn-primary btn-guest">Search</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                        
+                        <!-- --------------------------------------- -->
+
+                      <div class="modal-body">
+                            <table id="staffListTable"
+                                class="table table-bordered table-striped display nowrap order-column">
+                                <tbody class="">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--STAFF PF STATUS MODAL START -->
+        <div class="modal fade" id="PFStatusViewModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title">PF Status History</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>×</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <table class="table table-bordered table-striped" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>PF Status</th>
+                                    <th>Date</th>
+                                    <th>Sub Categories</th>
+                                    <th>Other Specify</th>
+                                </tr>
+                            </thead>
+                            <tbody id="PFlistHistory">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var PFArrayList = [];
+            function addressActive() {
+                var others = document.querySelector("#personalDet");
+                others.classList.remove("active");
+                var addressLink = document.getElementById("addressDet");
+                addressLink.classList.add("active");
+            }
+
+            function bankActive() {
+                var others = document.querySelector("#addressDet");
+                others.classList.remove("active");
+                var bankdetails = document.getElementById("bankDet");
+                bankdetails.classList.add("active");
+            }
+            // document.querySelector(".saveFillAdd").addEventListener("click", addressActive)
+            // document.querySelector(".saveFillBank").addEventListener("click", bankActive)
+
+            function reformatDate(data) {
+                var year = data.substr(0, 4);
+                var month = data.substr(5, 2);
+                var mydate = data.substr(8, 2);
+                var newDate = year + "-" + month + "-" + mydate;
+                return newDate;
+            }
+
+            function getBranchCode() {
+
+                var optionList = '<option value="">SELECT</option>';
+                $.ajax({
+                    url: "/route/spaLocationST/getLocationListNew",
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (filterResult) {
+                        if (filterResult && filterResult.length > 0) {
+                            optionList += '<option value="IN000">IN000-HO/ Mumbai Depot</option>';
+                            $.each(filterResult, function (index, data) {
+                                //console.log("datatattattattatatat", data.ST_BRN);
+                                optionList += '<option value="' + data.ST_BRN + '">' + data.ST_BRN + "-" + data.ST_LOCN +
+                                    '</option>';
+                            });
+                        }
+                        console.log(optionList);
+                        $("#ST_BRN").html(optionList);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert("Error in loading branch data.Please refresh page.");
+                    }
+                });
+            }
+
+
+
+
+            // $(".error-msg").hide();
+
+            function validateForm() {
+                var isValid = true;
+                var x = document.querySelectorAll("#AddStaffErp [required]");
+                for (var i = 0; i < x.length; i++) {
+                    console.log(x[i])
+                    if (x[i].value == "") {
+                        isValid = false;
+
+
+                    }
+                }
+                if (isValid) {
+                    return true;
+
+                } else {
+                    return false;
+                }
+            }
+
+            $(document).ready(function (e) {
+
+                $("#PFSubCategories").prop("disabled", true);
+                $("#PFOtherSpecify").prop("disabled", true);
+
+
+                $(document).on('change', '#PFStatusId', function () {
+                    var PFStatus = $(this).val();
+                    if (PFStatus == "Pf rejected") {
+                        $("#PFSubCategories").prop("disabled", false);
+
+                    } else {
+                        $("#PFSubCategories").prop("disabled", true);
+                    }
+
+                });
+
+                $(document).on('change', '#PFSubCategories', function () {
+                    var PFStatus = $(this).val();
+                    if (PFStatus == "Other plz specify") {
+                        $("#PFOtherSpecify").prop("disabled", false);
+
+                    } else {
+                        $("#PFOtherSpecify").prop("disabled", true);
+                    }
+
+                });
+
+                // $(document).on('change', '#BankTypeId', function () {
+                //     var BankType = $(this).val();
+                //     if (BankType == "SBI Bank") {
+                //         $("#BankNameId").prop("disabled", true);
+
+                //     } else {
+                //         $("#BankNameId").prop("disabled", false);
+                //     }
+
+                // });
+
+                $(document).on("click", "#viewPFStatus", function () {
+                    var bindData = "";
+                    var id = $(this).attr("dataIds");
+                    var url = "/route/F21_STAF/" + id;
+                    $.get(url, {}, function (data) {
+
+                        $("#PFStatusViewModal").modal("show");
+
+                        if (data && data.PFHistory) {
+
+                            for (var i = 0; i < data.PFHistory.length; i++) {
+
+                                bindData += '<tr>' +
+                                    '<td>' + data.PFHistory[i].PFStatusflag + '</td>' +
+                                    '<td>' + dateFormat(data.PFHistory[i].PFStatusDate) + '</td>';
+
+                                if (data.PFHistory[i].PFSubCategories) {
+                                    bindData += '<td>' + data.PFHistory[i].PFSubCategories + '</td>';
+                                } else {
+                                    bindData += "-";
+                                }
+
+                                if (data.PFHistory[i].PFOtherSpecifyRem) {
+                                    bindData += '<td>' + data.PFHistory[i].PFOtherSpecifyRem + '</td>'
+                                } else {
+                                    bindData += "-";
+                                }
+
+                                bindData += '</tr>';
+                            }
+                        }
+                        $("#PFlistHistory").html(bindData);
+                    });
+                });
+
+                $("#F21_BIRTH").click(function () {
+                    $("#F21_BIRTH").css("border-bottom", "1px solid #000");
+                })
+
+                $("#F21_JOINDT").click(function () {
+                    $("#F21_JOINDT").css("border-bottom", "1px solid #000");
+                })
+
+
+                getBranchCode();
+                var SubmitUrlId;
+                var populate_data = {};
+                var action_type;
+                var NewObject;
+                var flag = false;
+
+                $("#AddStaffErp").validate({
+                    ignore: "",
+                    invalidHandler: function (e, validator) {
+                        // $("#personal-details").fadeIn(500);
+                        $(".date-picker").removeAttr("readonly");
+
+                        if ($("#F21_BIRTH").val() == "") {
+                            $("#F21_BIRTH").css("border-bottom", "1px solid red");
+
+                        } else {
+                            $("#F21_BIRTH").css("border-bottom", "1px solid #000");
+
+                        }
+                        if ($("#F21_JOINDT").val() == "") {
+                            $("#F21_JOINDT").css("border-bottom", "1px solid red");
+
+                        } else {
+                            $("#F21_JOINDT").css("border-bottom", "1px solid #000");
+
+                        }
+
+
+
+
+                    },
+                    submitHandler: function (form) {
+
+
+                        if (validateForm()) {
+
+                            // $("#personal-details").removeClass("show");
+
+                            $(".overlay").show();
+                            var $form = $(form);
+                            var url = $form.attr('action');
+                            var method = $form.attr('method');
+                            var formData = $form.serializeObject();
+                            if (action_type == "PUT") {
+                                url += SubmitUrlId;
+                                method = "PUT";
+                            }
+                            console.log("form data", formData);
+                            $.ajax({
+                                url: url,
+                                type: method,
+                                data: JSON.stringify(formData),
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                success: function (result) {
+
+                                    if (result.message == "Save Successfully") {
+                                        $(".overlay").hide();
+                                        $("#success-alert-add101").alert();
+                                        $("#success-alert-add101").fadeTo(2000, 500).slideUp(
+                                            500,
+                                            function () { });
+                                        document.getElementById("AddStaffErp").reset();
+                                        $(".select2").select2();
+                                    } else {
+                                        //success-alert-update101
+                                        $("#success-alert-update101").alert();
+                                        $("#success-alert-update101").fadeTo(2000, 500).slideUp(
+                                            500,
+                                            function () { });
+                                        document.getElementById("AddStaffErp").reset();
+                                    }
+                                    $("#F21_BIRTH,#F21_JOINDT").css("border-bottom",
+                                        "1px solid #000!important");
+                                    location.reload();
+
+
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    $(".overlay").hide();
+                                    if (jqXHR.status == 200 || jqXHR.status == 302) {
+                                        window.location.href = '/login';
+                                    }
+                                    var result = jQuery.parseJSON(jqXHR.responseText);
+                                    if (jqXHR.status == 500) {
+
+                                        $(".custom_error").html(result.message);
+
+                                        $("#danger-alert").alert();
+
+                                        $("#danger-alert").fadeTo(2000, 500).slideUp(500,
+                                            function () { });
+                                    } else {
+                                        $(".custom_error").html(errorThrown);
+                                        $("#danger-alert").alert();
+
+                                        $("#danger-alert").fadeTo(2000, 500).slideUp(500,
+                                            function () { });
+                                    }
+                                    console.log("Please enter the required fields");
+
+                                }
+
+                            });
+
+                        } else {
+                            console.log("Please enter the required fields");
+                        }
+                    },
+
+                    rules: {
+                        STAFF_TYPE: "required",
+                        F21_SUKONM: "required",
+                        F21_FNAME: "required",
+                        F21_BIRTH: "required",
+                        F21_MF: "required",
+                        F21_JOINDT: "required",
+                        ST_BRN: "required",
+                        F21_DEPT: "required",
+                        F21_DESIGN: "required"
+                    },
+
+
+                });
+
+
+
+                // $(function () {
+                //     $('#AddStaffErp').submit(function () {
+                //         if ($("#AddStaffErp").valid()) {
+                //             console.log('the form is valid');
+                //             $(".error").css("display", "none");
+                //             $("#F21_BIRTH,#F21_JOINDT").css("border-bottom", "1px solid #000");
+                //         } else {
+                //             console.log("Please enter required fields")
+                //         }
+                //     });
+                // });
+
+
+
+                $(document).on('click', '.grid-edit-row', function () {
+
+                    $("#personal-details").collapse('show');
+
+
+                    // $(".form-title").html("Edit F21_STAF master");
+                    $(".SaveTheDetails").html("Update The Details")
+                    var id = $(this).attr("data-id");
+                    var url = "/route/F21_STAF/" + id;
+                    $.get(url, {}, function (data) {
+                        populate_data = data;
+                        JSON.stringify(populate_data);
+                        $.when($('#AddStaffErp').populate(data)).done(function (x) {
+                            $("#therapistDetails").modal('hide');
+                            $("#F21_BIRTH").val(reformatDate(data.F21_BIRTH));
+                            $("#F21_JOINDT").val(reformatDate(data.F21_JOINDT));
+
+                            if (data.REJOIN_DT) {
+                                $("#REJOIN_DT").val(reformatDate(data.REJOIN_DT));
+                            }
+                            if (data.F21_RESIDT) {
+                                $("#F21_RESIDT").val(reformatDate(data.F21_RESIDT));
+                            }
+
+
+                            SubmitUrlId = "/" + populate_data._id;
+                            action_type = "PUT";
+                            NewObject = data;
+                            flag = true;
+                            $(".overlay").hide();
+                            $(".form_add_entry").show();
+                            $("#staffUpdateModal").modal('show');
+                        });
+                    });
+                });
+
+                var dataColumns = [{
+                    data: "F21_IDNO",
+                    sTitle: "ID",
+                    visible: true,
+                    render: function (data, type, row) {
+                        var html = "-";
+
+                        if (row.F21_IDNO) {
+                            html = row.F21_IDNO;
+                        }
+
+                        return '<a hrfe="#" class="grid-edit-row" data-id="' + row['_id'] +
+                            '" data-F21_FNAME="' + row['F21_FNAME'] + '" data-F21_SNAME="' + row[
+                            'F21_SNAME'] + '" data-F21_PRE="' + row['F21_PRE'] + '">' + html + '</a>';
+                    }
+                }, {
+                    data: "_id",
+                    visible: false
+                }, {
+                    data: "ST_BRN",
+                    sTitle: "Branch",
+                    visible: true,
+                    // width: "50px",
+                }, {
+                    data: "F21_FNAME",
+                    sTitle: "Name",
+                    visible: true,
+
+                }, {
+                    data: "F21_SUKONM",
+                    sTitle: "ST Name",
+                    visible: true,
+                    className: "column-100 sukhoName"
+
+
+
+                }, {
+                    data: "F21_MOBILE",
+                    sTitle: "Mobile",
+                    visible: true,
+                    //width: "50px",
+                }, {
+                    data: "F21_DESIGN",
+                    sTitle: "Designation",
+                    visible: true,
+                    // width: "50px",
+                    render: function (data, type, row) {
+                        var dataRender = "-";
+                        if (row && row.F21_DESIGN) {
+                            dataRender = row.F21_DESIGN;
+                        }
+                        return dataRender;
+                    }
+                }, {
+                    data: "F21_DEPT",
+                    sTitle: "Department",
+                    visible: true,
+                    // width: "50px",
+                    render: function (data, type, row) {
+                        var dataRender = "-";
+                        if (row && row.F21_DEPT) {
+                            dataRender = row.F21_DEPT;
+                        }
+                        return dataRender;
+                    }
+                }, {
+                    data: "F_PANCARD",
+                    sTitle: "PAN No.",
+                    visible: true,
+                    // width: "50px",
+                }, {
+                    data: "F_AADHAR",
+                    sTitle: "Aadhar",
+                    visible: true,
+                    // width: "50px",
+                }, {
+                    data: "F_DRVLICN",
+                    sTitle: "Driv licn",
+                    visible: true,
+                    //  width: "50px"
+                }, {
+                    data: "REJOIN_DT",
+                    sTitle: "Rejoin DT",
+                    visible: true,
+                    //  width: "50px"
+                    render: function (data, type, row) {
+                        var dataRender = "-";
+                        if (row && row.REJOIN_DT) {
+                            dataRender = reformatDate(row.REJOIN_DT);
+                        }
+                        return dataRender;
+                    }
+                }, {
+                    data: "F21_ESICNO",
+                    sTitle: "SBI IFSC",
+                    visible: false,
+                    //  width: "50px"
+                    render: function (data, type, row) {
+                        var dataRender = "-";
+                        if (row && row.F21_ESICNO) {
+                            dataRender = row.F21_ESICNO;
+                        }
+                        return dataRender;
+                    }
+                }, {
+                    data: "F21_SBIAC",
+                    sTitle: "SBI A/C & IFSC Code",
+                    visible: true,
+                    //  width: "50px"
+                    render: function (data, type, row) {
+                        var dataRender = "-";
+                        if (row && row.F21_SBIAC) {
+                            dataRender = '<div>' + row.F21_SBIAC + '</div>' + '<div>' + row.F21_ESICNO + '</div>';
+                        }
+                        return dataRender;
+                    }
+                }, {
+                    data: "F21_ACIFSC",
+                    sTitle: "HDFC IFSC",
+                    visible: false,
+                    //  width: "50px"
+                    render: function (data, type, row) {
+                        var dataRender = "-";
+                        if (row && row.F21_ACIFSC) {
+                            dataRender = row.F21_ACIFSC;
+                        }
+                        return dataRender;
+                    }
+                }, {
+                    data: "OtherBankName",
+                    sTitle: "Other Bank Name",
+                    visible: true,
+                    //  width: "50px"
+                    render: function (data, type, row) {
+                        var dataRender = "-";
+                        if (row && row.OtherBankName) {
+                            dataRender = row.OtherBankName;
+                        }
+                        return dataRender;
+                    }
+                }, {
+                    data: "F21_ACNO",
+                    sTitle: "Other Bank A/C & IFSC",
+                    visible: true,
+                    //  width: "50px"
+                    render: function (data, type, row) {
+                        var dataRender = "-";
+                        if (row && row.F21_ACNO) {
+
+                            dataRender = '<div>' + row.F21_ACNO + '</div>' + '<div>' + row.F21_ACIFSC + '</div>';
+                        }
+                        return dataRender;
+                    }
+                }, {
+                    data: "F21_BRNCD",
+                    sTitle: "Branch Code",
+                    visible: true,
+                    //  width: "50px"
+                    render: function (data, type, row) {
+                        var dataRender = "-";
+                        if (row && row.F21_BRNCD) {
+                            dataRender = row.F21_BRNCD;
+                        }
+                        return dataRender;
+                    }
+                }, {
+                    data: "PFHistory",
+                    sTitle: "View Status",
+                    visible: true,
+                    //  width: "50px"
+                    render: function (data, type, row) {
+                        var dataRender = "-";
+                        if (row && row.PFHistory) {
+                            PFArrayList.push(row.PFHistory);
+                            dataRender = '<button type="button" dataIds="' + row['_id'] + '" id="viewPFStatus" > View PF Status</button > ';
+                        }
+                        return dataRender;
+                    }
+                }];
+
+                // setTimeout(function () {
+                var DrawTableInquiry = DrawCustomDataTable("staffListTable", 350, "/route/F21_STAF/data-grid-view/" +
+                    "addStaffList", dataColumns, [
+                    [0, "desc"]
+                ], "frm-grid-search", null, true, true);
+                // }, 3000);
+                $(document).on('click', '#refreshTable', function () {
+                    DrawTableInquiry.ajax.reload();
+                });
+
+            });
+        </script>
+
+
+        <% include ../partials/footer %>

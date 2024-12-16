@@ -1,0 +1,227 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+        <style>
+            .alert {
+                width: auto;
+                padding: 20px;
+                font-size: 15px;
+                top: 63px !important;
+                right: 20px !important;
+                z-index: 999999 !important;
+            }
+            .asnP{
+                border: 1px solid #AAA;
+                padding: 10px;
+                background: #eee;
+            }
+            .starGold{
+                color:gold;
+                border: #CCC;
+            }
+        </style>
+        <div id="mySidenav" class="hamburger-menu">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <div class="hamburger-content">
+                <form id="frm_grid_search" name="frm_grid_search">
+                    <div class="bgff">
+                        <label>TOURCODE</label>
+                        <input type="text" class="form-control tourcode" name="tourcode" />
+                    </div>
+                    <div class="bgff">
+                        <label>Feedback Type</label>
+                        <select class="form-control masterType" name="masterType">
+                            <option value=""></option>
+                            <option value="BEFORE TOUR">BEFORE TOUR</option>
+                            <option value="ON TOUR">ON TOUR</option>
+                            <option value="AFTER TOUR">AFTER TOUR</option>
+                        </select>
+                    </div>
+                    <div class="bgff">
+                        <label>Feedback Date</label>
+                        <input type="text" class="form-control datepicker feedbackDate" name="fromCallNumber" />
+                    </div>
+
+                    <!-- <div class="bgff">
+                        <label>Zone</label>
+                        <input type="text" class="form-control zone" name="zone" />
+                    </div> -->
+                    
+                    <div class="bgff">
+                        <span class="btn btn-primary btn-guest height-30 btn-block" onclick="getFeedback()"
+                            style="">SEARCH</span>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="box">
+            <div class="box-header with-border with-hamburger">
+                <a href="javascript:void(0);" class="box-header-hamburger-menu" onclick="openNav()">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </a>
+                <h3 class="box-title">Guest Feedback</h3>
+                              
+            </div>
+            <div class="box-body">
+                <div class="row gutter--3px">
+                    <div class="col-md-12">
+                        <table id="guestFeedback"
+                            class="table table-bordered table-striped display nowrap order-column" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th class="fs15--design">TOURCODE</th>
+                                    <th class="fs15--design">FORM</th>
+                                    <th class="fs15--design">Guest</th>
+                                    <th class="fs15--design">Zone</th>
+                                    <th class="fs15--design">Feedback Category</th>
+                                    <th class="fs15--design">Date</th>
+                                    <th class="fs15--design">View Feedback</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="feedbackModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                  <div id="feedbackDetails"></div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <script>
+            var DrawTableInquiry;
+            // var dataArr={
+            //     totalForms:0,
+            //     cancelForms:0,
+            //     crShellForms:0,
+            //     clearForms:0,
+            //     sentForms:0,
+            //     pendingForms:0
+            // };
+            function getTourZone(){
+                var tray_url = "/route/rsData/getTourZones/0";
+                $.getJSON(tray_url, function(data) {
+                    var optionList1='<option value=""></option>';
+                    $.each(data, function() {
+                        if (this != "") {
+                            optionList1 += '<option value="' + this + '">' + this + '</option>'
+                        }
+                    });
+                    $('.sectorR').html(optionList1);
+                    $('.sectorR').select2();
+                });
+            }
+
+            function getFeedback(){
+                var obj={category:$('.masterType').val(),date:$('.feedbackDate').val(),tourcode:$('.tourcode').val() , zone:$('.zone')};
+                $.ajax({
+                    url: "/route/feedBackLink/getFeedbackView",
+                    type: "post",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(obj),
+                    dataType: "json",
+                    success: function (result) {
+                        var str=``;
+                        //console.log(result.data);
+                        for(var i=0;i<result.data.length;i++){
+                            str+=`
+                                <tr>
+                                    <td class="fs15--design">${result.data[i].tcd}</td>
+                                    <td class="fs15--design">${result.data[i].form}</td>
+                                    <td class="fs15--design">${result.data[i].guestName}</td>
+                                    <td class="fs15--design">${result.data[i].zone}</td>
+                                    <td class="fs15--design">${result.data[i].feedBack_Category}</td>
+                                    <td class="fs15--design">${dateFormat(result.data[i].feedbackDate)}</td>
+                                    <td class="fs15--design">
+                                        <span data-id="${result.data[i]._id}" class="btn btn-primary btn-block" onclick="getFeedbackDtl(this)">
+                                            View Feedback
+                                        </span>
+                                    </td>
+                                </tr>
+                            `;
+                        }
+                        $('#guestFeedback tbody').html(str);
+                    }
+                });
+            }
+
+            function getFeedbackDtl(e){
+                var obj={id:e.getAttribute('data-id')};
+                $.ajax({
+                    url: "/route/feedBackLink/getFeedbackDetail",
+                    type: "post",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(obj),
+                    dataType: "json",
+                    success: function (result) {
+                        var str=``;
+                        console.log(result.data);
+                        displayFeedback(result.data);
+                    }
+                });
+            }
+
+            $(document).ready(function () {
+                getTourZone();
+                getFeedback();
+            });
+            
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+
+            function clearTourdt() {
+                $('.dateRange').val('');
+            }
+
+            function displayFeedback(data) {
+                const feedbackDiv = document.getElementById('feedbackDetails');
+                $('#feedbackModalLabel').text(data.guestName + " "+data.feedBack_Category+" FEEDBACK");
+                let feedbackHtml = `<h6>Category: ${data.feedBack_Category}</h6>`;
+                feedbackHtml += `<h6>Zone: ${data.zone}</h6><br>`;
+              
+                data.feedBackLink.forEach(item => {
+                    var category= (!isNaN(parseInt(item.feedBack_Rating)))?'Rating':'Comment';
+                    feedbackHtml += `<div class="mb-3">
+                            <div>${item.feedBack_Prompt}</div>`;
+                    if(category=="Comment"){
+                        feedbackHtml+=`<p class="fs15--design asnP">
+                                ${(!isNaN(parseInt(item.feedBack_Rating)))?'STAR':''}
+                                ${item.feedBack_Rating}
+                            </p>
+                            </div>`;
+                    }else{
+                        feedbackHtml+=`<p class="fs18--design asnP">`;
+                        for(var i=1;i<=item.feedBack_Rating;i++){
+                            feedbackHtml+=`<i class="fa fa-star text-warning starGold"></i>` ;
+                        }
+                        feedbackHtml+=`</p>
+                        </div>`;
+                    }
+                           
+                });
+              
+                feedbackDiv.innerHTML = feedbackHtml;
+                $('#feedbackModal').modal('show');
+            }
+        </script>
+        <% include ../partials/footer %>

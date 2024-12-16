@@ -1,0 +1,627 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+
+        <style>
+            .pd-4 {
+                padding-left: 10px;
+            }
+
+            .ui-autocomplete {
+                z-index: 2147483647;
+            }
+
+            .contentRow {
+                white-space: break-spaces !important;
+            }
+
+            .tourcode,
+            .formno {
+                text-transform: uppercase;
+                font-size: 16px;
+                font-weight: 800;
+            }
+
+            .tourname {
+                font-size: 12px;
+            }
+
+            .tour-detials {
+                font-size: 15px;
+                white-space: nowrap;
+            }
+
+            .background-box {
+                background: #dadada;
+                padding: 1px 5px;
+                border-radius: 4px;
+            }
+
+            .col-150 {
+                min-width: 150px;
+                max-width: 150px;
+                width: 150px;
+            }
+
+            .col-50 {
+                min-width: 50px;
+                max-width: 50px;
+                width: 50px;
+            }
+
+            .alert {
+                width: auto;
+                padding: 20px;
+                font-size: 15px;
+                top: 63px !important;
+                right: 20px !important;
+                z-index: 999999 !important;
+            }
+
+            .ibTable tr td {
+                padding: 3px;
+            }
+
+            .calIpBox {
+                border-bottom: 1px solid #fff;
+            }
+
+            label.error {
+                display: block !important;
+            }
+        </style>
+
+
+        <div class="box">
+            <div class="box-header with-border with-hamburger">
+                <a href="javascript:void(0);" class="box-header-hamburger-menu" onclick="openNav()">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </a>
+                <h3 class="box-title">TL Insurance</h3>
+            </div>
+            <div class="box-body">
+                <div class="row gutter--3px">
+                    <div class="col-md-12">
+                        <span class="btn btn-primary" onclick="addNewUser()"><i class="fa fa-plus"></i> Add TL Insurance
+                        </span>
+                    </div>
+                    <div class="col-md-12 r-col">
+                        <table id="uspList" class="table table-bordered table-striped display nowrap order-column"
+                            style="width:100%;">
+                            <tbody class="appar">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="newUserBox" tabindex="-1" role="dialog" aria-labelledby="newUserBox"
+            aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+
+                <div class="modal-content">
+                    <div class="modal-header">Add TL Insurance Details <span id="topTranNo" class="fs15--design">
+                        </span></h5>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="regForm">
+                            <div class="row gutter--3px">
+                                <div class="col-md-12">
+                                    <div class="row gutter--3px pd-4">
+
+
+
+                                        <div class="form-group row col-sm-12">
+                                            <input type="hidden" class="form-control idTLInsurance" name="id" value="0">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Tour Manager Name
+                                                <span style="color: rgb(167, 14, 14);">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control F31_SRNO" id="F31_SRNO" name="F31_SRNO"
+                                                    onchange="getDataF31Details(this)" required> </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Tour Manager Name
+                                                <span style="color: rgb(124, 13, 13);">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="F31_FULLNM" class="form-control F31_FULLNM"
+                                                    id="fullName" autocomplete="off" required />
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Address
+                                                <span style="color: rgb(124, 13, 13);">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="address" class="form-control address" id="add"
+                                                    autocomplete="off" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">DOB
+                                                <span style="color: rgb(124, 13, 13);">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="DOB" class="form-control datepicker DOB"
+                                                    required id="dob" autocomplete="off" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Date Of Travel
+                                                <span style="color: rgb(124, 13, 13);">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="dateOfTravel"
+                                                    class="form-control datepicker dateOfTravel" autocomplete="off" />
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Insurance Start
+                                                <span style="color: rgb(124, 13, 13);">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="insuranceStart"
+                                                    class="form-control datepicker insuranceStart" autocomplete="off" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Days Need To
+                                                Cover
+
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="number" name="daysNeedToCover"
+                                                    class="form-control daysNeedToCover" />
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Nominee Name
+                                                <span style="color: rgb(124, 13, 13);">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="nomineeName" class="form-control nomineeName"
+                                                    autocomplete="off" />
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Nominee Relation
+                                                <span style="color: rgb(124, 13, 13);">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="nomineeRelation"
+                                                    class="form-control nomineeRelation" autocomplete="off" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Plan Name
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="planName" class="form-control planName"
+                                                    autocomplete="off" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Mobile No
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="number" name="mobile" class="form-control mobile"
+                                                    id="mobile" minlength="10" maxlength="10" pattern="\d{10}"
+                                                    autocomplete="off" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Email Id <span
+                                                    style="color: rgb(124, 13, 13);">*</span>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="email" name="emailId" class="form-control emailId"
+                                                    id="emaill" required autocomplete="off" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Passport No
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="passport" class="form-control passport"
+                                                    id="pass" autocomplete="off" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row col-sm-12">
+                                            <label for="" class="col-sm-4 col-form-label fs15--design">Tour Code
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" name="tourCode" class="form-control tourCode"
+                                                    autocomplete="off" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-12 mt-10">
+
+                                    <button type="submit" class="btn btn-primary btn-block">SAVE AND SEND MAIL</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+
+            var DrawTableInquiry;
+            $(document).ready(function () {
+                getTourLeader();
+
+
+                var dataColumns = [{
+                    data: "_id",
+                    sTitle: "Id",
+                    visible: false
+                },
+
+                {
+                    data: "tranNo",
+                    sTitle: "Tran#",
+                    visible: true,
+                    className: "fs14--design column-12",
+
+                },
+
+                {
+                    data: "tranDt",
+                    sTitle: "Date",
+                    visible: false,
+
+                    // render: function (data, type, row) {
+                    //     return dateFormat(row.tranDt);
+                    // }
+                },
+
+                {
+                    data: "tranID",
+                    sTitle: "Tran ID#",
+                    visible: false,
+                    className: "fs14--design column-12",
+
+                },
+
+                {
+                    data: "F31_SRNO",
+                    sTitle: "Sr No#",
+                    visible: true,
+                    className: "fs14--design column-12",
+
+                },
+
+                {
+                    data: "F31_FULLNM",
+                    sTitle: "TL Name#",
+                    visible: true,
+                    className: "fs14--design column-12",
+
+                },
+
+
+                {
+                    data: "address",
+                    sTitle: "Address#",
+                    visible: true,
+                    className: "fs14--design column-12",
+                },
+
+                {
+                    data: "DOB",
+                    sTitle: "DOB#",
+                    visible: true,
+                    className: "fs14--design column-12",
+                    render: function (data, type, row) {
+                        return dateFormat(row.DOB);
+                    }
+                },
+
+                {
+                    data: "dateOfTravel",
+                    sTitle: "Travel Date#",
+                    visible: true,
+                    className: "fs14--design column-12",
+                    render: function (data, type, row) {
+                        return dateFormat(row.dateOfTravel);
+                    }
+                },
+
+                {
+                    data: "insuranceStart",
+                    sTitle: "Insur. Start#",
+                    visible: true,
+                    className: "fs14--design column-12",
+                    render: function (data, type, row) {
+                        return dateFormat(row.insuranceStart);
+                    }
+                },
+
+                {
+                    data: "daysNeedToCover",
+                    sTitle: "Days#",
+                    visible: true,
+                    className: "fs14--design column-12",
+                },
+
+                {
+                    data: "nomineeName",
+                    sTitle: "Nominee Name#",
+                    visible: true,
+                    className: "fs14--design column-12",
+                },
+
+                {
+                    data: "nomineeRelation",
+                    sTitle: "Nominee Relation#",
+                    visible: true,
+                    className: "fs14--design column-12",
+                },
+
+                {
+                    data: "planName",
+                    sTitle: "Plan Name#",
+                    visible: true,
+                    className: "fs14--design column-12",
+                },
+
+                {
+                    data: "mobile",
+                    sTitle: "Mobile#",
+                    visible: true,
+                    className: "fs14--design column-12",
+                },
+
+                {
+                    data: "emailId",
+                    sTitle: "Email Id#",
+                    visible: true,
+                    className: "fs14--design column-12",
+                },
+
+                {
+                    data: "passport",
+                    sTitle: "Passport#",
+                    visible: true,
+                    className: "fs14--design column-12",
+                },
+
+                {
+                    data: "tourCode",
+                    sTitle: "TourCode#",
+                    visible: true,
+                    className: "fs14--design column-12",
+                },
+
+
+                {
+                    data: "a",
+                    sTitle: "Action",
+                    visible: true,
+                    render: function (data, type, row) {
+                        //console.log(row);
+                        var html =
+                            ' <span class="btn btn-primary btn-block" data-id="' + row
+                                ._id +
+                            '" onclick="getUser(this) "> Edit</span>';
+                        return html;
+                    }
+                },
+                ];
+
+                DrawTableInquiry = DrawCustomDataTable("uspList", 350,
+                    "/route/TLInsurance/grid-data", dataColumns, [
+                    [0, "asc"]
+                ], "frm_grid_search", null, true, true);
+
+                $("#frm_grid_search").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        DrawTableInquiry.ajax.reload();
+                    }
+                });
+                $('.textUpper').on('keyup', function (e) {
+                    $(this).val($(this).val().toUpperCase());
+                });
+
+                $("form#regForm").submit(function (e) {
+                    //$('#newUserBox').modal('hide');
+                    e.preventDefault();
+                });
+
+                $("#regForm").validate({
+                    rules: {
+
+                    },
+                    messages: {
+
+                    },
+
+                    errorPlacement: function (error, element) {
+                        offset = element.offset();
+                        error.insertAfter(element)
+                        error.addClass('message');
+                        error.css('display', 'block!important');
+                        error.css('color', 'red');
+                    },
+
+                    submitHandler: function (form) {
+
+                        $('#newUserBox').modal('hide');
+                        var $form = $(form);
+                        var formData = $form.serializeObject();
+
+                        var method = "post";
+                        var url = "/route/TLInsurance/create";
+                        //  console.log(formData);
+                        if (formData.id != 0) {
+                            url =
+                                '/route/TLInsurance/update/' +
+                                formData.id;
+                            method = "put";
+                        }
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            contentType: "application/json; charset=utf-8",
+                            data: JSON.stringify(formData),
+                            dataType: "json",
+
+                            success: function (result) {
+                                if (result.status) {
+                                    notification({
+                                        type: "success",
+                                        message: result
+                                            .msg
+                                    });
+
+                                    DrawTableInquiry.ajax
+                                        .reload();
+                                    $("#regForm")[0].reset();
+                                    sendEmail(formData)
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+            function addNewUser() {
+                $('#newUserBox').modal('show');
+                $('.idtransaction').val('0');
+            }
+
+            function populate(frm, data) {
+                $.each(data, function (key, value) {
+                    $('[name=' + key + ']', frm).val(value);
+                });
+                $('.sector').select2();
+            }
+
+            function sendEmail(formData) {
+                $.ajax({
+                    url: '/route/TLInsurance/create',  // Replace with the actual endpoint for sending emails
+                    type: 'post',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({ formData: formData }),
+                    dataType: 'json',
+                    success: function (result) {
+                        console.log("resultresult",result)
+                        if (result.status) {
+                            console.log('Email sent successfully');
+                        } else {
+                            console.log('Error sending email:', result.msg);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('AJAX error:', error);
+                    }
+                });
+            }
+
+
+
+            function getUser(id) {
+                var id = id.getAttribute('data-id');
+                $('.idTLInsurance').val(id);
+
+                $.ajax({
+                    url: "/route/TLInsurance/getData",
+                    type: "get",
+                    data: {
+                        id: id
+                    },
+                    success: function (result) {
+
+                        var tranNO = '&nbsp;&nbsp;&nbsp;&nbsp;Tran No :- ' + result.data.tranNo;
+                        $("#topTranNo").html(tranNO);
+
+                        var iddata = {
+                            id: result.data._id
+                        }
+                        $.when($('#regForm').populate(result.data)).done(function (x) {
+
+                        });
+                        $('.F31_SRNO').select2();
+                        $('#newUserBox').modal('show');
+
+                    }
+                })
+            }
+
+            function getTourLeader() {
+                var tray_url = "/route/TLInsurance/getTourLeader/";
+                $.getJSON(tray_url, function (data) {
+                    var optionList1 = '<option value=""></option>';
+                    for (var i = 0; i < data.length; i++) {
+
+                        optionList1 += '<option value="' + data[i].F31_SRNO + '">' +
+                            data[i].F31_SRNO + ' - ' + data[i].F31_FULLNM + '</option>';
+                    }
+                    $('.F31_SRNO').html(optionList1);
+                    $('.F31_SRNO').select2();
+                });
+            }
+
+            function getDataF31Details(id) {
+                // console.log(e.value)
+
+                id = $('.F31_SRNO').val(),
+
+                    $.ajax({
+                        method: "get",
+                        url: "/route/TLInsurance/getF31Details/" + id,
+                        data: JSON.stringify(),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (result) {
+                            $('#dob').val(dateFormat(result.data.F31_BIRTH));
+                            $('#mobile').val(result.data.F31_MOBILE);
+                            $('#add').val(result.data.F31_ADD1);
+                            $('#emaill').val(result.data.F31_EMAIL);
+                            $('#pass').val(result.data.F31_PPNO);
+                            $('#fullName').val(result.data.F31_FULLNM);
+                        }
+                    });
+            }
+
+
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+
+        </script>
+
+        <% include ../partials/footer %>

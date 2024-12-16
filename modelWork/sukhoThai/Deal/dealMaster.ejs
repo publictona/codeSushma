@@ -1,0 +1,348 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+
+        <style>
+            .form-group {
+                margin-bottom: 25px;
+            }
+
+            .uppercase {
+                text-transform: uppercase;
+            }
+        </style>
+
+        <div class="col-sm-12 mb-3">
+            <button class="btn btn-primary" id="Add_New_Shipment_Details">
+                Add Deal Master Details
+            </button>
+        </div>
+        <!-- Table start -->
+
+        <div id="printModal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-header modal-otp-header">
+                        <h5>Print Deal Master Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span> </button>
+
+                    </div>
+                    <div class="modal-body modal-body-otp" id="printBody">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="card">
+            <div class="card-body">
+                <div class="col-sm-12">
+                    <table class="table table-bordered table-striped" id="shipmentDetailTable">
+                        <thead>
+                            <div class="col-sm-12"></div>
+
+                            <tr>
+                                <th colspan="16" class="text-center h2">Deal Master Details</th>
+                            </tr>
+                            <br>
+
+                            <!-- //  <div class="col-md-6"> -->
+                            <div class="col-md-12">
+                                <table id="uspList"
+                                    class="table table-bordered table-striped display nowrap order-column"
+                                    style="width:90%;">
+                                    <tbody class="appar">
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- </div> -->
+
+
+                            <tr class="text-center justify-content-center"> </tr>
+                        </thead>
+                        <tbody id="insertDealData"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Table end -->
+
+        <!-- MODAL START -->
+        <div class="modal fade" id="addDealModel" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title"></h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>×</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <form id="shipmentForm" action="/route/dealMaster/dealMaster" autocomplete="off" method="POST">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group m-0">
+                                        <input type="hidden" class="tranNo" name="tranNo" value="0">
+                                    </div>
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Account Code:</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="F_ACCTCD" oninput="this.value = this.value.toUpperCase();" minlength="3" 
+                                            maxlength="3"
+                                               required />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Name:</label>
+                                            
+                                        <div class="col-sm-8">
+                                            <input type="text" name="F_ACCTNM" class="form-control" 
+                                                required>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Mobile:</label>
+                                        <div class="col-sm-8">
+                                            <input type="number" class="form-control" name="F_MOBILE"  minlength="10" 
+                                            maxlength="10" required />
+                                        </div>
+                                    </div>
+
+                                  
+
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Email:</label>
+                                        <div class="col-sm-8">
+                                            <input type="email" class="form-control" 
+                                                name="F_EMAIL" required />
+                                        </div>
+                                    </div>
+                                  
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="appt" class="col-sm-4 col-form-label fs15--design">Contact Name:</label>
+                                         
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control"  name="F_CTCNAME"
+                                                required />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="alert alert-success alert-dismissible fade show alert-hidden"
+                                id="successAlertAddTherapy">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Success! </strong> Record added successfully.
+                            </div>
+
+                            <div class="alert alert-info alert-dismissible fade show alert-hidden"
+                                id="successAlertUpdateTherapy">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <strong>Success! </strong> Record Update successfully.
+                            </div>
+                            <div class="alert alert-danger alert-dismissible fade show d-none" id="success-alert-error">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Error! </strong> <span class="custom_error"></span>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary btn-block buttonSubmitFire">Submit</button>
+                            <button type="reset" class="btn btn-primary buttonReset">Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- MODAL END -->
+
+        <script type="text/javascript">
+
+            $(document).ready(function (e) {
+                getBranchCode();
+                $(document).on("click", "#Add_New_Shipment_Details", function () {
+                    $("#addDealModel").modal("show");
+                    $(".tranNo").val('0');
+                    
+                    $(".modal-title").html("Add New Deal Details");
+                    $(".buttonSubmitFire").html("SUBMIT");
+                    $(".buttonReset").html("RESET");
+                    $("#shipmentForm")[0].reset();
+                    $("#dateNow").val(Date());
+                });
+
+
+                var dataColumns = [
+                {
+                    data: "tranNo",
+                    sTitle: "Id",
+                    visible: false
+                },
+
+
+
+                {
+                    data: "F_ACCTCD",
+                    sTitle: "F_ACCTCD",
+                    visible: true,
+                    className: "fs15--design",
+                },
+
+                {
+                    data: "F_ACCTNM",
+                    sTitle: "F_ACCTNM",
+                    visible: true,
+                    className: "col-form-label fs15--design",
+                },
+
+                {
+                    data: "F_MOBILE",
+                    sTitle: "F_MOBILE",
+                    visible: true,
+                    className: "fs15--design",
+                   
+                },
+                {
+                    data: "F_EMAIL",
+                    sTitle: "F_EMAIL",
+                    visible: true,
+                    className: "fs15--design",
+                },
+
+                {
+                    data: "F_CTCNAME",
+                    sTitle: "F_CTCNAME",
+                    visible: true,
+                    className: "fs15--design",
+                },
+
+                {
+                    data: "update",
+                    sTitle: "Action",
+                    visible: true,
+                    render: function (data, type, row) {
+
+                        var html =
+                            ' <span class="btn btn-primary btn-block " data-id="' + row
+                                .tranNo +
+                            '" onclick="updataDealMaster(this) " > EDIT </span>';
+                        return html;
+                    }
+                },
+
+             
+                ];
+
+                DrawTableInquiry = DrawCustomDataTable("uspList", 350,
+                    "/route/dealMaster/grid-Data", dataColumns, [
+                    [0, "asc"]
+                ], "frm_grid_search", null, true, true);
+
+                $("#frm_grid_search").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        DrawTableInquiry.ajax.reload();
+                    }
+                });
+
+                $("#shipmentForm").validate({
+                    rules: {
+                    },
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        $(".overlay").show();
+                        var formDom = $(form);
+                        var formData = formDom.serializeObject();
+                        // alert(formData)
+                        /* post method */
+                        $.ajax({
+                            method: "POST",
+                            url: "/route/dealMaster/dealMaster",
+                            data: JSON.stringify(formData),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (result) {
+                               // console.log(result);
+                                //alert('Successfully saved data');
+                                $("#addDealModel").modal("hide");
+                                DrawTableInquiry.ajax.reload();
+                                getDealData();
+                            }
+                        });
+                    }
+                });
+            });
+
+            function getDealData() {
+                $.ajax({
+                    method: "POST",
+                    url: "/route/dealMaster/getDealDoc",
+                    data: JSON.stringify({}),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        var str = ``;
+                        for (var i = 0; i < result.Data.length; i++) {
+                            str += `
+                        <tr class="text-center justify-content-center" data-spa='${result.Data[i].spa}'> 
+                          <td class="align-middle font-weight-bold text-st-purple"> <span data-id="${result.Data[i].tranNo}" onclick="updataDealMaster(this)"> ${result.Data[i].F_ACCTCD} </span> </td>
+                          <td class="align-middle"> ${result.Data[i].F_ACCTNM}</td> 
+                          <td class="align-middle"> ${result.Data[i].F_MOBILE}</td> 
+                          <td class="align-middle"> ${result.Data[i].F_EMAIL}</td>
+                          <td class="align-middle"> ${result.Data[i].F_CTCNAME}</td>
+                          </tr>
+                    `;
+                        }
+                        $('#insertDealData').html(str);
+                        $('#shipmentDetailTable').dataTable();
+                        // console.log(str);
+                    },
+                })
+            };
+
+            getDealData();
+
+            function updataDealMaster(e) {
+                var id = e.getAttribute('data-id');
+              
+                var parent = e.parentNode.parentNode;
+                var obj = {
+                    tranNo: id
+                };
+                // alert(obj);
+                $.ajax({
+                    method: "POST",
+                    url: "/route/dealMaster/getDealDataById",
+                    data: JSON.stringify(obj),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+
+                         $.when($('#shipmentForm').populate(result.Data)).done(function (e) { });
+                       
+
+                        $('#addDealModel').modal('show');
+                        $(".modal-title").html("Update Shipment Details");
+                    }
+                });
+            };
+
+ </script>
+
+        <% include ../partials/footer %>

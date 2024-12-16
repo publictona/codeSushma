@@ -1,0 +1,594 @@
+<% include ../partials/head %>
+<% include ../partials/header %>
+<style>
+    .dataTables_wrapper {
+        margin-top: 0;
+    }
+    .w{
+        width: 10px;
+    }
+    .dt-buttons, .flatpickr-calendar:after, .flatpickr-calendar:before{
+        display: block;
+    }
+    .table-scroll{
+        height: 70vh;
+        overflow-y: auto;
+    }
+
+    .table-scroll th{
+        position: sticky;
+        top: -1px;
+        z-index: 11;
+    }
+</style>
+<div class="content__inner">
+    <h2 class="page-title">Stock Issue</h2>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <form class="" id="frm_grid_search1" name="frm_grid_search1">
+                    
+                    <div class="card-body">
+                        <!-- <div class="form-group">
+                            <label for="">TYPE</label>
+                            <select class="form-control" name="tourType">
+                                <option value="">SELECT TYPE</option>
+                                <option value="Transaction">Transaction</option>
+                                <option value="Consumption">Consumption</option>
+                              </select>
+                            <i class="form-group__bar"></i>
+                        </div> -->
+                        <div class="form-group">
+                            <label for="">From Date</label> 
+                            <input type="text" class="form-control sdate date-picker" name="start_date" id="sdate" />
+                            <i class="form-group__bar"></i>
+                        </div>
+                        <div class="form-group">
+                            <label for="">To Date</label>
+                            <input type="text" class="form-control edate date-picker" name="end_date" id="edate" />
+                            <i class="form-group__bar"></i>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Branch</label>
+                            <select class="form-control branchCodeGlobal" name="sector" id="sSector">
+                                
+                              </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Item Code</label>
+                            <select class="form-control " name="itemCode" id="itemCode">
+                                
+                              </select>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="button" class="btn btn-primary btn-block btn-guest search"  onclick='showData()'>Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-9">      
+            <div class="card">
+               
+                <div class="card-body">
+                    <!-- <span class="btn btn-success" onclick="printData4()">
+                        <i class="fa fa-print" aria-hidden="true" style="color: white;"></i>
+                    </span> -->
+                    <span class="btn btn-primary" style="margin-top:25px;margin-bottom:10px;" onclick="getXLSReport()">Generate XLS</span>
+                    <div class="pushsns_table printdata">
+                        <table class="table table-bordered table-striped display nowrap order-column "
+                            id="OnRequestItemListTable"></table>
+                    </div>
+                    <div class="table-scroll">
+                    <table class="table table-bordered table-striped display nowrap order-column addtr" border="1" id="ReportTable" cellpadding="5" cellspacing="0" style="width:100%;">
+                    </table>
+                    <table class="table table-bordered table-striped display nowrap order-column addtr1" border="1" id="ReportTable" cellpadding="5" cellspacing="0" style="width:100%;">
+                    </table>
+                    </div>
+                    <div id="pop1" class="popbox"></div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- /.row -->
+</div> <!-- /.content__inner -->
+
+
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Request Details</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <form method="PUT" action="/route/workToDo/issuedQty" id="issuedQtyForm"
+             autocomplete="off">
+                <div class="modal-body pb-0">
+                    <div class="row">
+                        <label class="col-sm-3 col-form-label">Requested Qty</label>
+                        <div class="col-sm-9">
+                            <div class="row gutter-3">
+                                <div class="col-sm-3 col-6">
+                                    <div class="form-group">
+                                        <input type="text" name="requestedQty" id="requestedQTYId" class="form-control" readonly />
+                                        <i class="form-group__bar"></i>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-6">
+                                    <div class="form-group">
+                                        <input type="text" name="requestedUnit" id="requestedUnitId" class="form-control" readonly />
+                                        <i class="form-group__bar"></i>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-6">
+                                    <div class="form-group">
+                                        <input type="text" name="" id="requestedBranchId" class="form-control" readonly />
+                                        <i class="form-group__bar"></i>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-6">
+                                    <div class="form-group">
+                                        <input type="text" name="requestedItemCode" id="requestedItemCodeId" class="form-control" readonly />
+                                        <i class="form-group__bar"></i>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="id" id="uniqueId" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-3 col-form-label">Issued Qty</label>
+                        <div class="col-sm-9">
+                            <div class="form-group">
+                                <input name="issuedQty" id="issuedQtyId" class="form-control" type="text">
+                                <i class="form-group__bar"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer pt-0">
+                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js">
+</script>
+<script type="text/javascript">
+
+function getXLSReport() {
+    $("#ReportTable").table2excel({
+        filename: "RequestItemList"+new Date().getTime()+".xls"
+    });
+}        
+    $(document).ready(function (e) {
+        getBranchCode();
+        getITEMCD();
+        issue();
+
+        $(".search").click(function(){
+
+        })
+        $(document).on('change', '#issuedQtyId', function () {
+
+            var reqAmt = $("#requestedQTYId").val();
+            var resAmt = $("#issuedQtyId").val();
+
+            if (parseInt(reqAmt) < parseInt(resAmt)) {
+                alert("Requested Qty and Issued Qty are Not Equal");
+
+            }
+
+        });
+
+        var SubmitUrlId;
+        var populate_data = {};
+        var action_type;
+        var NewObject;
+        var flag = false;
+
+        // var dataColumns = [{
+        //     data: "_id",
+        //     sTitle: "ID",
+        //     visible: false,
+        //     className: "w-10"
+        // }, {
+        //     data: "F_TRANDT",
+        //     sTitle: "TRAN DATE",
+        //     className: "",
+        //     render: function (data, type, row) {
+        //         //data-id
+        //         var dataRender = "-";
+        //         if (row && row.F_TRANDT) {
+        //             return '<a href="#" class="issuedRequest" data-id="' + row._id + '" dataReqQty="' + row.F_REQQTY + '" dataItemCode="' + row.F_ITEMCD + '" dataUnit="' + row.ITM_UNIT + '" dataBranchCode="' + row.ST_BRN + '">' + dateFormat(row.F_TRANDT); + '</a>';
+        //             //  dataRender = dateFormat(row.F_TRANDT);
+        //         }
+        //         return dataRender;
+        //     },
+        // }, {
+        //     data: "INV_REGION",
+        //     sTitle: "D",
+        //     className: "column-10",
+        //     render: function (data, type, row) {
+        //         var dataRender = "-";
+        //         if (row && row.INV_REGION) {
+        //             dataRender = row.INV_REGION;
+        //         }
+        //         return dataRender;
+        //     },
+        // }, {
+        //     data: "ST_BRN",
+        //     sTitle: "BRN",
+        //     className: "column-60",
+        //     render: function (data, type, row) {
+        //         var dataRender = "-";
+        //         if (row.ST_BRN) {
+        //             dataRender = row.ST_BRN;
+        //         }
+        //         return dataRender;
+        //     }
+        // }, {
+        //     data: "F_TRANID",
+        //     sTitle: "ID",
+        //     className: "",
+        //     render: function (data, type, row) {
+        //         var dataRender = "-";
+        //         if (row && row.F_TRANID) {
+        //             dataRender = row.F_TRANID;
+        //         }
+        //         return dataRender;
+        //     }
+        // }, {
+        //     data: "F_ITEMCD",
+        //     sTitle: "CODE",
+        //     className: "",
+        //     render: function (data, type, row) {
+        //         var dataRender = "-";
+        //         if (row && row.F_ITEMCD) {
+        //             dataRender = row.F_ITEMCD;
+        //         }
+        //         return dataRender;
+        //     }
+        // }, {
+        //     data: "itemOfName",
+        //     sTitle: "ITEM",
+        //     className: "",
+        //     render: function (data, type, row) {
+        //         var dataRender = "-";
+        //         if (row.itemOfName) {
+        //             dataRender = row.itemOfName;
+        //         }
+        //         return dataRender;
+        //     }
+        // }, {
+        //     data: "ITM_COST",
+        //     sTitle: "COST",
+        //     className: "",
+        //     render: function (data, type, row) {
+        //         var dataRender = 0;
+        //         if (row.ITM_COST) {
+        //             dataRender = row.ITM_COST;
+        //         }
+        //         return dataRender;
+        //     }
+        // }, {
+        //     data: "F_REQQTY",
+        //     sTitle: "REQ QTY",
+        //     className: "column-70",
+        //     render: function (data, type, row) {
+        //         var dataRender = "-";
+        //         if (row && row.F_REQQTY) {
+        //             dataRender = row.F_REQQTY;
+        //         }
+        //         return dataRender;
+        //     }
+        // }, {
+        //     data: "ITM_UNIT",
+        //     sTitle: "UNIT",
+        //     className: "",
+        //     render: function (data, type, row) {
+        //         var dataRender = "-";
+        //         if (row && row.ITM_UNIT) {
+        //             dataRender = row.ITM_UNIT;
+        //         }
+        //         return dataRender;
+        //     }
+        // }, {
+        //     data: "F_ISSQTY",
+        //     sTitle: "ISSUE",
+        //     className: "column-60",
+        //     render: function (data, type, row) {
+        //         var dataRender = "-";
+        //         if (row && row.F_ISSQTY) {
+        //             dataRender = row.F_ISSQTY;
+        //         }
+        //         return dataRender;
+        //     }
+        // }, {
+        //     data: "F_ISSDT",
+        //     sTitle: "ISSUE DATE",
+        //     className: "column-90",
+        //     render: function (data, type, row) {
+        //         var dataRender = "-";
+        //         if (row && row.F_ISSDT) {
+        //             dataRender = dateFormat(row.F_ISSDT);
+        //         }
+        //         return dataRender;
+        //     }
+        // }, {
+        //     data: "F_PENDING",
+        //     sTitle: "PENDING",
+        //     className: "column-70",
+        //     render: function (data, type, row) {
+        //         var dataRender = "-";
+        //         if (row && row.F_PENDING) {
+        //             dataRender = row.F_PENDING;
+        //         }
+        //         return dataRender;
+        //     }
+        // }];
+
+        // var DrawTableStockRequest = DrawCustomDataTable("OnRequestItemListTable", 350, "/route/workToDo/grid-view/" + "Pending", dataColumns, [
+        //     [0, "desc"]
+        // ], "frm_grid_search", null, true, true, "", "", "", "button");
+
+        $("#frm_grid_search").validate({
+            errorPlacement: function (error, element) {
+            }, submitHandler: function (form) {
+                DrawTableStockRequest.ajax.reload();
+            }
+        });
+
+
+        $(document).on('click', '.issuedRequest', function () {
+            $("#myModal").modal("show");
+
+            var id = $(this).attr("data-id");
+            var ReqQty = $(this).attr("dataReqQty");
+            var ReqUnit = $(this).attr("dataUnit");
+            var ReqItemCode = $(this).attr("dataItemCode");
+            var ReqBranchCode = $(this).attr("dataBranchCode");
+
+            $("#uniqueId").val(id);
+            $("#requestedQTYId").val(ReqQty);
+            $("#requestedUnitId").val(ReqUnit);
+            $("#requestedBranchId").val(ReqBranchCode);
+            $("#requestedItemCodeId").val(ReqItemCode);
+        });
+
+        $("form#issuedQtyForm").submit(function (e) {
+            e.preventDefault();
+        });
+
+        $("#issuedQtyForm").validate({
+            submitHandler: function (form) {
+                var $form = $(form);
+                var url = $form.attr('action');
+                if (action_type == "PUT") {
+                    url += SubmitUrlId;
+                }
+
+                var formdata = $form.serializeObject();
+
+                $.ajax({
+                    url: url,
+                    type: "PUT",
+                    data: JSON.stringify(formdata),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        result = JSON.parse(JSON.stringify(result));
+
+                        if (result.message == "Updated Successfully") {
+                            alert("successfully saved");
+                            $("#myModal").modal("hide");
+                            // $("#successStockRequest").alert();
+                            // $("#successStockRequest").fadeTo(2000, 500).slideUp(500, function () { });
+
+                        }
+                        document.getElementById("workToDoForm").reset();
+                        location.reload();
+                        action_type = "POST";
+                        SubmitUrlId = "";
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        $("#success-alert-error").alert();
+                        $("#success-alert-error").fadeTo(2000, 500).slideUp(500, function () {
+                        });
+                    }
+                });
+            }
+        });
+
+       
+
+
+    });
+    function issue(){
+    $.ajax({
+    url: "/route/stockRequest/getIssue",
+    type: "GET",
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: function (response) {
+        
+        var res = response.data;
+        // console.log(res);
+        var html=``;
+        var html1=``;
+        html += `<thead>
+                                <tr>
+                                    <th style="font-family: monospace;font-size: 12px;">TRAN DT</th>
+                                    <th style="font-family: monospace;font-size: 12px;">BRN</th>
+                                    <th style="font-family: monospace;font-size: 12px;">ID</th>
+                                    <th style="font-family: monospace;font-size: 12px;">CODE</th>
+                                    <th style="font-family: monospace;font-size: 12px;">ITEM</th>
+                                    <th style="font-family: monospace;font-size: 12px;">REQ QTY</th>
+                                    <th style="font-family: monospace;font-size: 12px;">UNIT</th>
+                                    <th style="font-family: monospace;font-size: 12px;">ISSUE</th>
+                                    <th style="font-family: monospace;font-size: 12px;">ISSUE DT</th>
+                                    <th style="font-family: monospace;font-size: 12px;">PENDING</th>
+                                </tr>
+                            </thead>
+                            <tbody class="">`; 
+                                var dt = new Date();
+                                for (var i = 0; i < res.length; i++) {
+                                html += `<tr>
+                                        <td style="font-family: monospace;font-size: 12px;">${res[i].F_TRANDT}</td>
+                                        <td style="font-family: monospace;font-size: 12px;">${res[i].ST_BRN}</td>
+                                        <td style="font-family: monospace;font-size: 12px;">${res[i].F_TRANNO}</td>
+                                        <td class="txtalign">${res[i].F_ITEMCD}</td>
+                                        <td class="txtalign">${res[i].itemOfName}</td>
+                                        <td class="txtalign" id="QTY${i}">${res[i].F_QTY}</td>
+                                        <td class="txtalign" id="QTY${i}">${res[i].F_UNIT}</td>
+                                       <td class="txtalign" style="font-family: monospace;font-size: 12px;text-align: right;">${res[i].F_ISSUEQTY?res[i].F_ISSUEQTY:0}</td>
+                                        <td style="font-family: monospace;font-size: 12px;">${res[i].F_ISSUEDT?res[i].F_ISSUEDT:moment(dt).format('DD/MM/YYYY')}</td>
+                                        <td style="font-family: monospace;font-size: 12px;">${res[i].F_Pending?res[i].F_Pending:""}</td>
+                                  </tr></body>`;
+                               
+                            }  
+                            $('.addtr').html(html);
+    }
+})
+}
+function showData(){
+    var sdate = $("#sdate").val();
+    var edate = $("#edate").val();
+    var sSector = $("#sSector").val();
+    var itemCode = $("#itemCode").val();
+    mthxsl(sdate,edate,sSector,itemCode);
+    $.ajax({
+    url: "/route/stockRequest/showData",
+    type: "post",
+    
+    data:{sdate:sdate,edate:edate,sSector:sSector,itemCode:itemCode},
+    success: function (response) {
+        var res = response.data;
+        console.log("res",res);
+       
+        var html=``;
+        var html1=``;
+        html += `<thead>
+                                <tr>
+                                    <th style="font-family: monospace;font-size: 12px;">TRAN DT</th>
+                                    <th style="font-family: monospace;font-size: 12px;">BRN</th>
+                                    <th style="font-family: monospace;font-size: 12px;">ID</th>
+                                    <th style="font-family: monospace;font-size: 12px;">CODE</th>
+                                    <th style="font-family: monospace;font-size: 12px;">ITEM</th>
+                                    <th style="font-family: monospace;font-size: 12px;">REQ QTY</th>
+                                    <th style="font-family: monospace;font-size: 12px;">UNIT</th>
+                                    <th style="font-family: monospace;font-size: 12px;">ISSUE</th>
+                                    <th style="font-family: monospace;font-size: 12px;">ISSUE DT</th>
+                                    <th style="font-family: monospace;font-size: 12px;">PENDING</th>
+                                </tr>
+                            </thead>
+                            <tbody class="">`; 
+                                var dt = new Date();
+                                for (var i = 0; i < res.length; i++) {
+                                html += `<tr>
+                                        <td style="font-family: monospace;font-size: 12px;">${res[i].F_TRANDT?res[i].F_TRANDT:""}</td>
+                                        <td style="font-family: monospace;font-size: 12px;">${res[i].ST_BRN?res[i].ST_BRN:""}</td>
+                                        <td style="font-family: monospace;font-size: 12px;">${res[i].F_TRANNO?res[i].F_TRANNO:""}</td>
+                                        <td class="txtalign">${res[i].F_ITEMCD?res[i].F_ITEMCD:""}</td>
+                                        <td class="txtalign">${res[i].itemOfName?res[i].itemOfName:""}</td>
+                                        <td class="txtalign" id="QTY${i}">${res[i].F_QTY?res[i].F_QTY:""}</td>
+                                        <td class="txtalign" id="QTY${i}">${res[i].F_UNIT}</td>
+                                       <td class="txtalign" style="font-family: monospace;font-size: 12px;text-align: right;">${res[i].F_ISSUEQTY?res[i].F_ISSUEQTY:0}</td>
+                                        <td style="font-family: monospace;font-size: 12px;">${(res[i].F_ISSUEDT)?res[i].F_ISSUEDT:moment(dt).format('DD/MM/YYYY')}</td>
+                                        <td style="font-family: monospace;font-size: 12px;">${res[i].F_Pending?res[i].F_Pending:""}</td>
+                                  </tr></body>`;
+                               
+                            }  
+                            
+                            $('.addtr').html(html);
+    }
+})
+}
+
+function mthxsl(sdate,edate,sSector,itemCode){
+    console.log(sdate,edate,sSector,itemCode);
+    var days=[];
+        // var dt1=$("#dt1").val().split('-');
+        // var dt2=$("#dt2").val().split('-');
+
+        var dt1=sdate.split('-');
+        var dt2=edate.split('-');
+        
+        //days.push(dt1[2]);
+        var dt21=new Date(sdate);
+        var dt22=new Date(edate);
+       
+        //var dif1=dt21.diff(dt1, 'days');
+       
+    //    var a = moment(dt2[2]+'-'+dt2[1]+'-'+dt2[0]);
+    //     var b = moment(dt1[2]+'-'+dt1[1]+'-'+dt1[0]);
+    var a = moment(sdate);
+        var b = moment(edate);
+      
+      
+
+       var dif =b.diff(a, 'days');
+      
+       
+       var currentDay=dt1[2]+'-'+dt1[1]+'-'+dt1[0];
+    //    for(var y=1;y<=dif+1;y++){
+       
+    //     //var day = moment(currentDay).add(y, 'days').format('DD');
+    //     var day=y;
+    //     days.push(day);
+      // }
+       console.log(days);
+    $.ajax({
+            url: "/route/stockRequest/mthxsl",
+            type: "post",
+            
+            data:{sdate:sdate,edate:edate,sSector:sSector,itemCode:itemCode},
+            success: function (response) {
+                console.log("response",response);
+                var html=``;
+                html+=`<thead><tr><th>STOCK</th>`;
+                    for(var y=1;y<=dif+1;y++){
+                        html+=`<th>${y}</th>`;
+                    }
+                html+=`</tr></thead><tbody>`;
+                    for(var y=1;y<=dif+1;y++){
+                        html+=`<tr>${y}</tr>`;
+                    } 
+                   ` </tbody>`;
+
+
+                $('.addtr1').html(html);
+
+        }
+    })
+}
+
+function getITEMCD(){
+    $.ajax({
+        url: "/route/stockRequest/getITEMCD",
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            console.log(response);
+            var html=``;
+            html+=`<option value="">Select ITEMCD</option>`;
+            for(var i=0;i<response.data.length;i++){
+                html+=`<option value="${response.data[i].F_ITEMCD}">${response.data[i].F_ITEMCD}</option>`;
+            }
+            $("#itemCode").html(html);
+            
+        }
+    })
+}
+    function printData4() {
+                    var newWin = window.open("");
+                    newWin.document.write(document.querySelector('.dataTables_scroll').innerHTML);
+                    setTimeout(function () {
+                        newWin.print();
+                        newWin.close();
+                    }, 500);
+                }
+</script>
+
+<% include ../partials/footer %>

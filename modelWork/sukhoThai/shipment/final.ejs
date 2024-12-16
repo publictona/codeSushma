@@ -1,0 +1,575 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+
+        <style>
+            .form-group {
+                margin-bottom: 25px;
+            }
+
+            .uppercase {
+                text-transform: uppercase;
+            }
+        </style>
+
+        <div class="col-sm-12 mb-3">
+            <button class="btn btn-primary" id="Add_New_Shipment_Details">
+                Add Shipment Details
+            </button>
+        </div>
+        <!-- Table start -->
+
+        <div id="printModal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-header modal-otp-header">
+                        <h5>Print Shipment Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span> </button>
+                       
+                    </div>
+                    <div class="modal-body modal-body-otp" id="printBody">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="card">
+            <div class="card-body">
+                <div class="col-sm-12">
+                    <table class="table table-bordered table-striped" id="shipmentDetailTable">
+                        <thead>
+                            <div class="col-sm-12"></div>
+
+                            <tr>
+                                <th colspan="16" class="text-center h2">Shipment Details</th>
+                            </tr>
+                            <br>
+
+                            <!-- //  <div class="col-md-6"> -->
+                            <div class="col-md-12 r-col">
+                                <table id="uspList"
+                                    class="table table-bordered table-striped display nowrap order-column"
+                                    style="width:100%;">
+                                    <tbody class="appar">
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- </div> -->
+
+
+                            <tr class="text-center justify-content-center">
+
+
+
+                            </tr>
+                        </thead>
+                        <tbody id="insertShipmentData"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Table end -->
+
+        <!-- MODAL START -->
+        <div class="modal fade" id="addShipmentModel" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title"></h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>×</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <form id="shipmentForm" action="/route/shipment/shipmentMaster" autocomplete="off" method="POST">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group m-0">
+                                        <input type="hidden" name="tranNo" value="0">
+                                    </div>
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Ship Branch
+                                            No:</label>
+                                        <div class="col-sm-8">
+                                            <select name="ship_brn" id="" class="form-control branchCodeGlobal"
+                                                onchange="setBranchCity(this)" required>
+                                                <option value="">Please select branch</option> 
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Ship To Name:</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="" name="ship_toname"
+                                                placeholder="Enter Name" required />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Ship To
+                                            Address:</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" name="ship_toaddress" class="form-control" id="shipAdd" required>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Ship To City:
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" name="ship_tocity" class="form-control" id="shipCity" required>
+                                        </div>
+
+                                    </div> -->
+
+                                    <!-- <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Ship To City Start:
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" name="ship_toCityFirstChar" class="form-control" id="shipCityFirstChar" required>
+                                        </div>
+
+                                    </div> -->
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Ship To City:
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <select name="ship_tocity" class="form-control">
+                                                <option value="">Select City</option>
+                                                <option value="GOA">GOA</option>
+                                                <option value="KASHMIR">KASHMIR</option>
+                                                <option value="MUMBAI">MUMBAI</option>
+                                                <option value="BANGALORE">BANGALORE</option>
+                                                <option value="PUNE">PUNE</option>
+                                                <option value="OTHER">OTHER</option>
+                                              </select>
+                                        </div>
+
+                                    </div>
+
+                                   
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Ship To
+                                            PinCode:</label>
+                                        <div class="col-sm-8">
+                                            <input type="number" name="ship_topincode" class="form-control" id="shipPin"
+                                                minlength="6" maxlength="6" pattern="\d{6}" required>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="ship_to_mobile" class="col-sm-4 col-form-label fs15--design">Ship To
+                                            Mobile</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="ship_to_mobile"
+                                                name="ship_tomobile" minlength="10" maxlength="10"
+                                                title="Mobile number must have exactly 10 digits." required />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Ship Content
+                                            Box:</label>
+                                        <div class="col-sm-8">
+                                            <input type="number" class="form-control" id="" name="ship_content"
+                                                placeholder="Enter No Of Box" required />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">No Of Print:</label>
+                                        <div class="col-sm-8">
+                                            <input type="number" class="form-control" id="" name="ship_printnos" required/>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Ship Date:</label>
+                                        <div class="col-sm-8">
+                                            <input type="date" class="form-control date-picker" id="dateNow"
+                                                name="ship_date" placeholder="Enter Refiling Due Date" required />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="appt" class="col-sm-4 col-form-label fs15--design">Select a Ship
+                                            Time:</label>
+                                        <div class="col-sm-8">
+                                            <input type="time" class="form-control" id="appt" name="ship_time"
+                                                required />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Ship From
+                                            Name:</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="" name="ship_fromname" required/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Ship From
+                                            Address:</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="" name="ship_fromaddress" required/>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Ship From
+                                            City:</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="ship_fromcity"
+                                                name="ship_fromcity" oninput="this.value = this.value.toUpperCase();" required />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design"
+                                            onchange="getCountryCityByPin(this)">Ship From
+                                            PinCode:</label>
+                                        <div class="col-sm-8">
+                                            <input type="number" class="form-control" id="" name="ship_frompincode"
+                                                minlength="6" maxlength="6" pattern="\d{6}" required />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row col-sm-12">
+                                        <label for="" class="col-sm-4 col-form-label fs15--design">Remark:</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="" name="ship_remarks" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="alert alert-success alert-dismissible fade show alert-hidden"
+                                id="successAlertAddTherapy">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Success! </strong> Record added successfully.
+                            </div>
+
+                            <div class="alert alert-info alert-dismissible fade show alert-hidden"
+                                id="successAlertUpdateTherapy">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <strong>Success! </strong> Record Update successfully.
+                            </div>
+                            <div class="alert alert-danger alert-dismissible fade show d-none" id="success-alert-error">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                <strong>Error! </strong> <span class="custom_error"></span>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary btn-block buttonSubmitFire">Submit</button>
+                            <button type="reset" class="btn btn-primary buttonReset">Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- MODAL END -->
+
+        <script type="text/javascript">
+
+            $(document).ready(function (e) {
+                getBranchCode();
+                $(document).on("click", "#Add_New_Shipment_Details", function () {
+                    $("#addShipmentModel").modal("show");
+                    $(".modal-title").html("Add New Shipment Details");
+                    $(".buttonSubmitFire").html("SUBMIT");
+                    $(".buttonReset").html("RESET");
+                    $("#shipmentForm")[0].reset();
+                    $("#dateNow").val(Date());
+                });
+
+
+                var dataColumns = [{
+                    data: "tranNo",
+                    sTitle: "Id",
+                    visible: false
+                },
+
+                {
+                    data: "ship_brn",
+                    sTitle: "BRN No.",
+                    visible: true,
+                    className: "col-form-label fs15--design",
+                },
+                {
+                    data: "ship_date",
+                    sTitle: "Date",
+                    visible: true,
+                    className: "fs15--design",
+                    render: function (data, type, row) {
+                        var html = " ";
+                        return dateFormat(row.ship_date);
+                    }
+                },
+                {
+                    data: "ship_time",
+                    sTitle: "Time",
+                    visible: true,
+                    className: "fs15--design",
+                },
+
+                {
+                    data: "ship_toname",
+                    sTitle: "Name",
+                    visible: true,
+                    className: "fs15--design",
+                },
+
+                {
+                    data: "ship_tocity",
+                    sTitle: "To City",
+                    visible: true,
+                    className: "fs15--design",
+
+                },
+
+                // {
+                //     data: "ship_toCityFirstChar",
+                //     sTitle: "To City Start",
+                //     visible: true,
+                //     className: "fs15--design",
+
+                // },
+
+                {
+                    data: "ship_tomobile",
+                    sTitle: "To Mobile",
+                    visible: true,
+                    className: "fs15--design",
+
+                },
+                {
+                    data: "ship_content",
+                    sTitle: "No Of Box",
+                    visible: true,
+                    className: "fs15--design",
+                },
+
+                {
+                    data: "ship_fromcity",
+                    sTitle: " From City",
+                    visible: true,
+                    className: "fs15--design",
+                },
+
+                {
+                    data: "update",
+                    sTitle: "Action",
+                    visible: true,
+                    render: function (data, type, row) {
+
+                        var html =
+                            ' <span class="btn btn-primary btn-block " data-id="' + row
+                                .tranNo +
+                            '" onclick="updateShipmentMaster(this) " > EDIT </span>';
+                        return html;
+                    }
+                },
+
+                {
+                    data: "shipment",
+                    sTitle: "Action",
+                    visible: true,
+                    render: function (data, type, row) {
+                        //console.log(row);
+                        var html =
+
+                            ' <span class="btn btn-primary btn-block" data-id="' + row
+                                ._id +
+                            '" onclick="getShipmentPrint(this) "><i class="fa fa-print"></i></span>';
+                        return html;
+                    }
+                }
+                ];
+
+                DrawTableInquiry = DrawCustomDataTable("uspList", 350,
+                    "/route/shipment/grid-Data", dataColumns, [
+                    [0, "asc"]
+                ], "frm_grid_search", null, true, true);
+
+                $("#frm_grid_search").validate({
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        DrawTableInquiry.ajax.reload();
+                    }
+                });
+
+                $("#shipmentForm").validate({
+                    rules: {
+                    },
+                    errorPlacement: function (error, element) { },
+                    submitHandler: function (form) {
+                        $(".overlay").show();
+                        var formDom = $(form);
+                        var formData = formDom.serializeObject();
+                        // alert(formData)
+                        /* post method */
+                        $.ajax({
+                            method: "POST",
+                            url: "/route/shipment/shipmentMaster",
+                            data: JSON.stringify(formData),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (result) {
+                                console.log(result);
+                                //alert('Successfully saved data');
+                                $("#addShipmentModel").modal("hide");
+                                DrawTableInquiry.ajax.reload();
+                                getShipmentData();
+                            }
+                        });
+                    }
+                });
+            });
+
+            function getShipmentData() {
+                $.ajax({
+                    method: "POST",
+                    url: "/route/shipment/getShipmentrDocument",
+                    data: JSON.stringify({}),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        var str = ``;
+                        for (var i = 0; i < result.Data.length; i++) {
+                            str += `
+                        <tr class="text-center justify-content-center" data-spa='${result.Data[i].spa}'> 
+                          <td class="align-middle font-weight-bold text-st-purple"> <span data-id="${result.Data[i].tranNo}" onclick="updateShipmentMaster(this)"> ${result.Data[i].ship_brn} </span> </td>
+                          <td class="align-middle"> ${result.Data[i].srNo}</td>
+                          <td class="align-middle"> ${result.Data[i].ship_toname}</td>
+                          <td class="align-middle"> ${result.Data[i].ship_toaddress}</td>
+                          <td class="align-middle"> ${result.Data[i].ship_tocity}</td>
+                          <td class="align-middle"> ${result.Data[i].ship_toCityFirstChar}</td>
+                          <td class="align-middle"> ${result.Data[i].ship_topincode}</td>
+                          <td class="align-middle"> ${result.Data[i].ship_content}</td>
+                          <td class="align-middle"> ${result.Data[i].ship_printnos}</td>
+                          <td class="align-middle"> ${result.Data[i].ship_time}</td>
+                          <td class="align-middle"> ${dateFormat(result.Data[i].ship_date)}</td>
+                          <td class="align-middle"> ${result.Data[i].ship_fromname}</td>
+                          <td class="align-middle"> ${result.Data[i].ship_fromaddress} </td>
+                          <td class="align-middle"> ${result.Data[i].ship_fromcity} </td>
+                          <td class="align-middle"> ${result.Data[i].ship_frompincode} </td>
+                          <td class="align-middle"> ${result.Data[i].ship_remarks} </td>
+                        </tr>
+                    `;
+                        }
+                        $('#insertShipmentData').html(str);
+                        $('#shipmentDetailTable').dataTable();
+                        // console.log(str);
+                    },
+                })
+            };
+
+            getShipmentData();
+
+            function updateShipmentMaster(e) {
+                var id = e.getAttribute('data-id');
+                var parent = e.parentNode.parentNode;
+                var obj = {
+                    tranNo: id
+                };
+                // alert(obj);
+                $.ajax({
+                    method: "POST",
+                    url: "/route/shipment/getShipmentDataById",
+                    data: JSON.stringify(obj),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        //console.log(result);
+                        $.when($('#shipmentForm').populate(result.Data)).done(function (e) { });
+                        $('#addShipmentModel').modal('show');
+                        $(".modal-title").html("Update Shipment Details");
+
+
+                    }
+                });
+            };
+
+            // function setBranchCity(e) {
+            //     // console.log(e.value)
+            //     $.ajax({
+            //         method: "POST",
+            //         url: "/route/shipment/getShipmentBranchDetails",
+            //         data: JSON.stringify({ ST_BRN: e.value }),
+            //         contentType: "application/json; charset=utf-8",
+            //         dataType: "json",
+            //         success: function (result) {
+            //             console.log(result.Data);
+            //             $('#shipCity').val(result.Data.F_CITY);
+            //             $('#shipAdd').val(result.Data.ST_ADD);
+            //             $('#shipPin').val(result.Data.F_PIN);
+            //         }
+            //     });
+            // }
+
+            function setBranchCity(e) {
+                // console.log(e.value)
+                $.ajax({
+                    method: "POST",
+                    url: "/route/shipment/getShipmentBranchDetails",
+                    data: JSON.stringify({ ST_BRN: e.value }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result.Data);
+                       // $('#shipCity').val(result.Data.F_CITY);
+                        //$('#shipCityFirstChar').val(result.Data.F_CITY[0]);
+                        $('#shipAdd').val(result.Data.ST_ADD);
+                        $('#shipPin').val(result.Data.F_PIN);
+                        
+                    }
+                });
+            }
+
+            //get Data
+
+            function getShipmentPrint(e) {
+                $('.divLoader').show();
+                var id = e.getAttribute('data-id');
+
+                $.ajax({
+                    url: '/route/shipment/shipmentPrint/',
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ id: id }),
+                    dataType: "json",
+
+                    success: function (result) {
+                        console.log(result);
+
+                        $('#printBody').html(result.html);
+                        $('#printModal').modal('show');
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        var result = jQuery.parseJSON(jqXHR.responseText);
+                    }
+                });
+            }
+
+  </script>
+
+        <% include ../partials/footer %>

@@ -1,0 +1,354 @@
+<% include ../partials/head %>
+    <% include ../partials/header %>
+
+        <style>
+            @media print {
+                .title-print {
+                    display: block;
+                    text-align: center;
+                }
+            }
+
+            .title-print {
+                display: none;
+            }
+
+            .header-title {
+                color: #fff;
+                margin-bottom: 0px;
+            }
+
+            .dataTables_wrapper {
+                margin-top: -59px !important;
+            }
+
+            .print-btn {
+                position: absolute;
+                right: 51px;
+                top: 10px;
+                border: 1px solid #4f4f4f;
+                border-radius: 2px;
+            }
+
+            .form-group {
+                margin-bottom: 25px;
+            }
+
+            .uppercase {
+                text-transform: uppercase;
+            }
+
+            /* ------tab s------ */
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                background-color: #eaeeed;
+                font-family: 'sans-serif', sans-serif;
+            }
+
+            .tab-container {
+                margin: 5% 10%;
+                background-color: #b7bbba;
+                padding: 3%;
+                border-radius: 4px;
+            }
+
+            .tab-menu {}
+
+            .tab-menu ul {
+                margin: 0;
+                padding: 0;
+            }
+
+            .tab-menu ul li {
+                list-style-type: none;
+                display: inline-block;
+            }
+
+            .tab-menu ul li a {
+                text-decoration: none;
+                color: #333;
+                background-color: #e0e6e4;
+                padding: 7px 25px;
+                border-radius: 4px;
+                margin-left: 10px;
+            }
+
+            .tab-menu ul li a.active-a {
+                background-color: #777;
+                color: #ffffff;
+                font-weight: bold;
+            }
+
+            .tab {
+                display: none;
+            }
+
+            .tab h2 {
+                color: rgba(0, 0, 0, .7);
+            }
+
+            .tab p {
+                color: rgba(0, 0, 0, 0.6);
+                text-align: justify;
+            }
+
+            .tab-active {
+                display: block;
+            }
+
+            .tab .badge {
+                margin-right: 5px;
+            }
+
+            #uspList_wrapper table,
+            #uspList_wrapper .dataTables_scrollHeadInner {
+                width: 100% !important;
+            }
+
+            .spa-loc .checkbox>input[type=checkbox] {
+                left: 10px !important;
+                top: 10px !important;
+                opacity: 1 !important;
+            }
+
+            .btn-group,
+            .btn-group-vertical {
+                display: block;
+            }
+
+
+            element.style {}
+
+            .newsearch {
+                display: flex;
+                align-items: flex-end;
+            }
+
+            .infotxt {
+                margin-top: 25px;
+                padding-left: 0px;
+            }
+
+            /* -----e----- */
+        </style>
+<div class="card">
+    <div class="card-body">
+        <div class="col-sm-12">
+            <form style="display: block;" autocomplete="OFF">
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Month Dropdown -->
+
+                        <!-- <div class="col-md-2">
+                            <label class="fs12--design">
+                                <strong>Month</strong>
+                            </label>
+                            <select class="form-control month" style="padding-left: 10px;" name="month" required>
+                                <option value="">Please select Month</option>
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div> -->
+
+                        <div class="col-md-2">
+                            <label for="">From Date</label>
+                            <input type="text" class="form-control startDate date-picker" name="startDate" id="startDate"/>
+                            <i class="form-group__bar"></i>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="">To Date</label>
+                            <input type="text" class="form-control endDate date-picker" name="endDate" id="endDate"/> 
+                            <i class="form-group__bar"></i>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="col-md-5">
+                            <div style="margin-top: 20px;">
+                                
+                                <span class="btn btn-primary" onclick="getDetail()"> Grooming Report</span>
+                                <span class="btn btn-warning" onclick="printData4()">
+                                    <i class="fa fa-print" aria-hidden="true" style="color: white;"></i>
+                                </span>
+                                <span class="btn btn-success" onclick="createXls('GroomingReportTable')"><i
+                                    class="fa fa-file-excel-o"></i> Generate XLS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12 printdata">
+    <div class="col-md-12 infotxt mb-3"></div>
+    <div class="col-md-11 pl-0">
+        <table class="table table-bordered table-striped display nowrap order-column addtr" border="1" cellpadding="5" cellspacing="0" style="width:100%;">
+           
+        </table>
+    </div>
+</div>
+
+<script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js">
+</script>
+
+<script type="text/javascript">
+    
+
+    function getDetail() { 
+    var startDate = $('.startDate').val();
+    var endDate = $('.endDate').val();
+
+    // Validate startDate and endDate
+    if (!validateDate(startDate) || !validateDate(endDate)) {
+        alert("Please provide valid Start Date and End Date in the format YYYY-MM-DD.");
+        return;
+    }
+
+    // Ensure startDate is not after endDate
+    if (new Date(startDate) > new Date(endDate)) {
+        alert("Start Date cannot be after End Date.");
+        return;
+    }
+
+    $.ajax({
+        url: '/route/groomingReport/groomingDataMonthWise',
+        method: 'POST',
+        data: { "startDate": startDate, "endDate": endDate }, // Pass the dates to the backend API
+        success: function(response) {
+            console.log("Response Data: ", response);
+            var html = ``;
+            var html1 = `<h4>Grooming Report : ${startDate} To ${endDate}</h4>`; 
+            var res = response.therapyDetails;
+        
+            if (!res || res.length === 0) {
+                html += `
+                <thead>
+                    <tr>
+                        <th class="table-cell">Branch</th>
+                        <th class="table-cell">ID</th>
+                        <th class="table-cell">Staff Name</th>
+                        <th class="table-cell">Amount</th>
+                        <th class="table-cell">Therapy</th>
+                    </tr>
+                    <tr><td colspan="5" style="text-align:center;">No Data Available</td></tr>
+                </thead>
+                `;
+            } else {
+                html += `<thead>
+                            <tr>
+                                <th class="table-cell">Branch</th>
+                                <th class="table-cell">ID</th>
+                                <th class="table-cell">Staff Name</th>
+                                <th class="table-cell">Amount</th>
+                                <th class="table-cell">Therapy</th>
+                            </tr>
+                         </thead>
+                         <tbody>`;
+                for (var i = 0; i < res.length; i++) {
+                    html += `<tr>
+                                <td class="table-cell">${res[i].ST_BRN ? res[i].ST_BRN : ""}</td>
+                                <td class="table-cell">${res[i].therapistId ? res[i].therapistId : ""}</td>
+                                <td class="table-cell">${res[i].therapistName ? res[i].therapistName : ""}</td>
+                                <td class="table-cell">${res[i].Amount ? res[i].Amount : ""}</td>
+                                <td class="table-cell">${res[i].therapiesCount ? res[i].therapiesCount : ""}</td>
+                             </tr>`;
+                }
+                html += `</tbody>`;
+            }
+
+            $('.infotxt').html(html1); // Add title
+            $('.addtr').html(html);     // Populate table with the data
+        },
+        error: function(xhr, status, error) {
+            console.error("Error fetching data: ", error);
+            $('.infotxt').html('<h4>Grooming Report</h4>');
+            $('.addtr').html(`
+                <thead>
+                    <tr>
+                        <th class="table-cell">Branch</th>
+                        <th class="table-cell">ID</th>
+                        <th class="table-cell">Staff Name</th>
+                        <th class="table-cell">Amount</th>
+                        <th class="table-cell">Therapy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td colspan="5" style="text-align:center;color:red;">Error fetching data. Please try again.</td></tr>
+                </tbody>
+            `);
+        }
+    });
+}
+
+// Utility function to validate date format (YYYY-MM-DD)
+function validateDate(date) {
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/; // Regex for YYYY-MM-DD
+    return dateRegex.test(date) && !isNaN(new Date(date).getTime());
+}
+
+
+
+
+    function printData4() {
+    var newWin = window.open("");
+
+    // Get the content of the .printdata container
+    var printContent = document.querySelector('.printdata').innerHTML;
+
+    // Add custom styles for print
+    var printStyles = `
+        <style>
+            @media print {
+                .printdata {
+                    margin-left: 15px;
+                    margin-right: 15px;
+                }
+                table {
+                    width: 100%;
+                    border: 1px solid #ddd;
+                    border-collapse: collapse;
+                }
+                th, td {
+                    margin: 15px;
+                    text-align: left;
+                }
+                th {
+                    background-color: #f2f2f2;
+                }
+            }
+        </style>
+    `;
+
+    // Write the HTML and styles to the new window
+    newWin.document.write(printStyles + printContent);
+
+    // Print the content after a short delay
+    setTimeout(function() {
+        newWin.print();
+        newWin.close();
+    }, 500);
+}
+
+   function createXls() {
+        $('.printdata').table2excel({
+          filename: "Goa Grooming Report.xls"
+        });
+      }
+
+
+
+</script>
+        <% include ../partials/footer %>
